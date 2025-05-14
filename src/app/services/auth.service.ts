@@ -10,13 +10,14 @@ interface RegisterPayload {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   private apiUrl = 'http://localhost:3000/auth';
 
   private currentUserSubject = new BehaviorSubject<User | null>(null);
-  public currentUser$: Observable<User | null> = this.currentUserSubject.asObservable();
+  public currentUser$: Observable<User | null> =
+    this.currentUserSubject.asObservable();
 
   constructor(private http: HttpClient) {
     const storedUser = sessionStorage.getItem('user');
@@ -26,7 +27,12 @@ export class AuthService {
   }
 
   register(data: RegisterPayload): Observable<any> {
-    return this.http.post(`${this.apiUrl}/register`, data);
+    return this.http.post(`${this.apiUrl}/register`, data).pipe(
+      tap((res: any) => {
+        this.saveToken(res.token);
+        this.saveUser(res.user);
+      })
+    );
   }
 
   login(email: string, password: string): Observable<any> {

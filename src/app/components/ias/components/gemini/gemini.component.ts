@@ -9,42 +9,63 @@ import { GeminiService } from './services/gemini.service';
 })
 export class GeminiComponent {
   prompt: string = '';
-  messages: { from: 'user' | 'bot', text: string }[] = [];
   isLoading = false;
+
+  // Múltiples conversaciones
+  conversations: { from: 'user' | 'bot', text: string }[][] = [[]];
+  conversationTitles: string[] = ['Conversación 1'];
+  selectedConversationIndex = 0;
 
   constructor(private chatService: GeminiService) {}
 
   sendMessage() {
-    if (!this.prompt.trim()) return;
+    const userMsg = this.prompt.trim();
+    if (!userMsg) return;
 
-    const userMsg = this.prompt;
-    const chatbotName = 'geminis';  // Nombre del chatbot (ajústalo según el chatbot actual)
+    const chatbotName = 'geminis';
 
-    // Agrega el mensaje del usuario a la vista
-    this.messages.push({ from: 'user', text: userMsg });
+    // Agregar mensaje del usuario
+    this.conversations[this.selectedConversationIndex].push({ from: 'user', text: userMsg });
     this.prompt = '';
     this.isLoading = true;
 
-    // Enviar el mensaje al backend para obtener la respuesta de la IA y guardar la conversación
+    // Enviar al backend y procesar respuesta
     this.chatService.sendPromptWithHistory(userMsg).subscribe({
       next: (res) => {
-        this.messages.push({ from: 'bot', text: res.response });
+        const botResponse = res.response;
+        this.conversations[this.selectedConversationIndex].push({ from: 'bot', text: botResponse });
 
-        // Guardar la respuesta de la IA en el historial
-        this.chatService.saveMessage(res.response, false, chatbotName).subscribe({
-          next: () => {
-            this.isLoading = false;
-          },
+        // Guardar respuesta
+        this.chatService.saveMessage(botResponse, false, chatbotName).subscribe({
+          next: () => (this.isLoading = false),
           error: () => {
-            console.error('Error al guardar la respuesta de la IA');
+            console.error('Error al guardar respuesta');
             this.isLoading = false;
-          },
+          }
         });
       },
       error: () => {
-        this.messages.push({ from: 'bot', text: '❌ Error al comunicarse con el asistente.' });
+        this.conversations[this.selectedConversationIndex].push({
+          from: 'bot',
+          text: '❌ Error al comunicarse con el asistente.'
+        });
         this.isLoading = false;
       }
     });
   }
+
+  // 🆕 Crear nueva conversación
+  startNewConversation() {
+    const index = this.conversations.length + 1;
+    this.conversations.push([]);
+    this.conversationTitles.push(`Conversación ${index}`);
+    this.selectedConversationIndex = this.conversations.length - 1;
+  }
+
+  // 🔁 Seleccionar conversación
+  selectConversation(index: number) {
+    this.selectedConversationIndex = index;
+  }
+
+  
 }

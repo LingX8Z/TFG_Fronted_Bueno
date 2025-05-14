@@ -7,8 +7,7 @@ import { SharedModule } from './shared/shared.module';
 import { RouterModule } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './shared/auth/login/login.component';
-import { RegisterComponent } from './shared/auth/register/register.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SobreMiComponent } from './components/sobre-mi/sobre-mi.component';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthInterceptor } from './interceptor/interceptor';
@@ -21,7 +20,6 @@ import { IasModule } from './components/ias/ias.module';
     AppComponent,
     HomeComponent,
     LoginComponent,
-    RegisterComponent,
     SobreMiComponent,
   ],
   imports: [
@@ -31,6 +29,7 @@ import { IasModule } from './components/ias/ias.module';
     RouterModule,
     FormsModule,
     IasModule,
+    ReactiveFormsModule, 
     HttpClientModule
   ],
   providers: [  {

@@ -1,48 +1,61 @@
-<!DOCTYPE html>
-<html lang="es">
-<body>
-  <div class="chatbot-container">
-    <div class="conversation-list-container">
-      <div class="conversation-list-title">Conversaciones</div>
-      <hr>
-      <button class="new-conversation-button">Nueva Conversación</button>
-      <div id="conversation-list">
-        <div class="conversation-item">
-          Conversación 1
-        </div>
-        <div class="conversation-item">Conversación 2 </div>
-        <div class="conversation-item">Conversación 3 </div>
-        <div class="conversation-item active">Conversación 4 </div>
-      </div>
-
-      <div class="under-conversation-text">
-        <span>BETA</span>
-        <p>Proximamente...</p>
+<!-- llama3.component.html funcional -->
+<div class="chatbot-container">
+  <div class="conversation-list-container">
+    <div class="conversation-list-title">Conversaciones</div>
+    <hr>
+    <button class="new-conversation-button" (click)="startNewConversation()">Nueva Conversación</button>
+    <div id="conversation-list">
+      <div
+        *ngFor="let conv of conversationTitles; let i = index"
+        class="conversation-item"
+        [class.active]="i === selectedConversationIndex"
+        (click)="selectConversation(i)"
+      >
+        {{ conv }}
       </div>
     </div>
-    <div class="chat-area">
-      <div class="chat-header">
-        <h1>Llama3</h1> <div class="header-info">
-          <h2 id="current-conversation-title">Conversación 4</h2>
-        </div>
-      </div>
-      <div class="chat-messages" id="chat-messages">
-        <div class="message user-message">Hola, ¿en qué puedo ayudarte?</div>
-        <div class="message bot-message">Hola, ¿cómo estás?</div>
-        <div class="message user-message">Estoy bien, gracias. ¿Y tú?</div>
-        <div class="message bot-message">
-          Estoy bien, gracias. ¿En qué puedo ayudarte hoy?
-        </div>
-      </div>
-      <div class="chat-input">
-        <input
-          type="text"
-          id="user-input"
-          placeholder="Escribe tu consulta..."
-        />
-        <button>Enviar</button>
-      </div>
+
+    <div class="under-conversation-text">
+      <span>BETA</span>
+      <p>Próximamente...</p>
     </div>
   </div>
-</body>
-</html>
+
+  <div class="chat-area">
+    <div class="chat-header">
+      <h1>Llama3</h1>
+      <div class="header-info">
+        <h2 id="current-conversation-title">
+          {{ conversationTitles[selectedConversationIndex] }}
+        </h2>
+      </div>
+    </div>
+
+    <div class="chat-messages" id="chat-messages">
+      <div
+        *ngFor="let msg of conversations[selectedConversationIndex]"
+        class="message"
+        [ngClass]="{
+          'user-message': msg.sender === 'user',
+          'bot-message': msg.sender === 'bot'
+        }"
+      >
+        <span [innerHTML]="formatMessage(msg.text)"></span>
+      </div>
+
+      <div class="message bot-message" *ngIf="loading">
+        <em>Escribiendo...</em>
+      </div>
+    </div>
+
+    <div class="chat-input">
+      <input
+        type="text"
+        [(ngModel)]="prompt"
+        (keyup.enter)="sendPrompt()"
+        placeholder="Escribe tu consulta..."
+      />
+      <button (click)="sendPrompt()">Enviar</button>
+    </div>
+  </div>
+</div>
