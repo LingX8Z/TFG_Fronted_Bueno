@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<body>
+    <div class="container">
+        <header>
+            <h1>Plataforma de Inteligencia Artificial</h1>
+            <p class="subtitle">Elige tu modelo de IA para interactuar</p>
+        </header>
+
+        <main class="models-grid">
+            <div class="model-card" id="gemini">
+                <div class="model-icon-wrapper">
+                    <div class="model-icon gemini-icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.25a.75.75 0 01.75.75v5.062l4.688-2.706a.75.75 0 011.02.906L15.31 12l3.148 5.788a.75.75 0 01-1.02.906L12.75 15.938v5.062a.75.75 0 01-1.5 0V15.937l-4.688 2.707a.75.75 0 01-1.02-.906L8.69 12 5.542 6.212a.75.75 0 011.02-.906L11.25 8.062V3a.75.75 0 01.75-.75zm0 0"></path></svg>
+                    </div>
+                </div>
+                <h2>Gemini</h2>
+                <p class="description">Modelo multimodal avanzado de Google, capaz de razonar a través de texto, imágenes, video y código.</p>
+                <button class="select-button" routerLink="gemini">Seleccionar Gemini</button>
+            </div>
+
+            <div class="model-card" id="rag">
+                <div class="model-icon-wrapper">
+                    <div class="model-icon rag-icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6 2C4.89543 2 4 2.89543 4 4V20C4 21.1046 4.89543 22 6 22H18C19.1046 22 20 21.1046 20 20V7.58579C20 7.05542 19.7893 6.54921 19.4142 6.17413L14.8259 1.58579C14.4508 1.21071 13.9446 1 13.4142 1H6C6 1 6 2 6 2ZM6 4H13V7C13 7.55228 13.4477 8 14 8H17V20H6V4ZM14.5 2.5L18.5 6.5H14.5V2.5Z M8 10V11H16V10H8ZM8 13V14H16V13H8ZM8 16V17H13V16H8Z"></path></svg>
+                    </div>
+                </div>
+                <h2>RAG</h2>
+                <p class="description">Retrieval Augmented Generation. Combina modelos generativos con bases de conocimiento externas para respuestas más precisas.</p>
+                <button class="select-button" routerLink="RAG">Seleccionar RAG</button>
+            </div>
+
+            <div class="model-card" id="llama3">
+                 <div class="model-icon-wrapper">
+                    <div class="model-icon llama-icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.77868 3.34158C9.94791 2.47129 10.7534 1.85714 11.6584 1.85714H12.3416C13.2466 1.85714 14.0521 2.47129 14.2213 3.34158L15.2011 8.6228C15.2297 8.77782 15.1395 8.93456 14.9823 8.97205L14.0787 9.18011C13.9236 9.21714 13.7673 9.12811 13.7262 8.97353L12.9093 5.89313C12.821 5.56061 12.493 5.37051 12.1593 5.45693L11.8407 5.54307C11.507 5.62949 11.179 5.43939 11.0907 5.10687L10.2738 2.02647C10.2327 1.87189 10.0764 1.78286 9.92132 1.81989L9.01768 2.02795C8.86049 2.06544 8.77031 2.22218 8.79892 2.3772L9.77868 7.65842C9.80729 7.81344 9.71711 7.97018 9.55991 8.00767L8.65628 8.21573C8.49908 8.25322 8.34289 8.16419 8.30178 8.00961L7.32202 2.72839C7.15279 1.8581 7.95834 1.24396 8.86332 1.24396H9.54652C9.63681 1.24396 9.72311 1.26548 9.79851 1.30483M6.16367 11.4863C6.59851 10.5562 7.59382 10 8.70279 10H15.2972C16.4062 10 17.4015 10.5562 17.8363 11.4863L21.0471 18.5137C21.4819 19.4438 20.8504 20.5186 19.8218 20.694L12.3487 22.0117C12.1243 22.0525 11.8757 22.0525 11.6513 22.0117L4.17821 20.694C3.14957 20.5186 2.51809 19.4438 2.95293 18.5137L6.16367 11.4863Z"></path></svg>
+                    </div>
+                </div>
+                <h2>Llama 3</h2>
+                <p class="description">La nueva generación de modelos de lenguaje abiertos de Meta, optimizados para una amplia gama de tareas.</p>
+                <button class="select-button" routerLink="llama3">Seleccionar Llama 3</button>
+            </div>
+        </main>
+
+    </div>
+
+    <router-outlet></router-outlet>
+</body>
+</html>

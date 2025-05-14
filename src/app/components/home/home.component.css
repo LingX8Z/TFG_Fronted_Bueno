@@ -1,0 +1,430 @@
+/* ----- Variables y Reseteo Global ----- */
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-secondary);
+    line-height: 1.6;
+    color: var(--color-text);
+    background-color: var(--color-background-page); /* Fondo general de la página */
+    overflow-x: hidden;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+a {
+    text-decoration: none;
+    color: var(--color-primary);
+    transition: color var(--transition);
+}
+
+a:hover {
+    color: var(--color-secondary);
+}
+
+h1, h2, h3, h4 {
+    font-family: var(--font-primary);
+    font-weight: 600;
+    margin-bottom: 0.8em;
+    color: var(--color-primary); /* Color base para encabezados */
+}
+
+h1 { font-size: 3em; line-height: 1.2; }
+h2 { font-size: 2.5em; text-align: center; }
+h3 { font-size: 1.8em; }
+p { margin-bottom: 1em; font-size: 1.05em; color: var(--color-text-light); }
+
+.section-padding {
+    padding: 80px 0;
+}
+
+.section-subtitle {
+    text-align: center;
+    font-size: 1.2em;
+    color: var(--color-text-light);
+    margin-top: -15px;
+    margin-bottom: 50px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.bg-light-section { /* Renombrado para claridad, usará --color-light */
+    background-color: var(--color-light);
+}
+
+
+/* ----- Sección Hero ----- */
+#hero {
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+    color: var(--button-text-color); /* Blanco para contraste en fondo oscuro */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    padding-top: 80px;
+}
+
+.hero-content {
+    z-index: 2;
+    max-width: 800px;
+    padding: 0 20px;
+}
+
+.hero-content h1 {
+    font-weight: 700;
+    color: var(--button-text-color); /* Blanco para el H1 del hero */
+    animation: fadeInDown 1s ease-out;
+}
+
+.hero-content p {
+    font-size: 1.3em;
+    margin-bottom: 30px;
+    font-weight: 300;
+    color: var(--color-light); /* Blanco verdoso para el párrafo del hero */
+    animation: fadeInUp 1s ease-out 0.5s;
+    animation-fill-mode: backwards;
+}
+
+.cta-button {
+    display: inline-block;
+    background-color: var(--color-tertiary); /* Usando el verde lima como acento */
+    color: var(--color-text); /* Texto oscuro sobre verde lima */
+    padding: 15px 35px;
+    border-radius: 50px; /* Mantenemos forma de píldora o usamos var(--radius) si se prefiere más cuadrado */
+    font-family: var(--font-primary);
+    font-weight: 600;
+    font-size: 1.1em;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: background-color var(--transition), transform var(--transition), box-shadow var(--transition);
+    box-shadow: 0 4px 15px rgba(27, 94, 32, 0.1);
+    animation: pulse 2s infinite 1s;
+}
+
+.cta-button:hover {
+    background-color: #A0D468; /* Un poco más oscuro/saturado que el --color-tertiary */
+    color: var(--color-primary);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(27, 94, 32, 0.15);
+}
+
+.hero-bg-animation .shape {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(240, 255, 240, 0.1); /* Usando --color-light con opacidad */
+    opacity: 0;
+}
+.shape1 { width: 200px; height: 200px; bottom: -50px; left: 10%; animation: float 15s infinite linear; }
+.shape2 { width: 100px; height: 100px; top: 10%; right: 15%; animation: float 12s infinite linear 3s; }
+.shape3 { width: 150px; height: 150px; top: 50%; left: 5%; animation: float 18s infinite linear 1s; }
+.shape4 { width: 80px; height: 80px; bottom: 20%; right: 5%; animation: float 10s infinite linear 2s; }
+
+@keyframes float {
+    0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+    25% { opacity: 1; }
+    50% { transform: translateY(-30px) rotate(180deg); opacity: 0.5; }
+    75% { opacity: 1; }
+    100% { transform: translateY(0) rotate(360deg); opacity: 0; }
+}
+
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+/* ----- Sección Chatbots ----- */
+.chatbot-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.chatbot-card {
+    background-color: var(--color-light); /* Fondo de tarjeta claro */
+    border-radius: var(--radius);
+    padding: 35px 30px;
+    text-align: center;
+    box-shadow: var(--card-shadow);
+    transition: transform var(--transition), box-shadow var(--transition);
+    border: 1px solid var(--border-color);
+}
+
+.chatbot-card:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--card-hover-shadow);
+}
+
+.chatbot-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin: 0 auto 25px auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5em;
+    font-weight: bold;
+    color: var(--button-text-color); /* Texto blanco sobre iconos de color */
+}
+
+/* Nuevos gradientes para iconos con la paleta verde */
+.gemini-icon { background: linear-gradient(45deg, var(--color-primary), var(--color-secondary)); }
+.rag-icon { background: linear-gradient(45deg, var(--color-secondary), var(--color-tertiary)); }
+.llama-icon { background: linear-gradient(45deg, var(--color-tertiary), #A5D6A7); } /* Usando --border-color para el segundo color del gradiente de Llama */
+
+
+.chatbot-card h3 {
+    color: var(--color-primary);
+    margin-bottom: 15px;
+}
+
+.chatbot-card p {
+    font-size: 0.95em;
+    color: var(--color-text); /* Texto principal para descripciones en tarjetas */
+    line-height: 1.7;
+    min-height: 100px;
+}
+
+.btn-chatbot {
+    display: inline-block;
+    background-color: var(--button-background-color);
+    color: var(--button-text-color);
+    padding: 12px 25px;
+    border-radius: 25px; /* O var(--radius) si se prefiere */
+    margin-top: 20px;
+    font-weight: 500;
+    transition: background-color var(--transition), transform var(--transition);
+}
+
+.btn-chatbot:hover {
+    background-color: var(--color-secondary); /* Hover al verde hoja brillante */
+    color: var(--button-text-color);
+    transform: scale(1.05);
+}
+
+/* ----- Sección Características ----- */
+/* Si #features usa .bg-light-section (F0FFF0), los items deben tener un fondo que contraste */
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.feature-item {
+    background-color: var(--button-text-color); /* Blanco para items sobre fondo --color-light */
+    padding: 30px;
+    border-radius: var(--radius);
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(27, 94, 32, 0.07);
+    transition: transform var(--transition);
+}
+.feature-item:hover {
+    transform: translateY(-5px);
+}
+
+.feature-icon {
+    font-size: 3em;
+    margin-bottom: 20px;
+    color: var(--color-secondary);
+}
+
+.feature-item h3 {
+    font-size: 1.4em;
+    margin-bottom: 10px;
+    color: var(--color-primary);
+}
+
+.feature-item p {
+    font-size: 0.9em;
+    color: var(--color-text-light);
+}
+
+/* ----- Sección Sobre Nosotros ----- */
+.about-content {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 50px;
+    align-items: center;
+}
+
+.about-image {
+    border-radius: var(--radius);
+    box-shadow: 0 8px 20px rgba(27, 94, 32, 0.1);
+}
+
+.about-content h3 {
+    color: var(--color-primary);
+    margin-top: 20px;
+}
+.about-content div p {
+    text-align: justify;
+    color: var(--color-text); /* Texto principal para párrafos largos */
+}
+
+/* ----- Sección Testimonios ----- */
+/* Si #testimonials usa .bg-light-section (F0FFF0), los items deben tener un fondo que contraste */
+.testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.testimonial-card {
+    background-color: var(--button-text-color); /* Blanco */
+    padding: 30px;
+    border-radius: var(--radius);
+    border-left: 5px solid var(--color-secondary);
+    box-shadow: 0 5px 15px rgba(27, 94, 32, 0.07);
+    font-style: italic;
+}
+
+.testimonial-card p {
+    margin-bottom: 20px;
+    font-size: 1em;
+    color: var(--color-text-light);
+}
+
+.testimonial-card h4 {
+    font-style: normal;
+    font-weight: 600;
+    color: var(--color-primary);
+    text-align: right;
+}
+
+/* En tu archivo home.component.css o un archivo global de estilos */
+
+.btn-chatbot.btn-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  /* Puedes añadir más estilos para que parezca deshabilitado,
+     como cambiar el color de fondo o borde */
+  /* background-color: #ccc; */
+  /* pointer-events: none; */ /* Ojo: esto puede interferir con tooltips si los tuvieras */
+}
+
+.login-required-message {
+  text-align: center;
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #f8d7da; /* Un color de fondo suave para alerta */
+  color: #721c24; /* Color de texto oscuro para contraste */
+  border: 1px solid #f5c6cb; /* Borde para el mensaje */
+  border-radius: 4px;
+}
+
+.login-required-message p {
+  margin: 0;
+}
+
+/* ----- Responsividad ----- */
+@media (max-width: 992px) {
+    .about-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+    .about-image {
+        margin: 0 auto 30px auto;
+        max-width: 80%;
+    }
+     .about-content div p {
+        text-align: left;
+    }
+}
+
+
+@media (max-width: 768px) {
+    h1 { font-size: 2.5em; }
+    h2 { font-size: 2em; }
+    #hero { min-height: auto; padding-top: 120px; padding-bottom: 60px; }
+
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        position: absolute;
+        top: 70px; /* Altura de la navbar */
+        left: 0;
+        background-color: var(--color-surface-header); /* Fondo del menú desplegable */
+        box-shadow: 0 5px 10px rgba(27, 94, 32, 0.1);
+        padding-bottom: 10px;
+    }
+    .nav-links.active {
+        display: flex;
+    }
+    .nav-links li {
+        margin: 10px 0;
+        text-align: center;
+    }
+    .menu-toggle {
+        display: flex;
+    }
+    .menu-toggle.active span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+    }
+    .menu-toggle.active span:nth-child(2) {
+        opacity: 0;
+    }
+    .menu-toggle.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(7px, -6px);
+    }
+
+    .chatbot-grid, .features-grid, .testimonials-grid {
+        grid-template-columns: 1fr;
+    }
+    .chatbot-card p {
+        min-height: auto;
+    }
+
+    .footer-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+    .social-links {
+        /* justify-content: center; no es necesario si el contenedor ya está centrado */
+    }
+}
+
+@media (max-width: 480px) {
+    h1 { font-size: 2em; }
+    .hero-content p { font-size: 1.1em; }
+    .cta-button { padding: 12px 25px; font-size: 1em;}
+    .section-padding { padding: 50px 0; }
+    .contact-form { padding: 25px; }
+}

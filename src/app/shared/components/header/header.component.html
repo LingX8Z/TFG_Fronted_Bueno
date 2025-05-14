@@ -1,0 +1,26 @@
+<header class="header">
+    <div class="header__logo">
+      <a routerLink="home">
+        <h1>RehabAI</h1>
+      </a>      
+    </div>
+  
+    <nav class="header__nav">
+      <a href="#">Inicio</a>
+      <a routerLink="ias">Tipos de IA</a>
+      <a routerLink="sobreMi">Sobre mi</a>
+    </nav>
+  
+    <div class="header__actions" *ngIf="(user | async) === null; else loggedIn">
+      <a class="login-btn" routerLink="login">Iniciar sesión</a>
+    </div>
+    
+    <ng-template #loggedIn>
+      <div class="header__actions">
+        <button (click)="logout()">Cerrar sesión</button>
+      </div>
+    </ng-template>
+    
+
+  </header>
+  

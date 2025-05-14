@@ -1,0 +1,34 @@
+:root {
+  --color-primary: #08449e;    /* Azul marino oscuro (Principal) */
+  --color-secondary: #1976D2;  /* Azul brillante estándar (Secundario) */
+  --color-tertiary: #42A5F5;   /* Azul cielo claro (Terciario) */
+  --color-light: #E3F2FD;      /* Azul muy pálido (Destacados, fondos claros) */
+  --color-background: #F0F7FC; /* Fondo azul ultra claro (Fondo de página principal) */
+  --color-surface: #FFFFFF;     /* Blanco puro (Superficies como tarjetas, o un azul muy claro como #FAFCFF) */
+  --color-text: #102A43;        /* Azul oscuro desaturado (Texto principal) */
+  --color-text-light: #627D98; /* Azul grisáceo medio (Texto secundario) */
+  --button-background-color: #419dff; /* Azul vibrante para botón (Bootstrap primary) */
+  --button-text-color: #FFFFFF;  /* Texto blanco para buen contraste */
+  --background-color: #B3D4FC; /* Azul claro agradable (Para fondos generales de componentes) */
+  --radius: 0.75rem;
+  --transition: 0.2s ease-in-out;
+
+  --card-shadow: 0 10px 25px rgba(13, 71, 161, 0.08); /* Sombra con tinte azul oscuro */
+  --card-hover-shadow: 0 15px 35px rgba(13, 71, 161, 0.12); /* Sombra más intensa con tinte azul */
+  --border-color: #BFD7ED;   /* Azul claro desaturado para bordes sutiles */
+
+  --font-primary: 'Montserrat', sans-serif;
+  --font-secondary: 'Roboto', sans-serif;
+
+  /* Estas variables están repetidas en tu original, las mantengo por fidelidad */
+  --radius: 0.75rem;
+  --transition: 0.2s ease-in-out;
+}
+
+body {
+  background-color: var(--background-color);
+}
+
+*{
+  margin: 0px;
+}

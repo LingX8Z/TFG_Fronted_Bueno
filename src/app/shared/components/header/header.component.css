@@ -1,0 +1,56 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  background-color: var(--color-surface);  /* Color de fondo con el secundario */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  color: var(--color-text); /* Texto en color oscuro */
+}
+
+.header__logo h1 {
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: var(--color-primary);  /* Título con el color principal oscuro */
+  margin: 0;
+  cursor: pointer;
+}
+
+.header__nav {
+  display: flex;
+  gap: 2rem;
+}
+
+.header__nav a {
+  text-decoration: none;
+  color: var(--color-primary);  /* Usar un color más claro para mejor contraste */
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.header__nav a:hover {
+  color: var(--color-secondary);  /* Cambiar a un color más oscuro al hacer hover */
+}
+
+
+.header__actions .login-btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  background-color: var(--color-primary);  /* Botón con color primario */
+  color: white;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-weight: 500;
+  transition: var(--transition);
+}
+
+.header__actions .login-btn:hover {
+  background-color: var(--color-secondary);  /* Hover con el color secundario */
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .header__nav {
+      display: none;
+  }
+}

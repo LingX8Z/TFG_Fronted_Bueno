@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<body>
+    <main>
+        <section id="hero">
+            <div class="hero-content">
+                <h1>Descubre la Nueva Era de la Conversación Inteligente</h1>
+                <p>Explora nuestras soluciones de IA con Gemini, RAG y Llama3. Potencia tu comunicación y obtén respuestas instantáneas y precisas.</p>
+                <a href="#bots" class="cta-button">Explorar Chatbots</a>
+            </div>
+            <div class="hero-bg-animation">
+                <div class="shape shape1"></div>
+                <div class="shape shape2"></div>
+                <div class="shape shape3"></div>
+                <div class="shape shape4"></div>
+            </div>
+        </section>
+
+<section id="bots" class="container section-padding">
+    <h2>Nuestros Chatbots Estrella</h2>
+    <p class="section-subtitle">Tecnología de vanguardia a tu alcance.</p>
+    <div class="chatbot-grid">
+        <div class="chatbot-card">
+            <div class="chatbot-icon gemini-icon">G</div>
+            <h3>Gemini</h3>
+            <p>Un modelo multimodal avanzado de Google, capaz de razonar sobre texto, imágenes, audio y video. Ideal para tareas complejas y creativas.</p>
+            <a class="btn-chatbot"
+               [class.btn-disabled]="!logeado"
+               [routerLink]="logeado ? ['/chat', 'gemini'] : null"
+               (click)="!logeado && $event.preventDefault()">Probar Gemini</a>
+        </div>
+        <div class="chatbot-card">
+            <div class="chatbot-icon rag-icon">R</div>
+            <h3>RAG (Retrieval Augmented Generation)</h3>
+            <p>Combina la potencia de los modelos de lenguaje con bases de conocimiento externas para respuestas más informadas y contextualizadas.</p>
+            <a class="btn-chatbot"
+               [class.btn-disabled]="!logeado"
+               [routerLink]="logeado ? ['/chat', 'RAG'] : null"
+               (click)="!logeado && $event.preventDefault()">Probar RAG</a>
+        </div>
+        <div class="chatbot-card">
+            <div class="chatbot-icon llama-icon">L3</div>
+            <h3>Llama 3</h3>
+            <p>La última generación de modelos de lenguaje abiertos de Meta, ofreciendo un rendimiento excepcional en diversas tareas de PNL.</p>
+            <a class="btn-chatbot"
+               [class.btn-disabled]="!logeado"
+               [routerLink]="logeado ? ['/chat', 'llama3'] : null"
+               (click)="!logeado && $event.preventDefault()">Probar Llama 3</a>
+        </div>
+    </div>
+    <div *ngIf="!logeado" class="login-required-message">
+        <p>Necesita iniciar sesión para acceder a las IAs.</p>
+    </div>
+</section>
+
+        <section id="features" class="section-padding bg-light">
+            <div class="container">
+                <h2>¿Por Qué Elegirnos?</h2>
+                <p class="section-subtitle">Ventajas que marcan la diferencia.</p>
+                <div class="features-grid">
+                    <div class="feature-item">
+                        <div class="feature-icon">💡</div>
+                        <h3>Innovación Constante</h3>
+                        <p>Accede a los modelos de IA más recientes y potentes del mercado.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">⚙️</div>
+                        <h3>Integración Flexible</h3>
+                        <p>Fácil de integrar en tus plataformas y flujos de trabajo existentes.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">📈</div>
+                        <h3>Escalabilidad</h3>
+                        <p>Soluciones que crecen con tus necesidades, desde proyectos pequeños a grandes implementaciones.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">💬</div>
+                        <h3>Soporte Dedicado</h3>
+                        <p>Nuestro equipo está listo para ayudarte a sacar el máximo provecho de nuestros chatbots.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+</body>
+</html>

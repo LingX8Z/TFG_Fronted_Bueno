@@ -1,0 +1,73 @@
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, catchError, Observable, of, tap } from 'rxjs';
+import { User } from '../interfaces/user.iterface';
+
+interface RegisterPayload {
+  fullName: string;
+  email: string;
+  password: string;
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class AuthService {
+  private apiUrl = 'http://localhost:3000/auth';
+
+  private currentUserSubject = new BehaviorSubject<User | null>(null);
+  public currentUser$: Observable<User | null> = this.currentUserSubject.asObservable();
+
+  constructor(private http: HttpClient) {
+    const storedUser = sessionStorage.getItem('user');
+    if (storedUser) {
+      this.currentUserSubject.next(JSON.parse(storedUser));
+    }
+  }
+
+  register(data: RegisterPayload): Observable<any> {
+    return this.http.post(`${this.apiUrl}/register`, data);
+  }
+
+  login(email: string, password: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/login`, { email, password }).pipe(
+      tap((res: any) => {
+        this.saveToken(res.token);
+        this.saveUser(res.user);
+      })
+    );
+  }
+
+  saveUser(user: User): void {
+    this.currentUserSubject.next(user);
+    sessionStorage.setItem('user', JSON.stringify(user));
+  }
+
+  getUser(): User | null {
+    return this.currentUserSubject.value;
+  }
+
+  saveToken(token: string): void {
+    sessionStorage.setItem('token', token);
+  }
+
+  getToken(): string | null {
+    return sessionStorage.getItem('token');
+  }
+
+  logout(): void {
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('user');
+    this.currentUserSubject.next(null);
+  }
+
+  isTokenValid() {
+    return this.http.get(`${this.apiUrl}/check`).pipe(
+      catchError(() => of(false)) // si hay error, asumimos que es inválido
+    );
+  }
+
+  isLoggedIn(): boolean {
+    return !!this.getToken();
+  }
+}

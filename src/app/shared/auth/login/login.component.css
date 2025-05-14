@@ -1,0 +1,308 @@
+/* --- Reset Básico y Estilos Globales --- */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #eef1f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: #333;
+    line-height: 1.6;
+    padding: 10px;
+    overflow: hidden;
+}
+
+.auth-view-toggle { display: none; }
+
+/* --- Contenedor Principal de Autenticación (2 columnas) --- */
+.auth-page-container {
+    display: flex;
+    width: 95vw;
+    height: 90vh;
+    max-width: 1800px;
+    max-height: 1000px;
+    /* background-color: transparent; No es necesario aquí, los hijos lo tendrán */
+    /* box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.2); La sombra puede estar en los hijos si se mueven fuera del flujo original */
+    /* overflow: hidden; Importante para que el radio no afecte a los hijos que rotan */
+    /* La sombra y el radio general los gestionarán los hijos que se mueven */
+    animation: fadeInAuth 0.8s ease-out;
+    position: relative; /* Para que la sombra de los hijos no se corte si se salen un poco durante la animación */
+}
+@keyframes fadeInAuth { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
+
+/* --- Paneles Principales (Flipper de Formularios y Panel de Arte) --- */
+.auth-interactive-flipper,
+.auth-art-wrapper {
+    flex: 0 0 50%; /* Cada uno ocupa la mitad del ancho */
+    height: 100%;
+    transition: transform 0.9s cubic-bezier(0.68, -0.55, 0.265, 1.55),
+                border-radius 0.9s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    background-color: #fff; /* Fondo para el flipper, el art-wrapper ya tiene el suyo */
+    box-shadow: 0 10px 30px -10px rgba(0,0,0,0.15); /* Sombra individual para cada panel */
+}
+
+/* Estado por defecto (Login: Formulario a la Izquierda, Arte a la Derecha) */
+.auth-interactive-flipper {
+    transform: translateX(0%);
+    border-radius: 20px 0 0 20px;
+    position: relative; /* Para perspectiva e hijos absolutos */
+    perspective: 2500px;
+    z-index: 10; /* Asegurar que esté encima si hay superposición momentánea */
+}
+.auth-art-wrapper {
+    transform: translateX(0%);
+    border-radius: 0 20px 20px 0;
+    /* Estilos de fondo y contenido de arte ya definidos abajo */
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* Mover fondo aquí */
+    z-index: 5;
+}
+
+/* Estado de Registro (Formulario a la Derecha, Arte a la Izquierda) */
+#view_register:checked ~ .auth-page-container .auth-interactive-flipper {
+    transform: translateX(100%); /* Mueve el panel del formulario a la derecha */
+    border-radius: 0 20px 20px 0;
+    z-index: 10;
+}
+#view_register:checked ~ .auth-page-container .auth-art-wrapper {
+    transform: translateX(-100%); /* Mueve el panel de arte a la izquierda */
+    border-radius: 20px 0 0 20px;
+    z-index: 5; /* Podría ajustarse si es necesario durante la transición */
+}
+
+
+/* --- Paneles de Formulario (Caras del Flipper Interno) --- */
+.auth-form-panel {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    transition: transform 0.9s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    background-color: #ffffff; /* Fondo de la cara del formulario */
+    padding: clamp(20px, 3vw, 40px) clamp(25px, 4vw, 50px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow-y: auto;
+    border-radius: inherit; /* Hereda el radio de su padre (.auth-interactive-flipper) */
+}
+
+.login-face {
+    transform: rotateY(0deg);
+    z-index: 2;
+}
+.register-face {
+    transform: rotateY(180deg);
+    z-index: 1;
+}
+
+/* Lógica de Volteo Interno del Formulario */
+#view_register:checked ~ .auth-page-container .auth-interactive-flipper .login-face {
+    transform: rotateY(-180deg);
+    z-index: 1;
+}
+#view_register:checked ~ .auth-page-container .auth-interactive-flipper .register-face {
+    transform: rotateY(0deg);
+    z-index: 2;
+}
+#view_login:checked ~ .auth-page-container .auth-interactive-flipper .login-face {
+    transform: rotateY(0deg);
+    z-index: 2;
+}
+#view_login:checked ~ .auth-page-container .auth-interactive-flipper .register-face {
+    transform: rotateY(180deg);
+    z-index: 1;
+}
+
+/* --- Contenido de los Formularios (Logo, Inputs, etc.) --- */
+.logo-container { text-align: center; margin-bottom: clamp(15px, 2vh, 25px); }
+.logo-svg {
+    width: clamp(50px, 6vw, 70px); height: clamp(50px, 6vw, 70px);
+    margin-bottom: 10px; animation: spinLogo 8s linear infinite;
+}
+@keyframes spinLogo { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+.logo-container h2 {
+    font-family: 'Montserrat', sans-serif; font-size: clamp(20px, 2.2vw, 26px);
+    color: #2c3e50; margin-bottom: 5px;
+}
+.logo-container p { font-size: clamp(13px, 1.3vw, 15px); color: #7f8c8d; }
+
+.input-group { margin-bottom: clamp(15px, 2vh, 20px); position: relative; }
+.input-group label {
+    display: block; font-weight: bold; margin-bottom: 0.8vh;
+    font-size: clamp(12px, 1.1vw, 14px); color: #34495e;
+}
+.input-group input[type="email"],
+.input-group input[type="password"],
+.input-group input[type="text"] {
+    width: 100%; padding: 12px 15px 12px 40px; border: 1px solid #bdc3c7;
+    border-radius: 8px; font-size: clamp(14px, 1.4vw, 16px); color: #2c3e50;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.input-group input:focus {
+    outline: none; border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+}
+.input-group input::placeholder { color: #95a5a6; }
+
+.input-icon {
+    position: absolute; left: 12px; transform: translateY(-50%);
+    color: #7f8c8d; pointer-events: none;
+}
+.input-group input:focus + .input-icon svg { fill: #3498db; }
+.input-group input:placeholder-shown + .input-icon { top: 69%; }
+.input-group input:not(:placeholder-shown) + .input-icon,
+.input-group input:focus + .input-icon {
+    top: calc(0.8vh + clamp(12px, 1.1vw, 14px) + 16px);
+}
+
+/* Opciones específicas de cada formulario */
+.options {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: clamp(15px, 2.5vh, 20px); font-size: clamp(11px, 1vw, 13px);
+}
+.remember-me { display: flex; align-items: center; color: #555; cursor: pointer; }
+.remember-me input[type="checkbox"] { margin-right: 8px; accent-color: #3498db; }
+.forgot-password { color: #3498db; text-decoration: none; transition: color 0.3s ease; }
+.forgot-password:hover { color: #2980b9; text-decoration: underline; }
+
+.options-register { margin-bottom: clamp(15px, 2.5vh, 20px); font-size: clamp(11px, 1vw, 13px); }
+.terms-agreement { display: flex; align-items: center; color: #555; cursor: pointer; }
+.terms-agreement input[type="checkbox"] { margin-right: 8px; accent-color: #3498db; }
+.terms-agreement a { color: #3498db; text-decoration: none; margin-left: 2px; }
+.terms-agreement a:hover { text-decoration: underline; }
+
+.btn-submit {
+    width: 100%; padding: clamp(12px, 1.8vh, 16px);
+    background: linear-gradient(135deg, #8e44ad, #3498db); color: white;
+    border: none; border-radius: 8px; font-size: clamp(15px, 1.5vw, 16px);
+    font-weight: bold; font-family: 'Montserrat', sans-serif; cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    letter-spacing: 0.5px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: clamp(10px, 2vh, 15px);
+}
+.btn-submit:hover {
+    background: linear-gradient(135deg, #732d91, #2980b9);
+    transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+.btn-submit:active { transform: translateY(0); box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+
+.form-alternate-link { text-align: center; font-size: clamp(13px, 1.2vw, 14px); color: #555; }
+.toggle-form-link { color: #e74c3c; text-decoration: none; font-weight: bold; cursor: pointer; }
+.toggle-form-link:hover { color: #c0392b; text-decoration: underline; }
+
+/* --- Panel de Arte (Derecha por defecto) --- */
+.auth-art-wrapper {
+    /* flex: 0 0 50%; Ya definido arriba */
+    /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); Ya definido arriba */
+    position: relative; display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    padding: clamp(30px, 3vw, 50px) clamp(30px, 4vw, 60px);
+    color: white; text-align: center; overflow: hidden;
+    /* border-radius y transform gestionados dinámicamente */
+}
+
+.art-content-segment { display: none; animation: fadeInArtContent 0.5s ease-in-out 0.4s; /* Retraso para que aparezca después del slide */ }
+@keyframes fadeInArtContent { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+.art-content-segment h3 {
+    font-family: 'Montserrat', sans-serif; font-size: clamp(22px, 2.8vw, 30px);
+    margin-bottom: 2vh;
+}
+.art-content-segment p { font-size: clamp(15px, 1.6vw, 17px); line-height: 1.7; opacity: 0.9; }
+
+#view_login:checked ~ .auth-page-container .login-art-content { display: block; }
+#view_register:checked ~ .auth-page-container .register-art-content { display: block; }
+
+.art-shape { position: absolute; border-radius: 50%; background-color: rgba(255, 255, 255, 0.08); animation: float 10s ease-in-out infinite alternate; }
+.art-shape-1 { width: clamp(150px, 20vw, 200px); height: clamp(150px, 20vw, 200px); top: 10%; left: -5%; animation-duration: 12s; }
+.art-shape-2 { width: clamp(100px, 15vw, 150px); height: clamp(100px, 15vw, 150px); bottom: 15%; right: -4%; animation-duration: 9s; animation-delay: -3s; background-color: rgba(255, 255, 255, 0.12); }
+.art-shape-3 { width: clamp(80px, 10vw, 100px); height: clamp(80px, 10vw, 100px); top: 50%; left: 30%; transform: translateY(-50%); animation-duration: 7s; animation-delay: -5s; }
+@keyframes float {
+    0% { transform: translateY(0px) translateX(0px) rotate(0deg); opacity: 0.7; }
+    50% { transform: translateY(-20px) translateX(15px) rotate(180deg); opacity: 1; }
+    100% { transform: translateY(0px) translateX(0px) rotate(360deg); opacity: 0.7; }
+}
+
+/* --- Responsividad --- */
+@media (max-width: 900px) {
+    .auth-page-container {
+        flex-direction: column; width: 95vw; height: auto; min-height: 95vh;
+    }
+    .auth-interactive-flipper,
+    .auth-art-wrapper {
+        flex: 1 1 auto; /* Permitir que crezcan y se encojan en columna */
+        width: 100%; /* Ocupar todo el ancho en columna */
+        transform: translateX(0%) !important; /* Resetear translateX y prevenir !important */
+        box-shadow: 0 10px 20px -8px rgba(0,0,0,0.1);
+    }
+
+    /* Orden y radios para la vista de Login en móvil (Formulario arriba, Arte abajo) */
+    #view_login:checked ~ .auth-page-container .auth-interactive-flipper {
+        order: 1;
+        border-radius: 20px 20px 0 0;
+        min-height: 400px; /* Altura mínima para el formulario */
+    }
+    #view_login:checked ~ .auth-page-container .auth-art-wrapper {
+        order: 2;
+        border-radius: 0 0 20px 20px;
+        min-height: 220px; /* Altura mínima para el arte */
+    }
+
+    /* Orden y radios para la vista de Registro en móvil (Arte arriba, Formulario abajo) */
+    #view_register:checked ~ .auth-page-container .auth-interactive-flipper {
+        order: 2; /* Formulario abajo */
+        border-radius: 0 0 20px 20px;
+         min-height: 400px;
+    }
+    #view_register:checked ~ .auth-page-container .auth-art-wrapper {
+        order: 1; /* Arte arriba */
+        border-radius: 20px 20px 0 0;
+        min-height: 220px;
+    }
+    .auth-form-panel { border-radius: inherit; } /* Hereda el radio del flipper padre */
+
+    .art-content-segment h3 { font-size: clamp(20px, 5vw, 24px); }
+    .art-content-segment p { font-size: clamp(14px, 3.5vw, 16px); }
+}
+
+@media (max-width: 480px) {
+    body { padding: 0; }
+    .auth-page-container {
+        width: 100vw; min-height: 100vh; height: 100vh;
+        border-radius: 0; box-shadow: none;
+    }
+     .auth-interactive-flipper,
+    .auth-art-wrapper {
+        border-radius: 0 !important; /* Sin radios en pantalla completa móvil */
+        box-shadow: none;
+        min-height: 0; /* Permitir que el contenido defina la altura */
+    }
+    /* En móvil muy pequeño, forzar Arte abajo siempre si se prefiere simplificar el orden */
+     #view_register:checked ~ .auth-page-container .auth-interactive-flipper,
+     #view_login:checked ~ .auth-page-container .auth-interactive-flipper {
+        order: 1;
+    }
+    #view_register:checked ~ .auth-page-container .auth-art-wrapper,
+    #view_login:checked ~ .auth-page-container .auth-art-wrapper {
+        order: 2;
+        min-height: 150px; /* Altura mínima muy reducida para el arte */
+    }
+
+
+    .auth-form-panel { border-radius: 0; padding: 25px; }
+    .auth-art-wrapper { padding: 20px; }
+
+    .logo-container h2 { font-size: 20px; }
+    .logo-container p { font-size: 12px; }
+    .input-group input { font-size: 14px; padding: 10px 10px 10px 35px; }
+    .input-icon { left: 10px; }
+    .input-group input:not(:placeholder-shown) + .input-icon,
+    .input-group input:focus + .input-icon {
+         top: calc(0.8vh + clamp(12px, 1.1vw, 14px) + 13px);
+    }
+    .btn-submit { padding: 12px; font-size: 15px; }
+    .options, .options-register { flex-direction: column; align-items: flex-start; gap: 10px; }
+}
