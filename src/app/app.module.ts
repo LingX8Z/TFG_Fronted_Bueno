@@ -14,6 +14,7 @@ import { AuthInterceptor } from './interceptor/interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { IAsComponent } from './components/ias/ias.component';
 import { IasModule } from './components/ias/ias.module';
+import { GestionUserComponent } from './components/gestion-user/gestion-user.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { IasModule } from './components/ias/ias.module';
     HomeComponent,
     LoginComponent,
     SobreMiComponent,
+    GestionUserComponent,
   ],
   imports: [
     BrowserModule,

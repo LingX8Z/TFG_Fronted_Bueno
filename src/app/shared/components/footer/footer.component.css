@@ -1,44 +1,52 @@
-/* Footer */
+/* Asumiendo que tu paleta de :root está definida globalmente */
+
 footer {
-    background-color: rgb(107, 107, 107); /* Fondo negro casi puro */
-    color: white;
-    text-align: center;
-    font-size: 0.9em;
-    padding-top: 1%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.3em;
+  background-color: var(--color-primary); /* Fondo azul oscuro principal */
+  color: var(--color-light); /* Texto claro para contraste */
+  text-align: center;
+  font-family: var(--font-secondary); /* O var(--font-primary) si prefieres Montserrat */
+  font-size: 0.9rem; /* Ligeramente más pequeño que el texto base */
+  padding: 2rem 1rem; /* Más padding vertical y horizontal */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem; /* Espacio entre el texto y los iconos sociales */
 }
 
 footer p {
-    color: var(--text-light);
-    margin: 0;
+  color: var(--color-light); /* Asegura que el texto del párrafo también sea claro */
+  margin: 0; /* Quita margen por defecto del párrafo si no se necesita */
+  max-width: 90%; /* Para evitar que el texto sea demasiado ancho en pantallas grandes */
 }
 
 .social-links {
-    display: flex;
-    gap: 1em;
+  display: flex;
+  gap: 1.25rem; /* Espacio entre iconos */
+  align-items: center;
 }
 
-.social-links img {
-    width: 28px;
-    height: 28px;
-    transition: transform 0.2s ease-in-out;
-    filter: brightness(0) invert(1); /* Para que los iconos sean blancos */
-}
-
-.social-links img:hover {
-    transform: translateY(-3px) scale(1.1);
+.social-links a { /* Estilo para los enlaces que envuelven los SVG */
+  display: inline-block; /* Para que la transformación funcione bien */
+  line-height: 0; /* Para evitar espacio extra si el SVG no llena el 'a' */
 }
 
 .social-links svg {
-    width: 36px;
-    height: 36px;
-    transition: transform 0.2s ease-in-out;
-    fill: var(--text-light); /* Asegura que los íconos sean del color adecuado */
+  width: 28px; /* O el tamaño que prefieras */
+  height: 28px;
+  fill: var(--color-light); /* Para el footer oscuro */
+  /* o fill: var(--color-text-light); para el footer claro */
+  transition: transform 0.3s ease-out, fill 0.3s ease-out;
 }
 
-.social-links svg:hover {
-    transform: translateY(-3px) scale(1.1);
+.social-links a:hover svg,
+.social-links a:focus svg {
+  transform: translateY(-4px) scale(1.15);
+  fill: var(--color-surface); /* Para el footer oscuro */
+  /* o fill: var(--color-primary); para el footer claro */
+}
+
+/* Si quieres eliminar el outline por defecto en los enlaces de los iconos al enfocar,
+   pero asegurándote de que haya otra indicación visual (como el cambio de 'fill' o 'transform') */
+.social-links a:focus {
+  outline: none;
 }

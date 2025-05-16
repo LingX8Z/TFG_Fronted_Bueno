@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './shared/auth/login/login.component';
 import { SobreMiComponent } from './components/sobre-mi/sobre-mi.component';
+import { GestionUserComponent } from './components/gestion-user/gestion-user.component';
 
 
 const routes: Routes = [
@@ -21,6 +22,10 @@ const routes: Routes = [
   {
     path: 'sobreMi',
     component: SobreMiComponent
+  },
+    {
+    path: 'gestionUser',
+    component: GestionUserComponent
   },
   {
     path: 'ias',
