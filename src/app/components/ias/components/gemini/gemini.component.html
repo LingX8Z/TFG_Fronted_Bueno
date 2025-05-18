@@ -1,17 +1,29 @@
-<!-- gemini.component.html funcional -->
 <div class="chatbot-container">
   <div class="conversation-list-container">
     <div class="conversation-list-title">Conversaciones</div>
     <hr />
-    <button class="new-conversation-button" (click)="startNewConversation()">Nueva Conversación</button>
+    <button class="new-conversation-button" (click)="startNewConversation()">
+      Nueva Conversación
+    </button>
+
     <div id="conversation-list">
       <div
         *ngFor="let conv of conversationTitles; let i = index"
-        class="conversation-item"
-        [class.active]="i === selectedConversationIndex"
-        (click)="selectConversation(i)"
+        class="conversation-item-wrapper"
       >
-        {{ conv }}
+        <div
+          class="conversation-item"
+          [class.active]="i === selectedConversationIndex"
+          (click)="selectConversation(i)"
+        >
+          <span class="conversation-title">{{ conv }}</span>
+          <button class="options-button" (click)="toggleMenu(i, $event)">
+            &#8942; </button>
+        </div>
+        <div class="conversation-menu" *ngIf="menuOpenIndex === i">
+          <button (click)="openRenameConversationModal(i, conv)">Renombrar</button>
+          <button (click)="openDeleteConversationModal(i, conv)">Eliminar</button>
+        </div>
       </div>
     </div>
 
@@ -26,12 +38,23 @@
       <h1>Gemini</h1>
       <div class="header-info">
         <h2 id="current-conversation-title">
-          {{ conversationTitles[selectedConversationIndex] }}
+          {{
+            conversationTitles[selectedConversationIndex] ||
+              "Sin conversación activa"
+          }}
         </h2>
       </div>
     </div>
 
     <div class="chat-messages" id="chat-messages">
+      <div
+        class="no-conversation-message"
+        *ngIf="conversationTitles.length === 0 && conversations[selectedConversationIndex]?.length === 0"
+      >
+        <p>🔍 No hay conversaciones activas.</p>
+        <p>Puedes crear una nueva conversación con el botón de arriba.</p>
+      </div>
+
       <div
         *ngFor="let msg of conversations[selectedConversationIndex]"
         class="message"
@@ -40,7 +63,10 @@
           'bot-message': msg.from === 'bot'
         }"
       >
-        {{ msg.text }}
+        <div class="message-text" [innerHTML]="msg.text"></div>
+        <div class="timestamp">
+          {{ msg.timestamp | date : "HH:mm" }}
+        </div>
       </div>
 
       <div class="message bot-message" *ngIf="isLoading">
@@ -53,9 +79,41 @@
         type="text"
         [(ngModel)]="prompt"
         (keyup.enter)="sendMessage()"
-        placeholder="Escribe tu consulta..."
+        [placeholder]="
+          isLoading ? 'Esperando respuesta...' : 'Escribe tu consulta...'
+        "
+        [disabled]="(conversationTitles.length === 0 && !conversations[0]?.length) || isLoading"
       />
-      <button (click)="sendMessage()">Enviar</button>
+      <button
+        (click)="sendMessage()"
+        [disabled]="(conversationTitles.length === 0 && !conversations[0]?.length) || isLoading"
+      >
+        Enviar
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" *ngIf="showRenameModal" (click)="cancelRenameConversation()">
+  <div class="modal-content" (click)="stopPropagationModal($event)">
+    <h2>Renombrar Conversación</h2>
+    <p>Nombre actual: "{{ currentTitleForRename }}"</p>
+    <input type="text" [(ngModel)]="newTitleForRename" placeholder="Nuevo nombre" (keyup.enter)="confirmRenameConversation()"/>
+    <div class="modal-actions">
+      <button (click)="cancelRenameConversation()" class="button-cancel">Cancelar</button>
+      <button (click)="confirmRenameConversation()" class="button-save" [disabled]="!newTitleForRename.trim() || newTitleForRename.trim() === currentTitleForRename">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" *ngIf="showDeleteModal" (click)="cancelDeleteConversation()">
+  <div class="modal-content" (click)="stopPropagationModal($event)">
+    <h2>Confirmar Eliminación</h2>
+    <p>¿Estás seguro de que deseas eliminar la conversación "<strong>{{ titleForDelete }}</strong>"?</p>
+    <p class="error">Esta acción no se puede deshacer.</p>
+    <div class="modal-actions">
+      <button (click)="cancelDeleteConversation()" class="button-cancel">Cancelar</button>
+      <button (click)="confirmDeleteConversation()" class="button-delete">Eliminar</button>
     </div>
   </div>
 </div>

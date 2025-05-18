@@ -1,0 +1,442 @@
+/* :root (Tus variables CSS se mantienen igual, asegúrate de que estén definidas) */
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-secondary);
+    background-color: var(--color-background);
+    color: var(--color-text);
+    line-height: 1.65; /* Ligeramente más espaciado para legibilidad */
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Alinea al inicio para scrolls largos */
+    min-height: 100vh;
+    padding: 40px 20px; /* Más padding superior en el body */
+}
+
+.user-profile-container {
+    width: 100%;
+    max-width: 650px; /* Un poco más ancho */
+    margin: 0px auto;
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
+
+.card {
+    background-color: var(--color-surface);
+    border-radius: var(--radius);
+    padding: 3rem 3.5rem; /* Más padding interno */
+    box-shadow: var(--card-shadow);
+    transition: box-shadow var(--transition);
+    border: 1px solid transparent; /* Para una transición de borde más suave si se añade en hover */
+}
+
+/* Opcional: Efecto sutil de elevación y borde al hacer hover en la tarjeta */
+/*
+.card:hover {
+    box-shadow: var(--card-hover-shadow);
+    transform: translateY(-2px);
+    border-color: var(--color-light);
+}
+*/
+
+.form-title {
+    font-family: var(--font-primary);
+    color: var(--color-primary);
+    font-size: 2.5rem; /* Ligeramente más grande */
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    text-align: center;
+}
+
+.form-subtitle {
+    font-family: var(--font-secondary);
+    color: var(--color-text-light);
+    font-size: 1.05rem; /* Ligeramente más grande */
+    margin-bottom: 2.5rem;
+    text-align: center;
+    max-width: 80%; /* Evita que sea demasiado ancho */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.user-form .form-group {
+    margin-bottom: 2rem; /* Más espaciado entre grupos */
+}
+
+.user-form label {
+    display: block;
+    font-family: var(--font-primary);
+    font-weight: 600; /* Un poco más de peso */
+    color: var(--color-secondary);
+    margin-bottom: 0.75rem; /* Más espacio bajo la etiqueta */
+    font-size: 0.95rem;
+}
+
+.user-form input[type="text"],
+.user-form input[type="email"],
+.user-form input[type="password"] {
+    width: 100%;
+    padding: 0.9rem 1.1rem; /* Padding más generoso */
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-small); /* Radio más pequeño para inputs */
+    font-family: var(--font-secondary);
+    font-size: 1rem;
+    color: var(--color-text);
+    background-color: var(--color-surface); /* Fondo blanco para inputs, destacando sobre el fondo claro */
+    transition: border-color var(--transition), box-shadow var(--transition), background-color var(--transition);
+    appearance: none; /* Quita estilos por defecto del navegador */
+}
+
+.user-form input[type="text"]:focus,
+.user-form input[type="email"]:focus,
+.user-form input[type="password"]:focus {
+    outline: none;
+    border-color: var(--border-color-focus);
+    background-color: var(--color-surface);
+    box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.15); /* Sombra de foco más sutil */
+}
+
+.user-form input::placeholder {
+    color: var(--color-text-light);
+    opacity: 0.8;
+}
+
+.user-form input[readonly],
+.user-form input[disabled] /* Para el campo email con formControlName y disabled:true */
+ {
+    background-color: #F4F6F8; /* Un gris más claro y moderno */
+    cursor: not-allowed;
+    color: var(--color-text-light);
+    border-color: #E1E5EA;
+}
+.user-form input[readonly]:focus,
+.user-form input[disabled]:focus {
+    box-shadow: none; /* Sin sombra de foco para campos deshabilitados */
+    border-color: #E1E5EA;
+}
+
+
+.user-form small:not(.error-message small) { /* Estilo para las small de ayuda, no las de error */
+    display: block;
+    margin-top: 0.6rem;
+    font-size: 0.85rem;
+    color: var(--color-text-light);
+    font-style: italic;
+}
+
+/* Estilos para los mensajes de error de Angular */
+.error-message small {
+    display: flex; /* Para alinear icono y texto */
+    align-items: center; /* Para alinear icono y texto */
+    padding: 0.3rem 0;
+    font-size: 0.85rem;
+    color: var(--color-error);
+    font-weight: 500; /* Hacer el mensaje de error un poco más prominente */
+    transition: opacity 0.3s ease-in-out;
+    opacity: 1; /* Asegurar que sea visible */
+}
+.error-message small::before { /* Icono de advertencia */
+    font-family: "Font Awesome 5 Free"; /* O "Font Awesome 6 Free" según tu versión */
+    font-weight: 900; /* Solid icons */
+    content: "\f071"; /* Código para fas fa-exclamation-triangle */
+    margin-right: 0.5em;
+    font-size: 0.9em;
+}
+
+.ng-invalid.ng-touched:not(form) { /* Estilo para inputs inválidos y tocados */
+    border-color: var(--color-error) !important; /* Mostrar borde rojo */
+}
+.ng-invalid.ng-touched:not(form):focus {
+     box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.15) !important; /* Sombra de foco roja */
+}
+
+
+.password-group {
+    position: relative;
+}
+
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-wrapper input[type="password"],
+.password-wrapper input[type="text"] {
+   padding-right: 3.2rem; /* Más espacio para el icono */
+}
+
+.toggle-icon {
+    position: absolute;
+    right: 0; /* Alineado al borde derecho del wrapper */
+    top: 0;
+    bottom: 0;
+    width: 3rem; /* Área de click más grande */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--color-text-light);
+    transition: color var(--transition);
+    border-left: 1px solid var(--border-color); /* Separador sutil para el icono */
+    border-top-right-radius: var(--radius-small);
+    border-bottom-right-radius: var(--radius-small);
+    background-color: var(--color-light);
+}
+.password-wrapper input:focus + .toggle-icon { /* Cuando el input tiene foco, el icono también cambia */
+    border-color: var(--border-color-focus);
+    color: var(--color-secondary);
+}
+
+.toggle-icon:hover {
+    color: var(--color-secondary);
+    background-color: #d1e6f9;
+}
+.toggle-icon i {
+    font-size: 0.9rem; /* Tamaño del icono */
+}
+
+
+.form-divider {
+    border: none;
+    border-top: 1px solid var(--border-color);
+    margin: 2.8rem 0 2.2rem; /* Ajustar espaciado */
+}
+
+.form-section-title {
+    font-family: var(--font-primary);
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    margin-bottom: 1.8rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--color-tertiary); /* Línea decorativa debajo del título de sección */
+    display: inline-block; /* Para que el borde solo ocupe el ancho del texto */
+}
+
+.form-actions {
+    margin-top: 3rem; /* Más espacio antes de los botones */
+    display: flex;
+    justify-content: flex-end; /* Alinea botones a la derecha (común en formularios de edición) */
+    gap: 1.2rem;
+}
+
+.btn {
+    padding: 0.9rem 1.8rem; /* Padding de botones más generoso */
+    border: 1px solid transparent; /* Borde base para transiciones suaves */
+    border-radius: var(--radius-small);
+    font-family: var(--font-primary);
+    font-weight: 600;
+    font-size: 0.95rem;
+    letter-spacing: 0.5px; /* Ligero espaciado entre letras */
+    cursor: pointer;
+    transition: background-color var(--transition), color var(--transition), border-color var(--transition), transform var(--transition), box-shadow var(--transition);
+    text-decoration: none;
+    text-align: center;
+    display: inline-flex; /* Para alinear el spinner */
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-primary {
+    background-color: var(--button-background-color);
+    color: var(--button-text-color);
+    box-shadow: 0 4px 12px rgba(65, 157, 255, 0.25); /* Sombra para el botón primario */
+}
+
+.btn-primary:hover:not(:disabled) {
+    background-color: var(--color-secondary);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(25, 118, 210, 0.3);
+}
+.btn-primary:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(25, 118, 210, 0.2);
+}
+
+
+.btn-secondary {
+    background-color: var(--color-surface);
+    color: var(--color-secondary);
+    border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover:not(:disabled) {
+    background-color: var(--color-light);
+    border-color: var(--color-tertiary);
+    color: var(--color-primary);
+    transform: translateY(-2px);
+}
+.btn-secondary:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: translateY(0);
+}
+.btn:disabled:hover {
+    transform: translateY(0); /* Evitar que el hover mueva el botón deshabilitado */
+}
+
+
+.form-actions .btn .fa-spinner {
+  margin-left: 0.7em; /* Espacio para el spinner */
+  font-size: 1em;
+}
+
+/* Estilos para mensajes de éxito/error globales (opcional, si los implementas) */
+.alert {
+  padding: 1rem 1.5rem;
+  margin-top: 1.5rem;
+  border-radius: var(--radius-small);
+  border: 1px solid transparent;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+}
+.alert::before { /* Para iconos en alertas */
+    font-family: "Font Awesome 5 Free"; /* O "Font Awesome 6 Free" */
+    font-weight: 900;
+    margin-right: 0.8em;
+    font-size: 1.2em;
+}
+
+.alert-success {
+  color: var(--color-success);
+  background-color: var(--color-success-light-bg);
+  border-color: var(--color-success);
+}
+.alert-success::before {
+    content: "\f058"; /* fas fa-check-circle */
+}
+
+.alert-danger {
+  color: var(--color-error);
+  background-color: var(--color-error-light-bg);
+  border-color: var(--color-error);
+}
+.alert-danger::before {
+    content: "\f06a"; /* fas fa-exclamation-circle */
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.modal {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  text-align: center;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 1.5rem;
+}
+
+.toast {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 12px 20px;
+  border-radius: 8px;
+  color: white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  animation: fadeInOut 3s ease-in-out;
+  z-index: 9999;
+  font-weight: bold;
+}
+
+.toast.success {
+  background-color: #38a169; /* verde */
+}
+
+.toast.error {
+  background-color: #e53e3e; /* rojo */
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: translateY(20px); }
+  10% { opacity: 1; transform: translateY(0); }
+  90% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(20px); }
+}
+
+/* Ajustes para pantallas más pequeñas */
+@media (max-width: 768px) {
+    body {
+        padding: 20px 15px;
+    }
+    .card {
+        padding: 2rem 1.5rem;
+    }
+
+    .form-title {
+        font-size: 2rem;
+    }
+    .form-subtitle {
+        font-size: 1rem;
+        max-width: 95%;
+    }
+
+    .form-actions {
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+
+    .btn {
+        width: 100%;
+        padding: 0.9rem 1rem; /* Ajustar padding para botones en columna */
+    }
+}
+
+@media (max-width: 480px) {
+    .card {
+        padding: 1.5rem 1rem;
+    }
+    .form-title {
+        font-size: 1.8rem;
+    }
+     .form-subtitle {
+        font-size: 0.9rem;
+    }
+    .user-form label {
+        font-size: 0.9rem;
+    }
+    .user-form input[type="text"],
+    .user-form input[type="email"],
+    .user-form input[type="password"] {
+        padding: 0.8rem 1rem;
+        font-size: 0.95rem;
+    }
+     .password-wrapper input[type="password"],
+    .password-wrapper input[type="text"] {
+        padding-right: 2.8rem;
+    }
+    .toggle-icon {
+        width: 2.8rem;
+    }
+}

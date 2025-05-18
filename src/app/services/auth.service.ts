@@ -73,6 +73,20 @@ export class AuthService {
     );
   }
 
+  // auth.service.ts (extensión de tu servicio existente)
+  updateUser(data: {
+    fullName: string;
+    currentPassword?: string;
+    newPassword?: string;
+  }): Observable<any> {
+    return this.http.patch(`${this.apiUrl}/update`, data).pipe(
+      tap((res: any) => {
+        if (res.user) {
+          this.saveUser(res.user);
+        }
+      })
+    );
+  }
   isLoggedIn(): boolean {
     return !!this.getToken();
   }

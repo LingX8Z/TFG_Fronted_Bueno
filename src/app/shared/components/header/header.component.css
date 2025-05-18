@@ -169,6 +169,150 @@
   box-shadow: 0 0 0 3px var(--color-surface), 0 0 0 6px var(--color-tertiary); /* Doble borde para el foco */
 }
 
+/* Estilos para el Área de Perfil de Usuario en Escritorio */
+.user-profile-area-desktop {
+  position: relative; /* Contexto para el menú desplegable */
+}
+
+.user-profile-toggle-desktop {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem; /* Espacio entre el nombre/rol y el icono */
+  background-color: transparent;
+  border: 1px solid transparent;
+  padding: 0.5rem 0.8rem;
+  border-radius: var(--radius, 0.75rem); /* Utiliza tu variable --radius si está definida globalmente */
+  cursor: pointer;
+  transition: background-color var(--transition, 0.2s ease-in-out), border-color var(--transition, 0.2s ease-in-out);
+  font-family: var(--font-secondary); /* Variable de tu CSS */
+  color: var(--color-text); /* Variable de tu CSS */
+}
+
+.user-profile-toggle-desktop:hover {
+  background-color: var(--color-light, #E3F2FD); /* Color de fondo claro para hover */
+  border-color: var(--border-color, #BFD7ED); /* Borde sutil para hover */
+}
+
+.user-info-desktop {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Alinea el texto a la izquierda; o flex-end si prefieres */
+  line-height: 1.3;
+}
+
+.user-info-desktop__name {
+  font-weight: 600; /* Semi-negrita */
+  font-size: 0.9em;
+  color: var(--color-text); /* Variable de tu CSS */
+}
+
+.user-info-desktop__role {
+  font-size: 0.75em;
+  color: var(--color-text-light, #627D98); /* Color de texto secundario */
+}
+
+.user-profile-toggle-desktop .user-profile-toggle__icon {
+  transition: transform var(--transition, 0.2s ease-in-out);
+  color: var(--color-secondary, #1976D2); /* Color para el icono */
+}
+
+.user-profile-toggle-desktop .user-profile-toggle__icon.is-rotated {
+  transform: rotate(180deg);
+}
+
+/* Menú Desplegable del Usuario en Escritorio */
+.user-menu-dropdown-desktop {
+  position: absolute;
+  top: calc(100% + 8px); /* Posición debajo del botón de toggle */
+  right: 0;
+  background-color: var(--color-surface); /* Variable de tu CSS */
+  border-radius: var(--radius, 0.75rem);
+  box-shadow: 0 10px 25px rgba(13, 71, 161, 0.1); /* Sombra suave */
+  border: 1px solid var(--border-color, #BFD7ED);
+  z-index: 1010; /* Asegura que esté por encima de otros elementos */
+  width: max-content; /* Ancho basado en el contenido */
+  min-width: 220px; /* Ancho mínimo */
+  padding: 0.5rem 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.user-menu-dropdown-desktop__link,
+.user-menu-dropdown-desktop__button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 0.75rem 1.2rem; /* Espaciado interno de los items */
+  text-decoration: none;
+  color: var(--color-text); /* Variable de tu CSS */
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9em;
+  font-family: var(--font-secondary); /* Variable de tu CSS */
+  transition: background-color var(--transition, 0.2s ease-in-out), color var(--transition, 0.2s ease-in-out);
+  box-sizing: border-box; /* Para que el padding no afecte el ancho total */
+}
+
+.user-menu-dropdown-desktop__link:hover,
+.user-menu-dropdown-desktop__button:hover {
+  background-color: var(--color-light, #E3F2FD); /* Color de fondo claro para hover */
+  color: var(--color-primary); /* Variable de tu CSS */
+}
+
+/* Estilos para Información y Acciones de Usuario en Móvil */
+.user-actions-mobile {
+  /* width: 80%; Ya definido en tu CSS para .header__actions--mobile */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  /* margin-top: 1.5rem; Ya definido en tu CSS para .header__actions--mobile */
+}
+
+.user-info-mobile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid var(--color-light);
+  margin-bottom: 0.5rem;
+  width: 100%; /* Para que ocupe el ancho de user-actions-mobile */
+  color: var(--color-text);
+}
+
+.user-info-mobile__name {
+  font-weight: bold;
+  font-size: 1.1em;
+  color: var(--color-text); /* Variable de tu CSS */
+}
+
+.user-info-mobile__role {
+  font-size: 0.9em;
+  color: var(--color-text-light, #627D98); /* Color de texto secundario */
+  margin-top: 0.25rem;
+}
+
+/* Los botones/links de acción en móvil ya deberían tomar estilos de .button y .header__actions--mobile .button */
+.user-action-mobile__link,
+.user-action-mobile__button {
+  width: 100%; /* Asegura que usen el ancho completo */
+  text-align: center;
+  /* Heredarán estilos de .button y .button-secondary de tu CSS existente */
+}
+
+/* Si los enlaces <a> necesitan verse como botones y no toman el estilo automáticamente: */
+.user-action-mobile__link.button {
+  /* background-color: var(--button-primary-bg); Puedes usar variables de botones si quieres que se vean como el de "Iniciar Sesión" */
+  /* color: var(--button-primary-text); */
+  /* O si deben ser diferentes, define nuevos estilos o usa .button-outline si te conviene */
+  background-color: transparent;
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+}
+.user-action-mobile__link.button:hover {
+  background-color: var(--color-light);
+}
 /* --- Responsive --- */
 @media (max-width: 768px) {
   .header {
@@ -273,4 +417,6 @@
   .header__actions--mobile .button { /* Para que ocupen el ancho disponible */
       width: 100%;
   }
+  
 }
+

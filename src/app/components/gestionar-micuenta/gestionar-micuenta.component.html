@@ -1,0 +1,89 @@
+<div class="user-profile-container">
+  <div class="card">
+    <h2 class="form-title">Editar Perfil</h2>
+    <p class="form-subtitle">Actualiza tu información personal a continuación.</p>
+
+    <form id="userForm" class="user-form" [formGroup]="userForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="email">Correo Electrónico</label>
+        <input type="email" id="email" name="email" formControlName="email" placeholder="usuario@ejemplo.com">
+        <small>El correo electrónico no se puede modificar.</small>
+      </div>
+
+      <div class="form-group">
+        <label for="fullName">Nombre Completo</label>
+        <input type="text" id="fullName" name="fullName" formControlName="fullName" placeholder="Nombre Apellido Ejemplo" required>
+        <div *ngIf="userForm.get('fullName')?.invalid && (userForm.get('fullName')?.dirty || userForm.get('fullName')?.touched)" class="error-message">
+          <small *ngIf="userForm.get('fullName')?.errors?.['required']">El nombre completo es requerido.</small>
+        </div>
+      </div>
+
+      <hr class="form-divider">
+      <p class="form-section-title">Cambiar Contraseña</p>
+
+      <div class="form-group password-group">
+        <label for="currentPassword">Antigua Contraseña</label>
+        <div class="password-wrapper">
+          <input [type]="showCurrent ? 'text' : 'password'" id="currentPassword" name="currentPassword" formControlName="currentPassword" placeholder="Introduce tu contraseña actual">
+          <span class="toggle-icon" (click)="toggleVisibility('current')">
+            <i class="fas" [ngClass]="{'fa-eye': !showCurrent, 'fa-eye-slash': showCurrent}"></i>
+          </span>
+        </div>
+        <small>Necesaria si deseas cambiar tu contraseña.</small>
+      </div>
+
+      <div class="form-group password-group">
+        <label for="newPassword">Nueva Contraseña</label>
+        <div class="password-wrapper">
+          <input [type]="showNew ? 'text' : 'password'" id="newPassword" name="newPassword" formControlName="newPassword" placeholder="Deja en blanco para no cambiar">
+          <span class="toggle-icon" (click)="toggleVisibility('new')">
+            <i class="fas" [ngClass]="{'fa-eye': !showNew, 'fa-eye-slash': showNew}"></i>
+          </span>
+        </div>
+        <small>Mínimo 8 caracteres. Incluye mayúsculas, minúsculas y números.</small>
+        <div *ngIf="userForm.get('newPassword')?.invalid && (userForm.get('newPassword')?.dirty || userForm.get('newPassword')?.touched)" class="error-message">
+          <small *ngIf="userForm.get('newPassword')?.errors?.['minlength']">La nueva contraseña debe tener al menos 8 caracteres.</small>
+        </div>
+      </div>
+
+      <div class="form-group password-group">
+        <label for="confirmPassword">Confirmar Nueva Contraseña</label>
+        <div class="password-wrapper">
+          <input [type]="showConfirm ? 'text' : 'password'" id="confirmPassword" name="confirmPassword" formControlName="confirmPassword" placeholder="Repite la nueva contraseña">
+          <span class="toggle-icon" (click)="toggleVisibility('confirm')">
+            <i class="fas" [ngClass]="{'fa-eye': !showConfirm, 'fa-eye-slash': showConfirm}"></i>
+          </span>
+        </div>
+         <div *ngIf="userForm.get('confirmPassword')?.touched && userForm.value.newPassword && userForm.value.newPassword !== userForm.value.confirmPassword" class="error-message">
+            <small>Las nuevas contraseñas no coinciden.</small>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary" [disabled]="isLoading || userForm.invalid">
+          <span *ngIf="!isLoading">Guardar Cambios</span>
+          <span *ngIf="isLoading">Guardando... <i class="fas fa-spinner fa-spin"></i></span>
+        </button>
+        <button type="button" class="btn btn-secondary" (click)="onCancel()" [disabled]="isLoading">Cancelar</button>
+      </div>
+
+      </form>
+  </div>
+</div>
+
+<!-- Modal de Confirmación -->
+<div class="modal-backdrop" *ngIf="showModal">
+  <div class="modal">
+    <h3>¿Confirmar cambios?</h3>
+    <p>¿Estás seguro de que deseas guardar los cambios?</p>
+    <div class="modal-buttons">
+      <button class="btn btn-primary" (click)="confirmUpdate()">Sí, guardar</button>
+      <button class="btn btn-secondary" (click)="cancelModal()">Cancelar</button>
+    </div>
+  </div>
+</div>
+<!-- Notificación tipo toast -->
+<div class="toast" [ngClass]="toastType" *ngIf="toastMessage">
+  {{ toastMessage }}
+</div>
+

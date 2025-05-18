@@ -57,4 +57,15 @@ export class GeminiService {
       title,
     });
   }
+
+  renameConversation(historyId: string, newTitle: string): Observable<any> {
+  return this.http.patch(`http://localhost:3000/chat-history/${historyId}/rename`, {
+    title: newTitle,
+  });
+}
+
+deleteConversation(historyId: string): Observable<any> {
+  return this.http.delete(`http://localhost:3000/chat-history/${historyId}`);
+}
+
 }

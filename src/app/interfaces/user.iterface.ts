@@ -4,6 +4,6 @@ export interface User {
     password?: string; // opcional si no lo usás en el frontend
     fullName: string;
     isActive: boolean;
-    roles: string[];
+    roles: string;
   }
   

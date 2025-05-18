@@ -15,6 +15,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { IAsComponent } from './components/ias/ias.component';
 import { IasModule } from './components/ias/ias.module';
 import { GestionUserComponent } from './components/gestion-user/gestion-user.component';
+import { GestionarMicuentaComponent } from './components/gestionar-micuenta/gestionar-micuenta.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { GestionUserComponent } from './components/gestion-user/gestion-user.com
     LoginComponent,
     SobreMiComponent,
     GestionUserComponent,
+    GestionarMicuentaComponent,
   ],
   imports: [
     BrowserModule,

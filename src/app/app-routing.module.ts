@@ -4,6 +4,7 @@ import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './shared/auth/login/login.component';
 import { SobreMiComponent } from './components/sobre-mi/sobre-mi.component';
 import { GestionUserComponent } from './components/gestion-user/gestion-user.component';
+import { GestionarMicuentaComponent } from './components/gestionar-micuenta/gestionar-micuenta.component';
 
 
 const routes: Routes = [
@@ -26,6 +27,10 @@ const routes: Routes = [
     {
     path: 'gestionUser',
     component: GestionUserComponent
+  },
+  {
+    path: 'gestionarMiCuenta',
+    component: GestionarMicuentaComponent
   },
   {
     path: 'ias',
