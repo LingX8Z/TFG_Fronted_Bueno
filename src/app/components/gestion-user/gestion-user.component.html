@@ -1,66 +1,62 @@
-<!DOCTYPE html>
-<html lang="es">
-<body>
-    <div class="container">
-        <header>
-            <h1>Panel de Administración de Usuarios</h1>
-        </header>
+<!-- Tabla de usuarios -->
+<table class="user-table">
+  <thead>
+    <tr>
+      <th>Nombre</th>
+      <th>Email</th>
+      <th>Rol</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let user of users">
+      <td>{{ user.fullName }}</td>
+      <td>{{ user.email }}</td>
+      <td [ngClass]="'role-' + user.roles">{{ user.roles }}</td>
 
-        <main>
-            <div class="toolbar">
-                <button class="btn btn-primary" id="addUserBtn">Añadir Nuevo Usuario</button>
-            </div>
+      <td>
+        <button class="btn btn-danger" (click)="deleteUser(user._id!)">
+          Eliminar
+        </button>
+        <button class="btn btn-secondary" (click)="openEditModal(user)">
+          Editar
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
 
-            <table class="user-table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nombre Completo</th>
-                        <th>Correo Electrónico</th>
-                        <th>Rol</th>
-                        <th>Fecha de Registro</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Ana Pérez García</td>
-                        <td>ana.perezexample.com</td>
-                        <td>Administrador</td>
-                        <td>2023-01-15</td>
-                        <td>
-                            <button class="btn btn-secondary btn-edit">Editar</button>
-                            <button class="btn btn-danger btn-delete">Eliminar</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>Carlos López Fernández</td>
-                        <td>carlos.lopezexample.com</td>
-                        <td>Editor</td>
-                        <td>2023-02-20</td>
-                        <td>
-                            <button class="btn btn-secondary btn-edit">Editar</button>
-                            <button class="btn btn-danger btn-delete">Eliminar</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>Laura Martínez Sánchez</td>
-                        <td>laura.martinezexample.com</td>
-                        <td>Usuario</td>
-                        <td>2023-03-10</td>
-                        <td>
-                            <button class="btn btn-secondary btn-edit">Editar</button>
-                            <button class="btn btn-danger btn-delete">Eliminar</button>
-                        </td>
-                    </tr>
-                    </tbody>
-            </table>
-        </main>
+<!-- Modal de edición -->
+<div class="modal-overlay" *ngIf="isEditModalOpen">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h2>Editar Usuario</h2>
+    <form (ngSubmit)="submitEdit()" #editForm="ngForm">
+      <label>Nombre:</label>
+      <input [(ngModel)]="editableUser.fullName" name="fullName" required />
 
-    </div>
+      <label>Rol:</label>
+      <select [(ngModel)]="editableUser.roles" name="roles">
+        <option value="user">User</option>
+        <option value="premium">Premium</option>
+        <option value="administrador">Administrador</option>
+      </select>
 
-    </body>
-</html>
+      <div class="modal-actions">
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="!editForm.form.valid"
+        >
+          Guardar
+        </button>
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="closeEditModal()"
+        >
+          Cancelar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

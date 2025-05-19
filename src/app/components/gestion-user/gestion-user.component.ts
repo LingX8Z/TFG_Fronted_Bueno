@@ -1,11 +1,59 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { User } from '../../interfaces/user.iterface';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-gestion-user',
   standalone: false,
   templateUrl: './gestion-user.component.html',
-  styleUrl: './gestion-user.component.css'
+  styleUrls: ['./gestion-user.component.css']
 })
-export class GestionUserComponent {
+export class GestionUserComponent implements OnInit {
+  users: User[] = [];
 
+  // Modal de edición
+  isEditModalOpen = false;
+  editableUser: Partial<User> = {};
+
+  constructor(private userService: AuthService) {}
+
+  ngOnInit(): void {
+    this.loadUsers();
+  }
+
+  loadUsers(): void {
+    this.userService.getAllUsers().subscribe({
+      next: (data) => this.users = data,
+      error: (err) => console.error('Error al cargar usuarios', err)
+    });
+  }
+
+  deleteUser(id: string): void {
+    if (confirm('¿Estás seguro de que deseas eliminar este usuario?')) {
+      this.userService.deleteUser(id).subscribe(() => this.loadUsers());
+    }
+  }
+
+  openEditModal(user: User): void {
+    this.editableUser = { ...user }; // Clonamos para evitar mutación directa
+    this.isEditModalOpen = true;
+  }
+
+  closeEditModal(): void {
+    this.isEditModalOpen = false;
+    this.editableUser = {};
+  }
+
+  submitEdit(): void {
+    if (this.editableUser._id) {
+      this.userService.updateUserRole(this.editableUser._id, this.editableUser.roles || 'user')
+        .subscribe({
+          next: () => {
+            this.loadUsers();
+            this.closeEditModal();
+          },
+          error: (err) => console.error('Error al actualizar usuario', err)
+        });
+    }
+  }
 }

@@ -33,15 +33,19 @@
       >Sobre mí</a
     >
     <a
+      *ngIf="(user | async)?.roles === 'Administrador'"
       routerLink="gestionUser"
       routerLinkActive="active-link"
       (click)="cerrarMenuSiEsMovil()"
-      >Gestión de usuario</a
     >
-
+      Gestión de usuario
+    </a>
   </nav>
 
-  <div class="header__actions header__actions--desktop" *ngIf="(user | async) === null; else loggedInDesktopMenu">
+  <div
+    class="header__actions header__actions--desktop"
+    *ngIf="(user | async) === null; else loggedInDesktopMenu"
+  >
     <a class="button button-gradient-login" routerLink="login">
       <span>Iniciar sesión</span>
       <svg
@@ -59,18 +63,61 @@
     </a>
   </div>
   <ng-template #loggedInDesktopMenu>
-    <div class="header__actions header__actions--desktop user-profile-area-desktop">
-      <button type="button" class="user-profile-toggle-desktop" (click)="toggleUserMenu()" [attr.aria-expanded]="userMenuOpen" aria-haspopup="true">
-        <div *ngIf="user | async as currentUserDetails" class="user-info-desktop">
-          <span class="user-info-desktop__name">{{ currentUserDetails.fullName }}</span>
-          <span class="user-info-desktop__role">{{ currentUserDetails.roles }}</span>
+    <div
+      class="header__actions header__actions--desktop user-profile-area-desktop"
+    >
+      <button
+        type="button"
+        class="user-profile-toggle-desktop"
+        (click)="toggleUserMenu()"
+        [attr.aria-expanded]="userMenuOpen"
+        aria-haspopup="true"
+      >
+        <div
+          *ngIf="user | async as currentUserDetails"
+          class="user-info-desktop"
+        >
+          <span class="user-info-desktop__name">{{
+            currentUserDetails.fullName
+          }}</span>
+          <span class="user-info-desktop__role">{{
+            currentUserDetails.roles
+          }}</span>
         </div>
-        <svg class="user-profile-toggle__icon" [class.is-rotated]="userMenuOpen" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M7 10l5 5 5-5H7z"/></svg>
+        <svg
+          class="user-profile-toggle__icon"
+          [class.is-rotated]="userMenuOpen"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          width="20"
+          height="20"
+          fill="currentColor"
+          aria-hidden="true"
+        >
+          <path d="M7 10l5 5 5-5H7z" />
+        </svg>
       </button>
       <div class="user-menu-dropdown-desktop" *ngIf="userMenuOpen">
-        <a routerLink="/gestion-usuario" (click)="closeUserMenu()" routerLink="gestionarMiCuenta" class="user-menu-dropdown-desktop__link">Cambiar mis datos</a>
-        <a routerLink="/premium" (click)="closeUserMenu()" class="user-menu-dropdown-desktop__link">Cambiar a premium</a>
-        <button type="button" (click)="performLogout()" class="user-menu-dropdown-desktop__button">Cerrar sesión</button>
+        <a
+          routerLink="/gestion-usuario"
+          (click)="closeUserMenu()"
+          routerLink="gestionarMiCuenta"
+          class="user-menu-dropdown-desktop__link"
+          >Cambiar mis datos</a
+        >
+        <a
+          routerLink="/premium"
+          (click)="closeUserMenu()"
+          class="user-menu-dropdown-desktop__link"
+          >Cambiar a premium</a
+        >
+        <button
+          type="button"
+          (click)="performLogout()"
+          class="user-menu-dropdown-desktop__button"
+        >
+          Cerrar sesión
+        </button>
       </div>
     </div>
   </ng-template>

@@ -90,4 +90,16 @@ export class AuthService {
   isLoggedIn(): boolean {
     return !!this.getToken();
   }
+
+  getAllUsers(): Observable<User[]> {
+    return this.http.get<User[]>(`${this.apiUrl}/users`);
+  }
+
+  deleteUser(id: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/users/${id}`);
+  }
+
+  updateUserRole(id: string, role: string): Observable<any> {
+    return this.http.patch(`${this.apiUrl}/users/${id}`, { roles: role });
+  }
 }

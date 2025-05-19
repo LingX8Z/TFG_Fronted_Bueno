@@ -1,344 +1,253 @@
-/* Estilos Generales con Variables CSS */
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap');
 
+/* === Estilos Globales (Opcional, si no los tienes ya) === */
 body {
-    font-family: var(--font-primary);
-    margin: 0;
-    padding: 0;
-    color: var(--color-text);
-    line-height: 1.7;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  font-family: var(--font-primary), sans-serif;
+  background-color: var(--color-background-page);
+  color: var(--color-text);
+  margin: 0;
+  padding: 20px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-.container {
-    width: 90%;
-    max-width: 1500px;
-    margin: 30px auto;
-    padding: 30px;
-    background-color: var(--color-surface);
-    box-shadow: var(--card-shadow);
-    border-radius: var(--radius);
-}
-
-header {
-    background-color: var(--color-surface);
-    color: var(--color-text);
-    padding: 25px 30px;
-    text-align: left;
-    border-bottom: 1px solid var(--border-color);
-    border-radius: var(--radius) var(--radius) 0 0;
-}
-
-header h1 {
-    margin: 0;
-    font-size: 1.8em;
-    font-weight: 600;
-}
-
-main {
-    padding: 25px 0;
-}
-
-.toolbar {
-    margin-bottom: 25px;
-    text-align: right;
-}
-
-/* Estilos de los Botones Mejorados */
-.btn {
-    padding: 12px 22px;
-    border: none;
-    border-radius: var(--radius);
-    cursor: pointer;
-    font-size: 0.9em;
-    font-weight: 500;
-    letter-spacing: 0.5px;
-    transition: all var(--transition);
-    text-decoration: none;
-    display: inline-block;
-    margin-left: 10px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-}
-
-.btn-primary {
-    background-color: var(--button-background-color);
-    color: var(--button-text-color);
-}
-
-.btn-primary:hover {
-    background-color: var(--color-secondary); /* Un azul un poco más oscuro que el --button-background-color */
-    transform: translateY(-2px);
-    box-shadow: var(--card-hover-shadow);
-}
-
-.btn-secondary { /* Botón Editar */
-    background-color: var(--color-secondary);
-    color: var(--button-text-color);
-}
-
-.btn-secondary:hover {
-    background-color: var(--color-primary); /* Azul más oscuro */
-    transform: translateY(-2px);
-    box-shadow: var(--card-hover-shadow);
-}
-
-.btn-danger { /* Botón Eliminar - Estilo Outline */
-    background-color: transparent;
-    color: var(--color-primary);
-    border: 1px solid var(--color-primary);
-}
-
-.btn-danger:hover {
-    background-color: var(--color-light);
-    color: var(--color-primary);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(13, 71, 161, 0.1);
-}
-
-/* Estilos de la Tabla de Usuarios Mejorados */
+/* === Tabla de Usuarios === */
 .user-table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
-    margin-top: 25px;
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius);
-    overflow: hidden;
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-top: 30px;
+  background-color: var(--color-surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
 }
 
 .user-table th,
 .user-table td {
-    border-top: 1px solid var(--border-color);
-    padding: 15px 18px;
-    text-align: left;
-    vertical-align: middle;
-    font-family: var(--font-secondary); /* Usar Roboto para el contenido de la tabla para diferenciar o mantener Montserrat */
+  padding: 16px 20px;
+  text-align: left;
+  vertical-align: middle;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.95em;
 }
 
-.user-table th:first-child,
-.user-table td:first-child {
-    border-left: none;
+.user-table th {
+  background-color: var(--color-light);
+  color: var(--color-primary);
+  font-weight: 600;
+  font-size: 0.85em;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-.user-table th:last-child,
-.user-table td:last-child {
-    border-right: none;
+.user-table td:nth-child(3) {
+  font-weight: 600;
+  text-transform: capitalize;
+  color: var(--color-primary);
 }
 
-.user-table thead th {
-    background-color: var(--color-light); /* Fondo muy claro para encabezados */
-    color: var(--color-text);
-    font-weight: 600;
-    font-size: 0.9em;
-    font-family: var(--font-primary); /* Encabezados con Montserrat */
-    border-top: none;
-    border-bottom: 2px solid var(--border-color);
+.user-table td:last-child,
+.user-table th:last-child {
+  text-align: right;
 }
 
-.user-table tbody tr {
-    transition: background-color var(--transition);
+.user-table tbody tr:last-child td {
+  border-bottom: none;
 }
-
-.user-table tbody tr:first-child td {
-    border-top: none;
-}
-
-.user-table tbody tr:nth-child(even) {
-    background-color: var(--color-surface); /* O un var(--color-light) muy sutil si se quiere alternancia */
-}
-.user-table tbody tr:nth-child(odd) {
-    background-color: var(--color-surface);
-}
-
 
 .user-table tbody tr:hover {
-    background-color: var(--color-light);
+  background-color: var(--color-light);
+  transition: background-color var(--transition);
 }
 
-.user-table td .btn {
-    padding: 7px 12px;
-    font-size: 0.8em;
-    font-weight: 400;
-    margin-right: 5px;
-    margin-left: 0;
+
+/* === Botones === */
+.btn {
+  padding: 6px 14px;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 0.85em;
+  font-weight: 500;
+  font-family: var(--font-primary);
+  transition: all var(--transition);
+  text-decoration: none;
+  display: inline-block;
+  margin-left: 8px;
+  line-height: 1.5;
+}
+.btn:first-child {
+  margin-left: 0;
 }
 
-/* Footer Mejorado */
-footer {
-    text-align: center;
-    padding: 25px;
-    margin-top: 40px;
-    background-color: var(--color-surface);
-    border-top: 1px solid var(--border-color);
-    border-radius: 0 0 var(--radius) var(--radius);
-    font-size: 0.85em;
-    color: var(--color-text-light);
+.btn-danger {
+  background-color: #d32f2f;
+  color: #fff;
+}
+.btn-danger:hover {
+  background-color: #b71c1c;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
 }
 
-/* Estilos para un posible Modal (opcional) - Adaptados a la nueva paleta */
-/*
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(16, 42, 67, 0.55); // Usando var(--color-text) con opacidad
+.btn-secondary {
+  background-color: #6c757d;
+  color: #fff;
+}
+.btn-secondary:hover {
+  background-color: #5a6268;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-primary {
+  background-color: #1976D2;
+  color: #fff;
+}
+.btn-primary:hover {
+  background-color: #115293;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+/* === Estilos del Modal de Edición === */
+/* === Modal de Edición === */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+  backdrop-filter: blur(4px);
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .modal-content {
-    background-color: var(--color-surface);
-    margin: 8% auto;
-    padding: 30px;
-    border: none;
-    width: 90%;
-    max-width: 550px;
-    border-radius: var(--radius);
-    box-shadow: var(--card-shadow);
-    position: relative;
-    animation: modalOpen 0.4s ease-out;
+  background: var(--color-surface);
+  padding: 30px;
+  border-radius: var(--radius);
+  width: 100%;
+  max-width: 460px;
+  box-shadow: var(--shadow-lg);
+  animation: slideUp 0.3s ease-out;
 }
 
-@keyframes modalOpen {
-    from { opacity: 0; transform: translateY(-30px); }
-    to { opacity: 1; transform: translateY(0); }
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.close-btn {
-    color: var(--color-text-light);
-    position: absolute;
-    top: 15px;
-    right: 20px;
-    font-size: 32px;
-    font-weight: bold;
-    transition: color var(--transition);
+.modal-content h2 {
+  font-size: 1.6em;
+  font-weight: 600;
+  color: var(--color-primary);
+  margin-top: 0;
+  margin-bottom: 25px;
+  text-align: center;
 }
 
-.close-btn:hover,
-.close-btn:focus {
-    color: var(--color-text);
-    text-decoration: none;
-    cursor: pointer;
+.modal-content form label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 8px;
+  font-size: 0.95em;
+  color: var(--color-text-light);
 }
 
-#userForm h2 {
-    margin-top: 0;
-    margin-bottom: 25px;
-    font-weight: 600;
-    color: var(--color-text);
+.modal-content form input,
+.modal-content form select {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  font-family: var(--font-secondary);
+  font-size: 1em;
+  margin-bottom: 16px;
+  transition: border-color var(--transition), box-shadow var(--transition);
+  box-sizing: border-box;
 }
 
-#userForm label {
-    display: block;
-    margin-top: 15px;
-    margin-bottom: 5px;
-    font-weight: 500;
-    font-size: 0.9em;
-    color: var(--color-text-light);
+.modal-content form input:focus,
+.modal-content form select:focus {
+  outline: none;
+  border-color: var(--color-secondary);
+  box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.2);
 }
 
-#userForm input[type="text"],
-#userForm input[type="email"],
-#userForm select {
-    width: 100%;
-    padding: 12px;
-    margin-top: 0;
-    border: 1px solid var(--border-color);
-    border-radius: calc(var(--radius) - 4px); // Un radio ligeramente menor para inputs
-    box-sizing: border-box;
-    transition: border-color var(--transition), box-shadow var(--transition);
-    font-family: var(--font-secondary);
+.modal-actions {
+  margin-top: 25px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
 }
 
-#userForm input[type="text"]:focus,
-#userForm input[type="email"]:focus,
-#userForm select:focus {
-    border-color: var(--color-primary);
-    box-shadow: 0 0 0 0.2rem rgba(var(--color-primary-rgb, 8, 68, 158), 0.25); // Necesitaría var(--color-primary-rgb)
-    outline: none;
-}
 
-#userForm button[type="submit"] {
-    margin-top: 25px;
-    width: 100%;
-    padding: 12px;
-    background-color: var(--button-background-color); // Usar el color primario del botón
-    color: var(--button-text-color);
-    border-radius: var(--radius);
-}
-*/
-
-/* Responsividad Mejorada (sin cambios en la lógica, solo hereda nuevas variables) */
-@media (max-width: 992px) {
-    .container {
-        width: 95%;
-        padding: 20px;
-    }
-
-    header h1 {
-        font-size: 1.6em;
-    }
-
-    .user-table {
-        font-size: 0.9em;
-    }
-}
-
+/* === Responsividad Básica para la Tabla === */
 @media (max-width: 768px) {
-    header {
-        text-align: center;
-    }
-    header h1 {
-        font-size: 1.5em;
-    }
+  /* body { padding: 10px; } Descomentar si es necesario más espacio en móviles */
 
-    .btn {
-        padding: 10px 15px;
-        font-size: 0.85em;
-    }
+  .user-table thead {
+    display: none; /* Ocultar cabecera en pantallas pequeñas */
+  }
+  .user-table tr {
+    display: block;
+    margin-bottom: 15px;
+    border: 1px solid var(--border-color); /* Borde alrededor de cada "tarjeta" */
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+  }
+  .user-table tr:last-child {
+    margin-bottom: 0;
+  }
+  .user-table td {
+    display: block;
+    text-align: right !important; /* Forzar alineación para el dato */
+    padding-left: 40%; /* Espacio para la pseudo-etiqueta */
+    position: relative;
+    border-bottom: 1px dashed var(--color-light);
+  }
+  .user-table td:last-child {
+    border-bottom: none; /* Quitar borde inferior del último td en vista tarjeta */
+  }
+  .user-table td::before {
+    content: attr(data-label); /* Necesitarás añadir data-label a tus <td> */
+    position: absolute;
+    left: 10px;
+    width: calc(40% - 20px); /* Ancho de la etiqueta menos padding */
+    font-weight: 600;
+    color: var(--color-primary);
+    text-align: left;
+    font-size: 0.8em;
+    text-transform: uppercase;
+  }
 
-    .user-table th,
-    .user-table td {
-        padding: 10px 12px;
-    }
+  /* Ajustes para la celda de Acciones en vista móvil */
+  .user-table td:last-child::before {
+    display: none; /* No mostrar "Acciones:" como etiqueta */
+  }
+  .user-table td:last-child {
+    padding-left: 15px; /* Reset padding para centrar botones */
+    text-align: center !important;
+  }
+  .user-table td:last-child .btn {
+    margin: 5px;
+  }
 
-    .table-responsive-container {
-        width: 100%;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-    }
-}
-
-@media (max-width: 576px) {
-    body {
-        line-height: 1.6;
-    }
-    header h1 {
-        font-size: 1.3em;
-    }
-
-    .toolbar {
-        text-align: center;
-    }
-
-    .toolbar .btn {
-        width: auto;
-        display: block;
-        margin: 0 auto 10px auto;
-        max-width: 280px;
-    }
-
-    .user-table td .btn {
-        display: inline-block;
-        width: auto;
-        padding: 6px 10px;
-        margin-bottom: 5px;
-    }
-    .user-table td {
-        white-space: normal;
-    }
+  .modal-content {
+    max-width: 90%;
+  }
 }
