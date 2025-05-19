@@ -13,10 +13,11 @@ body {
 
 /* === Tabla de Usuarios === */
 .user-table {
-  width: 100%;
+  width: 95%;
   border-collapse: separate;
   border-spacing: 0;
-  margin-top: 30px;
+  margin: 0 auto;
+  margin-top: 2%;
   background-color: var(--color-surface);
   border-radius: var(--radius);
   box-shadow: var(--shadow-md);

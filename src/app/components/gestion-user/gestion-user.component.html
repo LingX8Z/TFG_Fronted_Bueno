@@ -15,9 +15,10 @@
       <td [ngClass]="'role-' + user.roles">{{ user.roles }}</td>
 
       <td>
-        <button class="btn btn-danger" (click)="deleteUser(user._id!)">
+        <button class="btn btn-danger" (click)="openDeleteModal(user)">
           Eliminar
         </button>
+
         <button class="btn btn-secondary" (click)="openEditModal(user)">
           Editar
         </button>
@@ -36,9 +37,9 @@
 
       <label>Rol:</label>
       <select [(ngModel)]="editableUser.roles" name="roles">
-        <option value="user">User</option>
-        <option value="premium">Premium</option>
-        <option value="administrador">Administrador</option>
+        <option value="User">User</option>
+        <option value="Premium">Premium</option>
+        <option value="Administrador">Administrador</option>
       </select>
 
       <div class="modal-actions">
@@ -58,5 +59,24 @@
         </button>
       </div>
     </form>
+  </div>
+</div>
+
+<!-- Modal de confirmación para eliminar -->
+<div class="modal-overlay" *ngIf="isDeleteModalOpen">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h2>Confirmar Eliminación</h2>
+    <p>
+      ¿Estás seguro de que deseas eliminar al usuario
+      <strong>{{ userToDelete?.fullName }}</strong
+      >?
+    </p>
+
+    <div class="modal-actions">
+      <button class="btn btn-danger" (click)="confirmDelete()">Eliminar</button>
+      <button class="btn btn-secondary" (click)="cancelDelete()">
+        Cancelar
+      </button>
+    </div>
   </div>
 </div>

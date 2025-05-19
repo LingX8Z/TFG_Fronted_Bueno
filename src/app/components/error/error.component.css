@@ -1,0 +1,203 @@
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--error-font-primary);
+    background-color: var(--color-bg-page);
+    color: var(--color-text-primary);
+    line-height: 1.7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.error-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.error-container {
+    background-color: var(--color-surface);
+    padding: 40px 30px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    text-align: center;
+    max-width: 600px;
+    width: 100%;
+    animation: fadeInScaleUp 0.6s ease-out forwards;
+    opacity: 0;
+    transform: scale(0.95);
+}
+
+@keyframes fadeInScaleUp {
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* ... (resto de tu CSS anterior) ... */
+
+.error-code {
+    font-size: clamp(6rem, 25vw, 12rem); /* Tamaño de fuente responsivo */
+    font-weight: 900; /* Extra bold/black para el código de error */
+    line-height: 1;
+    margin-bottom: 20px;
+    color: var(--color-error-code-main);
+    position: relative;
+    user-select: none; /* Que no se pueda seleccionar */
+}
+
+.error-code span {
+    display: inline-block;
+    /* opacity: 0;  <-- Quitamos la opacidad inicial global de aquí */
+    /* La opacidad inicial se manejará por cada tipo de animación o elemento */
+}
+
+/* Aplicamos animación y opacidad inicial a los '4' */
+.error-code span:not(.error-code-zero) {
+    animation: bounceIn 0.5s ease-out forwards;
+    opacity: 0; /* Opacidad inicial para los '4' */
+}
+
+/* Delays para los '4' */
+.error-code span:nth-child(1) { animation-delay: 0.2s; } /* Primer 4 */
+/* El span:nth-child(2) es el .error-code-zero, se maneja abajo */
+.error-code span:nth-child(3) { animation-delay: 0.4s; } /* Segundo 4 */
+
+
+/* Estilos específicos para el '0' */
+.error-code .error-code-zero {
+    color: var(--color-error-code-zero);
+    animation: bounceInZero 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55) 0.3s forwards;
+    display: inline-block; /* Necesario para transform */
+    opacity: 0; /* Opacidad inicial específica para el '0', antes de que su animación comience */
+}
+
+@keyframes bounceIn {
+    0% { opacity: 0; transform: translateY(30px) scale(0.8); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes bounceInZero {
+    0% { opacity: 0; transform: scale(0.5); }
+    60% { opacity: 1; transform: scale(1.15); } /* Aseguramos opacidad 1 aquí */
+    100% { opacity: 1; transform: scale(1); }   /* Y la mantenemos en el estado final */
+}
+
+
+
+
+/* ... (resto de tu CSS) ... */
+
+.error-title {
+    font-size: clamp(1.5rem, 5vw, 2.25rem); /* Tamaño de fuente responsivo */
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-bottom: 15px;
+    animation: fadeInDown 0.5s ease-out 0.5s forwards;
+    opacity: 0;
+}
+
+.error-message {
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 30px;
+    max-width: 480px; /* Para que no sea muy ancho en el contenedor */
+    margin-left: auto;
+    margin-right: auto;
+    animation: fadeInDown 0.5s ease-out 0.6s forwards;
+    opacity: 0;
+}
+
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ... (otros estilos de error-style.css) ... */
+
+.btn.btn-home {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px; /* Espacio entre el icono y el texto */
+    /* Cambiamos a las nuevas variables de tu paleta principal */
+    background-color: var(--button-background-color); /* NUEVO COLOR BASE: #419dff */
+    color: var(--button-text-color);            /* Color de texto: #FFFFFF */
+    font-family: var(--font-primary); /* Usando tu variable --font-primary */
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: none;
+    padding: 12px 24px;
+    border-radius: var(--radius); /* Usando tu variable --radius */
+    border: none;
+    cursor: pointer;
+    transition: background-color var(--transition), transform var(--transition), box-shadow var(--transition); /* Usando tu variable --transition */
+    /* Puedes ajustar la sombra para que coincida con el nuevo color o usar una genérica */
+    box-shadow: 0 4px 10px rgba(65, 157, 255, 0.25); /* Sombra ajustada al azul #419dff */
+    animation: fadeInUp 0.5s ease-out 0.7s forwards;
+    opacity: 0;
+}
+
+.btn.btn-home:hover,
+.btn.btn-home:focus {
+    /* Usamos --color-secondary para el hover, que es un azul más oscuro de tu paleta */
+    background-color: var(--color-secondary); /* NUEVO COLOR HOVER: #1976D2 */
+    transform: translateY(-2px);
+    /* Sombra de hover ajustada */
+    box-shadow: 0 6px 15px rgba(25, 118, 210, 0.3); /* Sombra ajustada al azul #1976D2 */
+}
+
+.btn.btn-home:focus-visible {
+    outline: 2px solid var(--button-background-color); /* Outline con el color base del botón */
+    outline-offset: 3px;
+}
+
+.btn.btn-home:active {
+    transform: translateY(0);
+    /* Sombra de active ajustada */
+    box-shadow: 0 2px 5px rgba(65, 157, 255, 0.2);
+}
+
+.btn.btn-home svg {
+    transition: transform var(--transition);
+}
+.btn.btn-home:hover svg {
+    transform: scale(1.1) rotate(-5deg);
+}
+
+/* ... (resto de error-style.css como @keyframes fadeInUp etc.) ... */
+
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Pequeños ajustes para pantallas más pequeñas */
+@media (max-width: 480px) {
+    .error-container {
+        padding: 30px 20px;
+    }
+    .error-title {
+        font-size: 1.5rem; /* Asegurar que no sea demasiado grande */
+    }
+    .error-message {
+        font-size: 0.9rem;
+    }
+    .btn.btn-home {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+    }
+}

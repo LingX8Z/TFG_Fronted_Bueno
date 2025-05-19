@@ -99,7 +99,8 @@ export class AuthService {
     return this.http.delete(`${this.apiUrl}/users/${id}`);
   }
 
-  updateUserRole(id: string, role: string): Observable<any> {
-    return this.http.patch(`${this.apiUrl}/users/${id}`, { roles: role });
+  updateUserDetails(id: string, data: { fullName: string; roles: string }): Observable<any> {
+    return this.http.patch(`${this.apiUrl}/users/${id}`, data);
   }
+
 }

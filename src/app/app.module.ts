@@ -16,6 +16,8 @@ import { IAsComponent } from './components/ias/ias.component';
 import { IasModule } from './components/ias/ias.module';
 import { GestionUserComponent } from './components/gestion-user/gestion-user.component';
 import { GestionarMicuentaComponent } from './components/gestionar-micuenta/gestionar-micuenta.component';
+import { ErrorComponent } from './components/error/error.component';
+import { PagoPremiumComponent } from './components/pago-premium/pago-premium.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +27,8 @@ import { GestionarMicuentaComponent } from './components/gestionar-micuenta/gest
     SobreMiComponent,
     GestionUserComponent,
     GestionarMicuentaComponent,
+    ErrorComponent,
+    PagoPremiumComponent,
   ],
   imports: [
     BrowserModule,

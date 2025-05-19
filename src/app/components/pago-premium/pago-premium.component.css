@@ -1,0 +1,622 @@
+/* pago-premium.component.css */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Roboto:wght@400;500&display=swap');
+
+:host {
+    --color-primary: #08449e;
+    --color-secondary: #1976D2;
+    --color-tertiary: #42A5F5;
+    --color-light: #E3F2FD;
+    --color-background: #F0F7FC;
+    --color-surface: #FFFFFF;
+    --color-text: #102A43;
+    --color-text-light: #627D98;
+    --color-text-placeholder: #90A4AE;
+    --color-error: #D32F2F;
+
+    --button-premium-bg: #FFC107;
+    --button-premium-text: #212529;
+    --button-premium-hover-bg: #FFB300;
+
+    --button-payment-bg: var(--color-primary);
+    --button-payment-text: #FFFFFF;
+    --button-payment-hover-bg: #063782;
+
+    --radius: 0.5rem;
+    --transition: 0.25s ease-in-out;
+
+    --card-shadow: 0 8px 20px rgba(13, 71, 161, 0.07);
+    --input-border-color: #CFD8DC;
+    --input-focus-border-color: var(--color-secondary);
+    --input-focus-shadow: 0 0 0 3px rgba(25, 118, 210, 0.15);
+
+    --font-primary: 'Montserrat', sans-serif;
+    --font-secondary: 'Roboto', sans-serif;
+
+    --color-success: #28a745;
+    --color-success-light-bg: #E8F5E9;
+    --color-premium-accent-text: var(--color-primary);
+}
+
+:host {
+    font-family: var(--font-primary);
+    display: block;
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+.upgrade-page-wrapper {
+    background-color: var(--color-background);
+    color: var(--color-text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    padding-top: 40px;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 40px; /* Added padding at the bottom */
+}
+
+.upgrade-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.upgrade-header h1 {
+    font-size: clamp(1.8rem, 5vw, 2.6rem); /* Slightly adjusted for potentially longer text */
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--color-text);
+}
+
+.upgrade-header .text-premium {
+    color: var(--button-premium-bg);
+    /* For already upgraded state, you might want a different color or keep it consistent */
+}
+.upgrade-header .text-premium.role-administrador { /* Example for specific role styling */
+    color: var(--color-primary); /* Admin role in primary blue */
+}
+
+
+.header-subtitle {
+    font-size: 1.1rem;
+    color: var(--color-text-light);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.upgrade-content-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: 40px;
+    align-items: flex-start;
+}
+
+.plan-card, .payment-form-card, .already-upgraded-card {
+    background-color: var(--color-surface);
+    border-radius: var(--radius);
+    padding: 30px;
+    box-shadow: var(--card-shadow);
+    height: 100%;
+}
+
+/* Styles for the "Already Upgraded" Section */
+.already-upgraded-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 0; /* Add some vertical padding */
+    width: 100%;
+}
+
+.already-upgraded-card {
+    text-align: center;
+    max-width: 650px; /* Control width of this card */
+    width: 100%;
+    padding: 40px; /* More padding for this prominent card */
+}
+
+.already-upgraded-icon {
+    width: 70px;
+    height: 70px;
+    fill: var(--color-success); /* Green check for success/confirmation */
+    margin: 0 auto 25px auto;
+    display: block;
+}
+
+.already-upgraded-card h2 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: 15px;
+}
+.already-upgraded-card .text-premium-inline { /* For inline role text */
+    color: var(--button-premium-bg);
+    font-weight: 700;
+}
+.already-upgraded-card .text-premium-inline.role-administrador {
+    color: var(--color-primary);
+}
+
+
+.already-upgraded-card p {
+    font-size: 1.05rem;
+    color: var(--color-text-light);
+    margin-bottom: 30px;
+    line-height: 1.7;
+}
+
+.current-benefits {
+    margin-bottom: 30px;
+    text-align: left;
+    padding: 20px;
+    background-color: var(--color-light);
+    border-radius: var(--radius);
+}
+.current-benefits h4 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    margin-bottom: 15px;
+    text-align: center;
+}
+.current-benefits .benefits-list li {
+    font-size: 0.9rem; /* Slightly smaller for this context */
+}
+
+
+.btn-explore {
+    background-color: var(--button-payment-bg); /* Use a primary action color */
+    color: var(--button-payment-text);
+    padding: 12px 30px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: var(--radius);
+    transition: background-color var(--transition), transform var(--transition);
+    display: inline-block; /* To respect padding and margin */
+    width: auto; /* Not full width */
+}
+
+.btn-explore:hover {
+    background-color: var(--button-payment-hover-bg);
+    transform: translateY(-2px);
+}
+
+
+.plan-card-header {
+    text-align: center;
+    border-bottom: 1px solid var(--input-border-color);
+    padding-bottom: 20px;
+    margin-bottom: 25px;
+}
+
+.plan-eyebrow {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 15px;
+    background-color: var(--color-light);
+    color: var(--color-premium-accent-text);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+}
+
+.plan-card-header h2 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: 10px;
+}
+
+.plan-price {
+    margin-bottom: 10px;
+}
+
+.plan-price .price-amount {
+    font-size: 2.8rem;
+    font-weight: 800;
+    color: var(--color-primary);
+}
+
+.plan-price .price-period {
+    font-size: 1rem;
+    color: var(--color-text-light);
+}
+
+.plan-offer {
+    font-size: 0.9rem;
+    color: var(--color-success);
+    font-weight: 500;
+}
+
+.plan-card-body h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: 15px;
+}
+
+.benefits-list {
+    list-style: none;
+    padding: 0;
+}
+
+.benefits-list li {
+    display: flex;
+    align-items: center;
+    font-size: 0.95rem;
+    color: var(--color-text-light);
+    margin-bottom: 12px;
+    font-family: var(--font-secondary);
+}
+
+.benefit-icon {
+    width: 20px;
+    height: 20px;
+    fill: var(--color-success);
+    margin-right: 10px;
+    flex-shrink: 0;
+}
+
+.payment-form-card h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--color-text-light);
+    margin-bottom: 6px;
+}
+
+.form-group input[type="text"] {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid var(--input-border-color);
+    border-radius: var(--radius);
+    font-family: var(--font-secondary);
+    font-size: 1rem;
+    color: var(--color-text);
+    transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.form-group input::placeholder {
+    color: var(--color-text-placeholder);
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--input-focus-border-color);
+    box-shadow: var(--input-focus-shadow);
+}
+
+.input-with-icon {
+    position: relative;
+}
+.input-with-icon input {
+    padding-right: 70px;
+}
+.card-icons {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    gap: 5px;
+}
+.card-icon-img {
+    height: 24px;
+    width: auto;
+}
+
+.form-row {
+    display: flex;
+    gap: 20px;
+}
+
+.form-row .form-group {
+    flex: 1;
+}
+
+.secure-payment-info {
+    display: flex;
+    align-items: center;
+    font-size: 0.85rem;
+    color: var(--color-text-light);
+    background-color: var(--color-light);
+    padding: 10px 15px;
+    border-radius: var(--radius);
+    margin-top: 10px;
+    margin-bottom: 25px;
+}
+
+.secure-payment-info svg {
+    width: 20px;
+    height: 20px;
+    fill: var(--color-secondary);
+    margin-right: 10px;
+    flex-shrink: 0;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 25px;
+    border: 1px solid transparent;
+    border-radius: var(--radius);
+    font-family: var(--font-primary);
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color var(--transition), transform var(--transition), box-shadow var(--transition);
+    width: 100%;
+}
+.btn:disabled {
+    background-color: #B0BEC5;
+    color: #78909C;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+
+.btn-submit-payment {
+    background-color: var(--button-payment-bg);
+    color: var(--button-payment-text);
+    box-shadow: 0 4px 12px rgba(8, 68, 158, 0.2);
+}
+
+.btn-submit-payment:not(:disabled):hover {
+    background-color: var(--button-payment-hover-bg);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(8, 68, 158, 0.25);
+}
+
+.terms-notice {
+    font-size: 0.8rem;
+    color: var(--color-text-light);
+    text-align: center;
+    margin-top: 20px;
+}
+
+.terms-notice a {
+    color: var(--color-secondary);
+    text-decoration: none;
+    font-weight: 500;
+}
+.terms-notice a:hover {
+    text-decoration: underline;
+}
+
+.upgrade-footer {
+    text-align: center;
+    padding: 30px 0;
+    font-size: 0.9rem;
+    color: var(--color-text-light);
+    border-top: 1px solid var(--input-border-color);
+    margin-top: 50px;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    margin: 30px auto 15px auto;
+    border: 5px solid #E0E0E0;
+    border-top-color: var(--color-secondary);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(16, 42, 67, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease-out, visibility 0.3s ease-out;
+    backdrop-filter: blur(3px);
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content-wrapper {
+    background: var(--color-surface);
+    border-radius: var(--radius);
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 0 10px 30px rgba(16, 42, 67, 0.2);
+    animation: modal-appear 0.3s ease-out forwards;
+    transform: scale(0.95);
+    opacity: 0;
+}
+.modal-overlay.active .modal-content-wrapper {
+    transform: scale(1);
+    opacity: 1;
+}
+
+
+@keyframes modal-appear {
+    from { opacity: 0; transform: scale(0.95) translateY(10px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.modal-header-section {
+    padding: 15px 20px;
+    border-bottom: 1px solid var(--input-border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.modal-header-section h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    margin: 0;
+}
+
+.btn-close-modal {
+    background: none;
+    border: none;
+    font-size: 1.8em;
+    color: var(--color-text-light);
+    cursor: pointer;
+    padding: 0 5px;
+    line-height: 1;
+    transition: color var(--transition);
+}
+.btn-close-modal:hover {
+    color: var(--color-error);
+}
+
+
+.modal-body {
+    padding: 25px 30px;
+}
+.modal-body.text-center {
+    text-align: center;
+}
+
+.modal-status-text {
+    font-size: 1.1rem;
+    color: var(--color-text);
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+.modal-status-subtext {
+    font-size: 0.9rem;
+    color: var(--color-text-light);
+}
+
+.success-icon {
+    width: 60px;
+    height: 60px;
+    fill: var(--color-success);
+    margin: 0 auto 20px auto;
+    display: block;
+}
+
+.modal-success-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: 10px;
+}
+
+.modal-success-message {
+    font-size: 1rem;
+    color: var(--color-text-light);
+    margin-bottom: 25px;
+}
+
+.btn-modal-close {
+    background-color: var(--button-payment-bg);
+    color: var(--button-payment-text);
+    padding: 10px 25px;
+    border-radius: var(--radius);
+    border: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color var(--transition);
+    min-width: 120px;
+}
+.btn-modal-close:hover {
+    background-color: var(--button-payment-hover-bg);
+}
+
+.invalid-input {
+    border-color: var(--color-error) !important;
+}
+.error-message {
+    color: var(--color-error);
+    font-size: 0.8rem;
+    margin-top: 4px;
+    text-align: left; /* Ensure error messages are aligned left */
+}
+
+
+@media (max-width: 900px) {
+    .upgrade-content-grid {
+        grid-template-columns: 1fr;
+    }
+    .payment-form-section, .already-upgraded-container { /* Ensure already upgraded section also stacks */
+        margin-top: 30px;
+    }
+}
+
+@media (max-width: 600px) {
+    .upgrade-page-wrapper {
+        padding-top: 20px;
+    }
+    .upgrade-header h1 {
+        font-size: 1.6rem; /* Further adjust for small screens */
+    }
+    .header-subtitle {
+        font-size: 0.95rem;
+    }
+    .plan-card, .payment-form-card, .already-upgraded-card {
+        padding: 20px;
+    }
+    .plan-price .price-amount {
+        font-size: 2rem;
+    }
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+    .form-row .form-group {
+        margin-bottom: 20px;
+    }
+    .btn {
+        font-size: 0.9rem;
+        padding: 12px 20px;
+    }
+    .payment-form-card h3 {
+        font-size: 1.3rem;
+    }
+    .already-upgraded-card h2 {
+        font-size: 1.5rem;
+    }
+    .already-upgraded-card p {
+        font-size: 1rem;
+    }
+    .modal-content-wrapper {
+        max-width: calc(100% - 30px);
+    }
+    .modal-body {
+        padding: 20px;
+    }
+}

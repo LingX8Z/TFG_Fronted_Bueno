@@ -15,7 +15,11 @@ export class GestionUserComponent implements OnInit {
   isEditModalOpen = false;
   editableUser: Partial<User> = {};
 
-  constructor(private userService: AuthService) {}
+  // Nuevo modal de confirmación
+  isDeleteModalOpen = false;
+  userToDelete: User | null = null;
+
+  constructor(private userService: AuthService) { }
 
   ngOnInit(): void {
     this.loadUsers();
@@ -46,14 +50,43 @@ export class GestionUserComponent implements OnInit {
 
   submitEdit(): void {
     if (this.editableUser._id) {
-      this.userService.updateUserRole(this.editableUser._id, this.editableUser.roles || 'user')
-        .subscribe({
-          next: () => {
-            this.loadUsers();
-            this.closeEditModal();
-          },
-          error: (err) => console.error('Error al actualizar usuario', err)
-        });
+      this.userService.updateUserDetails(this.editableUser._id, {
+        fullName: this.editableUser.fullName!,
+        roles: this.editableUser.roles!
+      }).subscribe({
+        next: () => {
+          this.loadUsers();
+          this.closeEditModal();
+        },
+        error: (err) => console.error('Error al actualizar usuario', err)
+      });
     }
+  }
+
+  // Al hacer clic en "Eliminar"
+  openDeleteModal(user: User): void {
+    this.userToDelete = user;
+    this.isDeleteModalOpen = true;
+  }
+  // Confirmar eliminación
+  confirmDelete(): void {
+    if (this.userToDelete?._id) {
+      this.userService.deleteUser(this.userToDelete._id).subscribe({
+        next: () => {
+          this.loadUsers();
+          this.cancelDelete(); // cerrar el modal
+        },
+        error: (err) => {
+          console.error('Error al eliminar usuario', err);
+          this.cancelDelete();
+        }
+      });
+    }
+  }
+
+  // Cancelar modal
+  cancelDelete(): void {
+    this.isDeleteModalOpen = false;
+    this.userToDelete = null;
   }
 }
