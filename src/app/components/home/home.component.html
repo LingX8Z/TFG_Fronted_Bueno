@@ -26,7 +26,7 @@
             <p>Un modelo multimodal avanzado de Google, capaz de razonar sobre texto, imágenes, audio y video. Ideal para tareas complejas y creativas.</p>
             <a class="btn-chatbot"
                [class.btn-disabled]="!logeado"
-               [routerLink]="logeado ? ['/chat', 'gemini'] : null"
+               [routerLink]="logeado ? ['/gemini'] : null"
                (click)="!logeado && $event.preventDefault()">Probar Gemini</a>
         </div>
         <div class="chatbot-card">
@@ -35,7 +35,7 @@
             <p>Combina la potencia de los modelos de lenguaje con bases de conocimiento externas para respuestas más informadas y contextualizadas.</p>
             <a class="btn-chatbot"
                [class.btn-disabled]="!logeado"
-               [routerLink]="logeado ? ['/chat', 'RAG'] : null"
+               [routerLink]="logeado ? ['/RAG'] : null"
                (click)="!logeado && $event.preventDefault()">Probar RAG</a>
         </div>
         <div class="chatbot-card">
@@ -44,7 +44,7 @@
             <p>La última generación de modelos de lenguaje abiertos de Meta, ofreciendo un rendimiento excepcional en diversas tareas de PNL.</p>
             <a class="btn-chatbot"
                [class.btn-disabled]="!logeado"
-               [routerLink]="logeado ? ['/chat', 'llama3'] : null"
+               [routerLink]="logeado ? ['/llama3'] : null"
                (click)="!logeado && $event.preventDefault()">Probar Llama 3</a>
         </div>
     </div>

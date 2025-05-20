@@ -2,6 +2,7 @@ import { Component, HostListener, ElementRef, OnInit } from '@angular/core';
 import { AuthService } from '../../../services/auth.service'; // Verifica esta ruta
 import { User } from '../../../interfaces/user.iterface'; // Verifica esta ruta y el nombre del archivo (debería ser .interface.ts)
 import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'shared-header',
@@ -18,7 +19,8 @@ export class HeaderComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private elementRef: ElementRef // Para detectar clics fuera del menú
+    private elementRef: ElementRef, // Para detectar clics fuera del menú
+    private router: Router
   ) {
     this.user = this.authService.currentUser$;
   }
@@ -71,7 +73,7 @@ export class HeaderComponent implements OnInit {
       document.body.style.overflow = '';
     }
     if (!oldIsMobile && this.isMobile && this.userMenuOpen) { // Si se redimensiona a móvil y el menú de usuario de escritorio estaba abierto
-        this.userMenuOpen = false;
+      this.userMenuOpen = false;
     }
   }
 
@@ -81,12 +83,14 @@ export class HeaderComponent implements OnInit {
 
   performLogout(): void { // Logout desde el menú de escritorio
     this.authService.logout();
+    this.router.navigate(['/home']);
     this.closeUserMenu();
     this.cerrarMenuSiEsMovil(); // Aunque improbable, cierra el menú móvil si estuviera abierto
   }
 
   performLogoutMobile(): void { // Logout desde el menú móvil
     this.authService.logout();
+    this.router.navigate(['/home']);
     this.cerrarMenuSiEsMovil(); // Cierra el menú móvil principal
   }
 
@@ -98,12 +102,11 @@ export class HeaderComponent implements OnInit {
       this.closeUserMenu();
     }
 
-    // Opcional: Lógica para cerrar el menú móvil principal si se hace clic fuera
-    // const mainMobileNav = this.elementRef.nativeElement.querySelector('.header__nav');
-    // const menuToggle = this.elementRef.nativeElement.querySelector('.header__menu-toggle');
-    // if (this.menuAbierto && mainMobileNav && !mainMobileNav.contains(event.target as Node) &&
-    //     menuToggle && !menuToggle.contains(event.target as Node)) {
-    //   this.cerrarMenuSiEsMovil();
-    // }
+    const mainMobileNav = this.elementRef.nativeElement.querySelector('.header__nav');
+    const menuToggle = this.elementRef.nativeElement.querySelector('.header__menu-toggle');
+    if (this.menuAbierto && mainMobileNav && !mainMobileNav.contains(event.target as Node) &&
+      menuToggle && !menuToggle.contains(event.target as Node)) {
+      this.cerrarMenuSiEsMovil();
+    }
   }
 }

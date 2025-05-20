@@ -21,6 +21,7 @@ body {
   overflow: hidden;
   margin: 0 auto;
   margin-top: 3%;
+  margin-bottom: 3%;
 }
 
 .conversation-list-container {
@@ -37,6 +38,51 @@ body {
   font-weight: bold;
   margin-bottom: 10px;
   color: #333;
+}
+
+/* --- Role Indicator in Conversation List Title --- */
+
+/* Default style for User (Gris) */
+.conversation-list-title .role-indicator {
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.75em; /* Slightly smaller than the title */
+  font-weight: bold;
+  margin-left: 8px; /* Space from "Conversaciones" */
+  background-color: #e0e0e0; /* Light grey background */
+  color: #555555; /* Dark grey text */
+  border: 1px solid #cccccc;
+}
+
+/* Premium Role Style (Dorado) */
+.premium-theme .conversation-list-title .role-indicator {
+  background-color: orange; /* Gold */
+  color: #4A3B00; /* Darker gold/brown text for contrast */
+  border: 1px solid orange; /* Goldenrod border */
+  text-shadow: 0 0 3px rgba(255, 255, 255, 0.3);
+}
+
+/* Admin Role Style (Plateado) */
+.admin-theme .conversation-list-title .role-indicator {
+  background-color: #FFD700; /* Silver */
+  color: #2F2F2F; /* Dark grey text for contrast */
+  border: 1px solid #FFD700; /* Darker silver border */
+  text-shadow: 0 0 3px rgba(255, 255, 255, 0.4);
+}
+
+/* Optional: Adjustments to the main title text color if needed when a theme is active */
+.premium-theme .conversation-list-title,
+.admin-theme .conversation-list-title {
+  display: flex; /* Helps align the main title and span nicely */
+  align-items: center;
+}
+
+.premium-theme .conversation-list-title {
+ color: #ecf0f1; /* From your existing premium theme */
+}
+
+.admin-theme .conversation-list-title {
+ color: #f5f6fa; /* From your existing admin theme */
 }
 
 .conversation-list-container hr {
@@ -104,6 +150,7 @@ body {
 
 .under-conversation-text p {
   margin-top: 5px;
+  color: black;
 }
 
 .chat-area {
@@ -517,3 +564,159 @@ body {
   font-weight: bold;
 }
 
+/* ... tus estilos existentes ... */
+
+/* --- Estilos para Roles --- */
+
+/* Tema Base (ya lo tienes) */
+
+/* Tema Premium */
+.premium-theme .conversation-list-container {
+  background: linear-gradient(135deg, #2c3e50, #3498db); /* Azul oscuro a azul más claro */
+  border-right: 1px solid #4a6fa5;
+}
+.premium-theme .conversation-list-title {
+  color: #ecf0f1; /* Texto claro */
+}
+.premium-theme .conversation-list-container hr {
+  border-top: 1px solid #4a6fa5;
+}
+.premium-theme .new-conversation-button {
+  background-color: #e67e22; /* Naranja */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+.premium-theme .new-conversation-button:hover {
+  background-color: #d35400;
+}
+.premium-theme .conversation-item {
+  color: white; /* Texto de item gris claro */
+  border-bottom: 1px solid #3e5770;
+}
+.premium-theme .conversation-item:hover {
+  background-color: rgba(236, 240, 241, 0.1); /* Hover sutil */
+  color: #fff;
+}
+.premium-theme .conversation-item.active {
+  background-color: #e67e22; /* Naranja para activo */
+  color: white;
+  font-weight: bold;
+}
+.premium-theme .options-button {
+  color: white;
+}
+.premium-theme .options-button:hover {
+  color: #fff;
+}
+.premium-theme .chat-header {
+  background: #34495e; /* Azul grisáceo oscuro */
+  border-bottom: 1px solid #2c3e50;
+}
+.premium-theme .chat-header h1 {
+  color: #e67e22; /* Naranja para el título principal */
+}
+.premium-theme .header-info h2 {
+  color: #ecf0f1; /* Texto de subtítulo claro */
+}
+.premium-theme .star-icon {
+  color: #f1c40f; /* Amarillo estrella */
+  margin-left: 8px;
+}
+.premium-theme .under-conversation-text {
+  color: #bdc3c7;
+  border-top: 1px solid #3e5770;
+}
+.premium-theme .under-conversation-text span {
+  background-color: #e67e22;
+  color: white;
+}
+
+.premium-theme  .under-conversation-text p {
+  margin-top: 5px;
+  color: white;
+}
+
+
+/* Tema Administrador (puede heredar de premium o ser completamente diferente) */
+.admin-theme .conversation-list-container {
+  background: linear-gradient(135deg, #1d2b3a, #4a0e6c); /* Oscuro a púrpura */
+  border-right: 1px solid #5d3d77;
+}
+.admin-theme .conversation-list-title {
+  color: #f5f6fa;
+  text-shadow: 0 0 5px rgba(255,255,255,0.3);
+}
+.admin-theme .conversation-list-container hr {
+  border-top: 1px solid #5d3d77;
+}
+.admin-theme .new-conversation-button {
+  background-color: #8e44ad; /* Púrpura */
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.admin-theme .new-conversation-button:hover {
+  background-color: #732d91;
+}
+.admin-theme .conversation-item {
+  color: #dfe6e9;
+  border-bottom: 1px solid #4a315e;
+}
+.admin-theme .conversation-item:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+.admin-theme .conversation-item.active {
+  background-color: #8e44ad; /* Púrpura para activo */
+  color: white;
+  border-left: 3px solid #f1c40f; /* Borde dorado */
+}
+.admin-theme .options-button {
+  color: white;
+}
+.admin-theme .options-button:hover {
+  color: #f1c40f; /* Dorado al hacer hover */
+}
+.admin-theme .chat-header {
+  background: #2c1e38; /* Púrpura muy oscuro */
+  border-bottom: 1px solid #1d2b3a;
+}
+.admin-theme .chat-header h1 {
+  color: #8e44ad;
+  font-variant: small-caps;
+}
+.admin-theme .header-info h2 {
+  color: #f5f6fa;
+}
+.admin-theme .star-icon {
+  color: #ffd700; /* Dorado */
+  animation: pulse 1.5s infinite; /* Animación sutil */
+}
+.admin-theme .under-conversation-text {
+  color: #dfe6e9;
+  border-top: 1px solid #4a315e;
+}
+.admin-theme .under-conversation-text span {
+  background-color: #8e44ad;
+  color: white;
+  padding: 3px 7px;
+}
+
+.admin-theme  .under-conversation-text p {
+  margin-top: 5px;
+  color: white;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+.user-limit-info {
+  padding: 10px;
+  font-size: 0.8em;
+  text-align: center;
+  color: #777;
+  background-color: #f9f9f9;
+  border-top: 1px solid #e0e0e0;
+}

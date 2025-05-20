@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { IAsComponent } from './ias.component';
 import { Llama3Component } from './components/llama3/llama3.component';
 import { GeminiComponent } from './components/gemini/gemini.component';
+import { AuthGuard } from '../../guards/auth.guard';
 
 const routes: Routes = [
   {
@@ -11,15 +12,18 @@ const routes: Routes = [
   },
   {
     path: 'RAG',
-    component: Llama3Component
+    component: Llama3Component,
+    canActivate: [AuthGuard]
   },
   {
     path: 'llama3',
-    component: Llama3Component
+    component: Llama3Component,
+    canActivate: [AuthGuard]
   },
   {
     path: 'gemini',
-    component: GeminiComponent
+    component: GeminiComponent,
+    canActivate: [AuthGuard]
   }
 ];
 

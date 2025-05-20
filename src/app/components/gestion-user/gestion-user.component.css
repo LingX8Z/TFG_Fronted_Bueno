@@ -1,5 +1,30 @@
-
 /* === Estilos Globales (Opcional, si no los tienes ya) === */
+:root {
+  /* Define tus variables CSS aquí si no están globales */
+  /* Ejemplo: */
+  --font-primary: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --font-secondary: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --color-background-page: #f4f7f9;
+  --color-text: #333;
+  --color-text-light: #777;
+  --color-text-secondary: #495057;
+  --color-text-placeholder: #adb5bd;
+  --color-surface: #fff;
+  --color-light: #f8f9fa;
+  --color-primary: #007bff;
+  --color-primary-rgb: 0, 123, 255; /* Para box-shadow con opacidad */
+  --color-secondary: #6c757d;
+  --border-color: #dee2e6;
+  --border-color-light: #e9ecef;
+  --radius: 6px;
+  --radius-lg: 12px;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+  --shadow-md: 0 3px 6px rgba(0,0,0,0.07);
+  --shadow-lg: 0 10px 20px rgba(0,0,0,0.1);
+  --transition: all 0.2s ease-in-out;
+  --color-background-input: #fff;
+}
+
 body {
   font-family: var(--font-primary), sans-serif;
   background-color: var(--color-background-page);
@@ -14,38 +39,39 @@ body {
 /* === Tabla de Usuarios === */
 .user-table {
   width: 95%;
-  border-collapse: separate;
+  border-collapse: separate; /* Usar separate para border-spacing */
   border-spacing: 0;
-  margin: 0 auto;
-  margin-top: 2%;
+  margin: 2% auto;
   background-color: var(--color-surface);
-  border-radius: var(--radius);
+  border-radius: var(--radius-lg); /* Un radio más grande para la tabla contenedora */
   box-shadow: var(--shadow-md);
-  overflow: hidden;
+  overflow: hidden; /* Importante para que el border-radius afecte a las filas internas */
+  border: 1px solid var(--border-color-light); /* Borde sutil para la tabla */
 }
 
 .user-table th,
 .user-table td {
-  padding: 16px 20px;
+  padding: 14px 18px; /* Ajuste de padding */
   text-align: left;
   vertical-align: middle;
   border-bottom: 1px solid var(--border-color);
-  font-size: 0.95em;
+  font-size: 0.9em; /* Ligeramente más pequeño para más datos */
 }
 
-.user-table th {
+.user-table thead th { /* Estilos para los encabezados principales de columna */
   background-color: var(--color-light);
   color: var(--color-primary);
   font-weight: 600;
-  font-size: 0.85em;
+  font-size: 0.8em;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  border-top: none; /* No borde superior para los th principales */
 }
 
-.user-table td:nth-child(3) {
+.user-table td:nth-child(3) .role-badge { /* Estilo para el badge de Rol */
   font-weight: 600;
   text-transform: capitalize;
-  color: var(--color-primary);
+  /* Los colores específicos del badge se manejan con role-badge-xxx */
 }
 
 .user-table td:last-child,
@@ -62,14 +88,89 @@ body {
   transition: background-color var(--transition);
 }
 
+/* === Estilos para la Fila de Filtros en la Tabla === */
+.user-table thead .filter-row th {
+  padding: 10px 12px; /* Padding específico para celdas de filtro */
+  background-color: var(--color-surface); /* Fondo ligeramente diferente o igual al de la tabla */
+  border-bottom: 1px solid var(--border-color); /* Línea divisoria más marcada */
+}
+
+.user-table .filter-row input[type="text"],
+.user-table .filter-row select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  font-size: 0.9em;
+  font-family: var(--font-primary);
+  background-color: var(--color-background-input);
+  color: var(--color-text);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  box-sizing: border-box;
+}
+
+.user-table .filter-row input[type="text"]::placeholder {
+  color: var(--color-text-placeholder);
+  opacity: 1;
+}
+
+.user-table .filter-row select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23333' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 10px 10px;
+  padding-right: 35px; /* Espacio para la flecha custom */
+}
+/* Estilo para cuando el select está vacío (opción "Todos los Roles" seleccionada) */
+.user-table .filter-row select:required:invalid {
+    color: var(--color-text-placeholder, #adb5bd);
+}
+.user-table .filter-row select option {
+    color: var(--color-text); /* Color normal para las opciones */
+}
+.user-table .filter-row select option[value=""] {
+    color: var(--color-text-placeholder, #adb5bd); /* Color del placeholder para la opción por defecto */
+}
+
+
+.user-table .filter-row input[type="text"]:focus,
+.user-table .filter-row select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.25);
+}
+
+
+/* === Badges de Rol (ejemplo) === */
+.role-badge {
+  padding: 4px 10px;
+  border-radius: var(--radius);
+  font-size: 0.8em;
+  font-weight: 500;
+  color: #fff;
+  display: inline-block;
+  text-transform: capitalize;
+}
+.role-badge-user {
+  background-color: var(--color-secondary); /* Gris para User */
+}
+.role-badge-premium {
+  background-color: #ffc107; /* Amarillo/Dorado para Premium */
+  color: #333;
+}
+.role-badge-administrador {
+  background-color: #dc3545; /* Rojo para Administrador */
+}
+
 
 /* === Botones === */
 .btn {
-  padding: 6px 14px;
+  padding: 7px 15px; /* Un poco más de padding */
   border: none;
   border-radius: var(--radius);
   cursor: pointer;
-  font-size: 0.85em;
+  font-size: 0.8em;
   font-weight: 500;
   font-family: var(--font-primary);
   transition: all var(--transition);
@@ -77,6 +178,8 @@ body {
   display: inline-block;
   margin-left: 8px;
   line-height: 1.5;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 .btn:first-child {
   margin-left: 0;
@@ -103,7 +206,7 @@ body {
 }
 
 .btn-primary {
-  background-color: #1976D2;
+  background-color: #1976D2; /* Azul primario de material design */
   color: #fff;
 }
 .btn-primary:hover {
@@ -119,17 +222,16 @@ body {
   transform: none;
 }
 
-/* === Estilos del Modal de Edición === */
-/* === Modal de Edición === */
+/* === Estilos del Modal === */
 .modal-overlay {
   position: fixed;
   top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.55); /* Un poco más oscuro */
   display: flex; align-items: center; justify-content: center;
   z-index: 1000;
   padding: 20px;
-  backdrop-filter: blur(4px);
-  animation: fadeIn 0.3s ease-out;
+  backdrop-filter: blur(5px); /* Desenfoque más pronunciado */
+  animation: fadeIn 0.25s ease-out;
 }
 
 @keyframes fadeIn {
@@ -139,21 +241,21 @@ body {
 
 .modal-content {
   background: var(--color-surface);
-  padding: 30px;
-  border-radius: var(--radius);
+  padding: 25px 30px; /* Ajuste de padding */
+  border-radius: var(--radius-lg);
   width: 100%;
-  max-width: 460px;
+  max-width: 480px; /* Un poco más ancho */
   box-shadow: var(--shadow-lg);
-  animation: slideUp 0.3s ease-out;
+  animation: slideUp 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); /* Transición más suave */
 }
 
 @keyframes slideUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0.6; transform: translateY(25px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .modal-content h2 {
-  font-size: 1.6em;
+  font-size: 1.5em; /* Ajuste de tamaño */
   font-weight: 600;
   color: var(--color-primary);
   margin-top: 0;
@@ -165,28 +267,29 @@ body {
   display: block;
   font-weight: 600;
   margin-bottom: 8px;
-  font-size: 0.95em;
-  color: var(--color-text-light);
+  font-size: 0.9em;
+  color: var(--color-text-secondary);
 }
 
 .modal-content form input,
 .modal-content form select {
   width: 100%;
-  padding: 10px 14px;
+  padding: 12px 15px; /* Padding más cómodo */
   border: 1px solid var(--border-color);
   border-radius: var(--radius);
   font-family: var(--font-secondary);
-  font-size: 1em;
-  margin-bottom: 16px;
+  font-size: 0.95em;
+  margin-bottom: 18px; /* Más espacio */
   transition: border-color var(--transition), box-shadow var(--transition);
   box-sizing: border-box;
+  background-color: var(--color-background-input);
 }
 
 .modal-content form input:focus,
 .modal-content form select:focus {
   outline: none;
-  border-color: var(--color-secondary);
-  box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.2);
+  border-color: var(--color-primary); /* Usar el color primario para el borde enfocado */
+  box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.25); /* Usar el color primario para el shadow */
 }
 
 .modal-actions {
@@ -196,49 +299,75 @@ body {
   gap: 12px;
 }
 
+/* Mensaje de no resultados */
+.no-results-message {
+  text-align: center;
+  padding: 25px;
+  font-style: italic;
+  color: var(--color-text-light);
+  background-color: transparent; /* Para que no choque con el hover de la fila si está dentro */
+}
 
-/* === Responsividad Básica para la Tabla === */
+
+/* === Ajustes Responsivos === */
 @media (max-width: 768px) {
-  /* body { padding: 10px; } Descomentar si es necesario más espacio en móviles */
+  body { padding: 10px; }
 
   .user-table thead {
-    display: none; /* Ocultar cabecera en pantallas pequeñas */
+    /* Por defecto, la cabecera (incluyendo la fila de filtros) se ocultará en móvil
+       con esta regla. Si quieres que los filtros sean visibles en móvil,
+       necesitarás una estrategia diferente aquí (ej: no ocultar thead,
+       o mover los filtros a otro lugar para móviles). */
+    display: none;
   }
+
   .user-table tr {
     display: block;
     margin-bottom: 15px;
-    border: 1px solid var(--border-color); /* Borde alrededor de cada "tarjeta" */
+    border: 1px solid var(--border-color);
     border-radius: var(--radius);
     box-shadow: var(--shadow-sm);
+    background-color: var(--color-surface); /* Fondo para cada "tarjeta" */
   }
   .user-table tr:last-child {
     margin-bottom: 0;
   }
+
   .user-table td {
     display: block;
-    text-align: right !important; /* Forzar alineación para el dato */
-    padding-left: 40%; /* Espacio para la pseudo-etiqueta */
+    text-align: right !important;
+    padding-left: 45%; /* Más espacio para la etiqueta data-label */
     position: relative;
-    border-bottom: 1px dashed var(--color-light);
+    border-bottom: 1px dashed var(--border-color-light); /* Línea divisoria más sutil */
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+  .user-table td:first-child {
+      border-top-left-radius: var(--radius); /* Redondear esquinas de la tarjeta */
+      border-top-right-radius: var(--radius);
   }
   .user-table td:last-child {
-    border-bottom: none; /* Quitar borde inferior del último td en vista tarjeta */
+    border-bottom: none;
+    border-bottom-left-radius: var(--radius);
+    border-bottom-right-radius: var(--radius);
   }
+
   .user-table td::before {
-    content: attr(data-label); /* Necesitarás añadir data-label a tus <td> */
+    content: attr(data-label);
     position: absolute;
-    left: 10px;
-    width: calc(40% - 20px); /* Ancho de la etiqueta menos padding */
+    left: 12px; /* Alineación del label */
+    width: calc(45% - 24px); /* Ancho del label menos padding */
     font-weight: 600;
     color: var(--color-primary);
     text-align: left;
-    font-size: 0.8em;
+    font-size: 0.75em; /* Label más pequeño */
     text-transform: uppercase;
+    top: 50%;
+    transform: translateY(-50%); /* Centrado vertical del label */
   }
 
-  /* Ajustes para la celda de Acciones en vista móvil */
-  .user-table td:last-child::before {
-    display: none; /* No mostrar "Acciones:" como etiqueta */
+  .user-table td:last-child::before { /* Celda de Acciones */
+    display: none;
   }
   .user-table td:last-child {
     padding-left: 15px; /* Reset padding para centrar botones */
@@ -246,9 +375,23 @@ body {
   }
   .user-table td:last-child .btn {
     margin: 5px;
+    padding: 8px 12px; /* Botones ligeramente más grandes en móvil */
+    font-size: 0.8em;
   }
 
   .modal-content {
     max-width: 90%;
+    padding: 20px;
+  }
+  .modal-content h2 {
+    font-size: 1.3em;
+  }
+  .modal-actions {
+    flex-direction: column; /* Botones del modal en columna en móvil */
+    gap: 10px;
+  }
+  .modal-actions .btn {
+    width: 100%; /* Botones ocupan todo el ancho */
+    margin-left: 0;
   }
 }

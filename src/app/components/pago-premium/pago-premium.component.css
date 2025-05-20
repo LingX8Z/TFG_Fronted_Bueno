@@ -11,7 +11,9 @@
     --color-text: #102A43;
     --color-text-light: #627D98;
     --color-text-placeholder: #90A4AE;
-    --color-error: #D32F2F;
+    --color-error: #D32F2F; /* Rojo para errores y acciones destructivas */
+    --color-warning: #FFA000; /* Naranja/Amarillo para advertencias */
+
 
     --button-premium-bg: #FFC107;
     --button-premium-text: #212529;
@@ -20,6 +22,15 @@
     --button-payment-bg: var(--color-primary);
     --button-payment-text: #FFFFFF;
     --button-payment-hover-bg: #063782;
+
+    --button-danger-bg: var(--color-error);
+    --button-danger-text: #FFFFFF;
+    --button-danger-hover-bg: #C62828;
+
+    --button-secondary-bg: #CFD8DC; /* Un gris claro para acciones secundarias */
+    --button-secondary-text: var(--color-text);
+    --button-secondary-hover-bg: #B0BEC5;
+
 
     --radius: 0.5rem;
     --transition: 0.25s ease-in-out;
@@ -74,10 +85,9 @@
 
 .upgrade-header .text-premium {
     color: var(--button-premium-bg);
-    /* For already upgraded state, you might want a different color or keep it consistent */
 }
-.upgrade-header .text-premium.role-administrador { /* Example for specific role styling */
-    color: var(--color-primary); /* Admin role in primary blue */
+.upgrade-header .text-premium.role-administrador {
+    color: var(--color-primary);
 }
 
 
@@ -103,26 +113,25 @@
     height: 100%;
 }
 
-/* Styles for the "Already Upgraded" Section */
 .already-upgraded-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px 0; /* Add some vertical padding */
+    padding: 20px 0;
     width: 100%;
 }
 
 .already-upgraded-card {
     text-align: center;
-    max-width: 650px; /* Control width of this card */
+    max-width: 650px;
     width: 100%;
-    padding: 40px; /* More padding for this prominent card */
+    padding: 40px;
 }
 
 .already-upgraded-icon {
     width: 70px;
     height: 70px;
-    fill: var(--color-success); /* Green check for success/confirmation */
+    fill: var(--color-success);
     margin: 0 auto 25px auto;
     display: block;
 }
@@ -133,7 +142,7 @@
     color: var(--color-text);
     margin-bottom: 15px;
 }
-.already-upgraded-card .text-premium-inline { /* For inline role text */
+.already-upgraded-card .text-premium-inline {
     color: var(--button-premium-bg);
     font-weight: 700;
 }
@@ -164,12 +173,12 @@
     text-align: center;
 }
 .current-benefits .benefits-list li {
-    font-size: 0.9rem; /* Slightly smaller for this context */
+    font-size: 0.9rem;
 }
 
 
 .btn-explore {
-    background-color: var(--button-payment-bg); /* Use a primary action color */
+    background-color: var(--button-payment-bg);
     color: var(--button-payment-text);
     padding: 12px 30px;
     font-size: 1rem;
@@ -177,8 +186,8 @@
     text-decoration: none;
     border-radius: var(--radius);
     transition: background-color var(--transition), transform var(--transition);
-    display: inline-block; /* To respect padding and margin */
-    width: auto; /* Not full width */
+    display: inline-block;
+    width: auto;
 }
 
 .btn-explore:hover {
@@ -367,7 +376,7 @@
     text-decoration: none;
     cursor: pointer;
     transition: background-color var(--transition), transform var(--transition), box-shadow var(--transition);
-    width: 100%;
+    width: 100%; /* Default for buttons inside forms maybe */
 }
 .btn:disabled {
     background-color: #B0BEC5;
@@ -456,7 +465,7 @@
     background: var(--color-surface);
     border-radius: var(--radius);
     width: 100%;
-    max-width: 420px;
+    max-width: 420px; /* Ancho estándar para modales de info/pago */
     box-shadow: 0 10px 30px rgba(16, 42, 67, 0.2);
     animation: modal-appear 0.3s ease-out forwards;
     transform: scale(0.95);
@@ -465,6 +474,11 @@
 .modal-overlay.active .modal-content-wrapper {
     transform: scale(1);
     opacity: 1;
+}
+
+/* Ancho específico para el modal de confirmación si es necesario */
+.modal-content-wrapper.modal-confirm-cancel {
+    max-width: 480px; /* Un poco más ancho para el texto y botones */
 }
 
 
@@ -483,9 +497,14 @@
 .modal-header-section h3 {
     font-size: 1.2rem;
     font-weight: 600;
-    color: var(--color-primary);
+    color: var(--color-primary); /* Azul para cabecera estándar */
     margin: 0;
 }
+/* Para el modal de confirmación, el título podría ser más sobrio o de advertencia */
+.modal-confirm-cancel .modal-header-section h3 {
+    color: var(--color-text); /* Un color más neutro para la cabecera de confirmación */
+}
+
 
 .btn-close-modal {
     background: none;
@@ -498,7 +517,7 @@
     transition: color var(--transition);
 }
 .btn-close-modal:hover {
-    color: var(--color-error);
+    color: var(--color-error); /* Rojo al pasar el cursor, indica cerrar/cancelar */
 }
 
 
@@ -528,6 +547,15 @@
     display: block;
 }
 
+.warning-icon { /* Estilo para el icono de advertencia */
+    width: 50px; /* Ajusta según sea necesario */
+    height: 50px;
+    fill: var(--color-warning); /* Color de advertencia */
+    margin: 0 auto 20px auto;
+    display: block;
+}
+
+
 .modal-success-title {
     font-size: 1.4rem;
     font-weight: 600;
@@ -541,6 +569,21 @@
     margin-bottom: 25px;
 }
 
+/* Estilos para el texto del modal de advertencia/confirmación */
+.modal-warning-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: 10px;
+}
+.modal-warning-message {
+    font-size: 0.95rem;
+    color: var(--color-text-light);
+    margin-bottom: 25px;
+    line-height: 1.6;
+}
+
+
 .btn-modal-close {
     background-color: var(--button-payment-bg);
     color: var(--button-payment-text);
@@ -551,11 +594,45 @@
     font-weight: 500;
     cursor: pointer;
     transition: background-color var(--transition);
-    min-width: 120px;
+    min-width: 120px; /* Para que el botón "Entendido" tenga un tamaño decente */
 }
 .btn-modal-close:hover {
     background-color: var(--button-payment-hover-bg);
 }
+
+/* Estilos para los botones en el modal de confirmación de cancelación */
+.modal-confirm-buttons {
+    display: flex;
+    gap: 15px; /* Espacio entre botones */
+    justify-content: center; /* Centrar los botones si no ocupan todo el ancho */
+    margin-top: 20px;
+}
+
+.modal-confirm-buttons .btn { /* Los botones dentro de este contenedor no serán full-width por defecto */
+    width: auto;
+    padding: 10px 20px; /* Ajusta el padding para estos botones */
+    font-size: 0.9rem;
+}
+
+.btn-modal-danger {
+    background-color: var(--button-danger-bg);
+    color: var(--button-danger-text);
+}
+.btn-modal-danger:hover {
+    background-color: var(--button-danger-hover-bg);
+    transform: translateY(-1px);
+}
+
+.btn-modal-secondary {
+    background-color: var(--button-secondary-bg);
+    color: var(--button-secondary-text);
+    border: 1px solid var(--button-secondary-hover-bg); /* Un borde sutil */
+}
+.btn-modal-secondary:hover {
+    background-color: var(--button-secondary-hover-bg);
+    transform: translateY(-1px);
+}
+
 
 .invalid-input {
     border-color: var(--color-error) !important;
@@ -564,7 +641,26 @@
     color: var(--color-error);
     font-size: 0.8rem;
     margin-top: 4px;
-    text-align: left; /* Ensure error messages are aligned left */
+    text-align: left;
+}
+
+.btn-cancel-subscription {
+  background-color: var(--button-danger-bg); /* Usar la variable de color de error/peligro */
+  color: var(--button-danger-text);
+  border: none; /* Puede que no necesite borde si el fondo es distintivo */
+  font-weight: 600;
+  margin-top: 16px;
+  padding: 10px 20px; /* Ajuste de padding */
+  border-radius: var(--radius);
+  transition: all 0.2s ease-in-out;
+  width: auto; /* Para que no ocupe todo el ancho si no es necesario */
+  display: inline-block; /* Para que el width:auto funcione correctamente */
+}
+
+.btn-cancel-subscription:hover {
+    background-color: var(--button-danger-hover-bg);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
 
@@ -572,7 +668,7 @@
     .upgrade-content-grid {
         grid-template-columns: 1fr;
     }
-    .payment-form-section, .already-upgraded-container { /* Ensure already upgraded section also stacks */
+    .payment-form-section, .already-upgraded-container {
         margin-top: 30px;
     }
 }
@@ -582,7 +678,7 @@
         padding-top: 20px;
     }
     .upgrade-header h1 {
-        font-size: 1.6rem; /* Further adjust for small screens */
+        font-size: 1.6rem;
     }
     .header-subtitle {
         font-size: 0.95rem;
@@ -600,9 +696,9 @@
     .form-row .form-group {
         margin-bottom: 20px;
     }
-    .btn {
+    .btn { /* Afecta a todos los .btn, ajustar si es necesario */
         font-size: 0.9rem;
-        padding: 12px 20px;
+        padding: 12px 15px; /* Ajuste de padding general para botones en móvil */
     }
     .payment-form-card h3 {
         font-size: 1.3rem;
@@ -614,9 +710,16 @@
         font-size: 1rem;
     }
     .modal-content-wrapper {
-        max-width: calc(100% - 30px);
+        max-width: calc(100% - 30px); /* Asegura que el modal no sea demasiado ancho en móviles */
     }
     .modal-body {
         padding: 20px;
+    }
+    .modal-confirm-buttons {
+        flex-direction: column; /* Apila los botones en móviles */
+        gap: 10px;
+    }
+    .modal-confirm-buttons .btn {
+        width: 100%; /* Hace que los botones apilados ocupen todo el ancho */
     }
 }

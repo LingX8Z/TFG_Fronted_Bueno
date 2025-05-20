@@ -1,6 +1,10 @@
-import { Component, HostListener, ElementRef, OnInit } from '@angular/core';
+import { Component, HostListener, ElementRef, OnInit, OnDestroy } from '@angular/core'; // Added OnDestroy
 import { GeminiService } from './services/gemini.service';
 import { marked } from 'marked';
+import { Observable, Subscription } from 'rxjs'; // Added Subscription
+import { User } from '../../../../interfaces/user.iterface'; // Your User interface
+import { AuthService } from '../../../../services/auth.service';
+
 // Asegúrate de que el módulo que declara GeminiComponent (o GeminiComponent si fuera standalone)
 // importa FormsModule y CommonModule.
 
@@ -10,9 +14,16 @@ import { marked } from 'marked';
   templateUrl: './gemini.component.html',
   styleUrls: ['./gemini.component.css'],
 })
-export class GeminiComponent implements OnInit {
+export class GeminiComponent implements OnInit, OnDestroy { // Implements OnDestroy
   prompt: string = '';
   isLoading = false;
+
+  // user$: Observable<User | null>; // Changed from user to user$ to indicate it's an observable
+  private userSubscription: Subscription | undefined; // For managing subscription
+
+  // --- Role-based properties ---
+  currentUserRole: 'User' | 'Premium' | 'Administrador' | null = null;
+  readonly MAX_CONVERSATIONS_FOR_USER_ROLE = 5;
 
   conversations: {
     from: 'user' | 'bot';
@@ -21,75 +32,110 @@ export class GeminiComponent implements OnInit {
   }[][] = [[]];
   conversationTitles: string[] = [];
   conversationHistoryIds: string[] = [];
-  selectedConversationIndex = 0;
+  selectedConversationIndex = -1; // Initialize to -1 for no selection initially
 
   menuOpenIndex: number | null = null;
 
   // --- Propiedades para Modales Integrados ---
-  // Rename Modal
   showRenameModal = false;
   renameModalIndex: number | null = null;
-  currentTitleForRename: string = ''; // Para mostrar el título actual en el placeholder o texto
-  newTitleForRename: string = ''; // Vinculado al input del modal
+  currentTitleForRename: string = '';
+  newTitleForRename: string = '';
 
-  // Delete Modal
   showDeleteModal = false;
   deleteModalIndex: number | null = null;
-  titleForDelete: string = ''; // Para mostrar en el mensaje de confirmación
+  titleForDelete: string = '';
 
   constructor(
     private chatService: GeminiService,
-    private elementRef: ElementRef
-  ) {}
+    private elementRef: ElementRef,
+    private authService: AuthService
+  ) {
+    // this.user$ = this.authService.currentUser$; // Assign observable
+  }
 
   ngOnInit() {
-    this.loadConversations();
+    this.userSubscription = this.authService.currentUser$.subscribe(
+      (user: User | null) => {
+        if (user && user.roles) {
+          // Ensure the role from user.rol matches one of the expected types
+          const role = user.roles as 'User' | 'Premium' | 'Administrador';
+          if (['User', 'Premium', 'Administrador'].includes(role)) {
+            this.currentUserRole = role;
+          } else {
+            console.warn(`Rol desconocido recibido: ${user.roles}. Asignando 'User' por defecto.`);
+            this.currentUserRole = 'User'; // Default or error handling
+          }
+        } else {
+          this.currentUserRole = 'User'; // Default if no user or no role (or handle as unauthenticated)
+          console.log('No user logged in or role not defined, defaulting to User role.');
+        }
+        console.log('Current User Role:', this.currentUserRole);
+        // Load conversations after role is determined (or at least initiated)
+        this.loadConversations();
+      }
+    );
+  }
+
+  ngOnDestroy() { // Clean up subscription
+    if (this.userSubscription) {
+      this.userSubscription.unsubscribe();
+    }
+  }
+
+  // Getter para saber si el usuario tiene un rol "elevado"
+  get isPrivilegedUser(): boolean {
+    return this.currentUserRole === 'Premium' || this.currentUserRole === 'Administrador';
   }
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent) {
-    // Lógica para cerrar el menú de tres puntos si se hace clic fuera
     if (this.menuOpenIndex !== null) {
       const target = event.target as HTMLElement;
-      const menuButton = this.elementRef.nativeElement.querySelector(
-        `.conversation-item-wrapper:nth-child(${
-          this.menuOpenIndex + 1
-        }) .options-button`
-      );
-      const menuDropdown = this.elementRef.nativeElement.querySelector(
-        `.conversation-item-wrapper:nth-child(${
-          this.menuOpenIndex + 1
-        }) .conversation-menu`
+      // Query for the specific menu and button that is open
+      // This assumes menuOpenIndex corresponds to an item that is currently rendered.
+      const menuItemWrapper = this.elementRef.nativeElement.querySelector(
+        `.conversation-item-wrapper[data-original-index='${this.menuOpenIndex}']`
       );
 
-      let clickedInsideMenuComponent = false;
-      if (menuButton && menuButton.contains(target)) {
-        clickedInsideMenuComponent = true;
-      }
-      if (menuDropdown && menuDropdown.contains(target)) {
-        clickedInsideMenuComponent = true;
-      }
+      if (menuItemWrapper) {
+        const menuButton = menuItemWrapper.querySelector('.options-button');
+        const menuDropdown = menuItemWrapper.querySelector('.conversation-menu');
 
-      if (!clickedInsideMenuComponent) {
+        let clickedInsideMenuComponent = false;
+        if (menuButton && menuButton.contains(target)) {
+          clickedInsideMenuComponent = true;
+        }
+        if (menuDropdown && menuDropdown.contains(target)) {
+          clickedInsideMenuComponent = true;
+        }
+        if (!clickedInsideMenuComponent) {
+          this.closeMenu();
+        }
+      } else {
+        // Fallback or if the element isn't found (e.g., list changed rapidly)
         this.closeMenu();
       }
     }
-
-    // Lógica para cerrar modales si se hace clic en el overlay (opcional, si no se maneja en el HTML)
-    // Por ahora, el HTML maneja el cierre al hacer clic en el overlay.
   }
 
   loadConversations() {
-    const chatbotName = 'geminis';
-    this.chatService.getConversationHistory(chatbotName).subscribe({
-      next: (conversations) => {
-        if (conversations && conversations.length > 0) {
-          this.conversationTitles = conversations.map((c) => c.title);
-          this.conversations = conversations.map((c) => {
-            const orderedMessages = c.messages;
-            console.log('Mensajes en el orden recibido desde el backend:');
-            console.log(c.messages.map((m: any) => m.sender + ': ' + m.text));
+    // Ensure role is known before loading, or handle default behavior
+    if (this.currentUserRole === null) {
+        // console.warn('Role not yet determined. Delaying conversation load or using default.');
+        // Optionally, you could wait or queue this call, but for now,
+        // it will proceed, and the template will adapt once the role is set.
+    }
 
+    const chatbotName = 'geminis'; // Consider making this configurable or user-specific
+    this.chatService.getConversationHistory(chatbotName).subscribe({
+      next: (apiConversations) => { // Renamed to avoid conflict
+        if (apiConversations && apiConversations.length > 0) {
+          this.conversationTitles = apiConversations.map((c) => c.title);
+          this.conversations = apiConversations.map((c) => {
+            const orderedMessages = c.messages || []; // Ensure messages is an array
+            // console.log('Mensajes en el orden recibido desde el backend:');
+            // console.log(orderedMessages.map((m: any) => m.sender + ': ' + m.text));
             return orderedMessages.map((m: any) => ({
               from: m.sender,
               text:
@@ -99,16 +145,31 @@ export class GeminiComponent implements OnInit {
               timestamp: m.timestamp,
             }));
           });
-
-          this.conversationHistoryIds = conversations.map((c) => c._id);
-          this.selectedConversationIndex = 0;
+          this.conversationHistoryIds = apiConversations.map((c) => c._id);
+          this.selectedConversationIndex = 0; // Select the first one
         } else {
-          this.startNewConversation(true);
+          // No existing conversations, try to start a new one if allowed
+          if (!(this.currentUserRole === 'User' && this.conversationTitles.length >= this.MAX_CONVERSATIONS_FOR_USER_ROLE)) {
+             this.startNewConversation(true);
+          } else {
+            this.conversations = [[]];
+            this.conversationTitles = [];
+            this.conversationHistoryIds = [];
+            this.selectedConversationIndex = -1; // No conversation to select
+          }
         }
       },
       error: (err) => {
         console.error('Error cargando conversaciones:', err);
-        this.startNewConversation(true);
+        // Attempt to start new if error and allowed
+         if (!(this.currentUserRole === 'User' && this.conversationTitles.length >= this.MAX_CONVERSATIONS_FOR_USER_ROLE)) {
+            this.startNewConversation(true);
+         } else {
+            this.conversations = [[]];
+            this.conversationTitles = [];
+            this.conversationHistoryIds = [];
+            this.selectedConversationIndex = -1;
+         }
       },
     });
   }
@@ -117,23 +178,27 @@ export class GeminiComponent implements OnInit {
     const userMsg = this.prompt.trim();
     if (!userMsg) return;
 
+    // Check if a conversation is selected and valid
     if (
-      this.conversationTitles.length === 0 ||
       this.selectedConversationIndex < 0 ||
+      this.selectedConversationIndex >= this.conversationTitles.length ||
       !this.conversations[this.selectedConversationIndex]
     ) {
-      console.warn(
-        'Intentando enviar mensaje sin conversación seleccionada o existente.'
-      );
-      this.isLoading = false;
+      // If no valid conversation is selected, try to start a new one and send the message
+      // This is useful if the user types a message when no chat is active
+      if (!(this.currentUserRole === 'User' && this.conversationTitles.length >= this.MAX_CONVERSATIONS_FOR_USER_ROLE)) {
+        this.startNewConversationAndSend(userMsg);
+      } else {
+        console.warn('Límite de conversaciones alcanzado para el rol User o no hay conversación seleccionada.');
+        alert('Por favor, selecciona una conversación o crea una nueva si tu plan lo permite.');
+        this.isLoading = false;
+      }
       return;
     }
-    const historyId =
-      this.conversationHistoryIds[this.selectedConversationIndex];
+
+    const historyId = this.conversationHistoryIds[this.selectedConversationIndex];
     if (!historyId) {
-      console.error(
-        'No se encontró historyId para la conversación seleccionada.'
-      );
+      console.error('No se encontró historyId para la conversación seleccionada.');
       this.isLoading = false;
       return;
     }
@@ -143,6 +208,7 @@ export class GeminiComponent implements OnInit {
       text: userMsg,
       timestamp: new Date().toISOString(),
     });
+    const currentPrompt = this.prompt;
     this.prompt = '';
     this.isLoading = true;
 
@@ -150,41 +216,92 @@ export class GeminiComponent implements OnInit {
       next: (res) => {
         const botResponse = res.response;
         const botResponseHtml = marked.parse(botResponse) as string;
-        this.conversations[this.selectedConversationIndex].push({
-          from: 'bot',
-          text: botResponseHtml,
-          timestamp: new Date().toISOString(),
-        });
+        if (this.conversations[this.selectedConversationIndex]) {
+            this.conversations[this.selectedConversationIndex].push({
+              from: 'bot',
+              text: botResponseHtml,
+              timestamp: new Date().toISOString(),
+            });
+        }
+        // Save messages to backend
         this.chatService.addMessage(historyId, 'user', userMsg).subscribe({
           next: () => {
-            this.chatService
-              .addMessage(historyId, 'bot', botResponse)
-              .subscribe({
-                next: () => (this.isLoading = false),
-                error: () => {
-                  console.error('Error al guardar respuesta del bot');
-                  this.isLoading = false;
-                },
-              });
+            this.chatService.addMessage(historyId, 'bot', botResponse).subscribe({
+              next: () => (this.isLoading = false),
+              error: (err) => {
+                console.error('Error al guardar respuesta del bot:', err);
+                this.isLoading = false;
+              },
+            });
           },
-          error: () => {
-            console.error('Error al guardar mensaje del usuario');
+          error: (err) => {
+            console.error('Error al guardar mensaje del usuario:', err);
             this.isLoading = false;
           },
         });
       },
-      error: () => {
-        this.conversations[this.selectedConversationIndex].push({
-          from: 'bot',
-          text: '❌ Error al comunicarse con el asistente.',
-          timestamp: new Date().toISOString(),
-        });
+      error: (err) => {
+        if (this.conversations[this.selectedConversationIndex]) {
+            this.conversations[this.selectedConversationIndex].push({
+              from: 'bot',
+              text: '❌ Error al comunicarse con el asistente.',
+              timestamp: new Date().toISOString(),
+            });
+        }
+        console.error('Error al enviar prompt:', err);
+        this.prompt = currentPrompt; // Restore prompt on error
         this.isLoading = false;
       },
     });
   }
 
+  startNewConversationAndSend(initialMessage: string) {
+    if (this.currentUserRole === 'User' && this.conversationTitles.length >= this.MAX_CONVERSATIONS_FOR_USER_ROLE) {
+        console.warn('Usuario "User" ha alcanzado el límite de conversaciones.');
+        this.prompt = initialMessage; // Devolver el mensaje al input
+        this.isLoading = false;
+        alert("Has alcanzado el límite de 5 conversaciones para tu tipo de cuenta.");
+        return;
+    }
+
+    const chatbotName = 'geminis';
+    let newIndex = 1;
+    let potentialTitle = `Conversación ${newIndex}`;
+    while (this.conversationTitles.includes(potentialTitle)) {
+        newIndex++;
+        potentialTitle = `Conversación ${newIndex}`;
+    }
+    const title = potentialTitle;
+
+    this.isLoading = true;
+    this.chatService.createConversation(chatbotName, title).subscribe({
+        next: (newConv) => {
+            this.conversations.push([]);
+            this.conversationTitles.push(title);
+            this.conversationHistoryIds.push(newConv._id);
+            this.selectedConversationIndex = this.conversationTitles.length - 1;
+
+            // Ahora que la conversación está creada y seleccionada, envía el mensaje
+            this.prompt = initialMessage;
+            this.sendMessage(); // Llamar a sendMessage que ahora encontrará una conversación válida
+        },
+        error: (err) => {
+            console.error('Error al crear nueva conversación:', err);
+            this.isLoading = false;
+            this.prompt = initialMessage; // Devolver el mensaje si falla la creación
+        },
+    });
+  }
+
   startNewConversation(isInitialLoad: boolean = false) {
+    if (this.currentUserRole === 'User' && this.conversationTitles.length >= this.MAX_CONVERSATIONS_FOR_USER_ROLE) {
+      console.warn('Usuario "User" ha alcanzado el límite de conversaciones.');
+      if (!isInitialLoad) { // Solo mostrar alerta si es una acción del usuario, no en carga inicial
+          alert("Has alcanzado el límite de 5 conversaciones para tu tipo de cuenta.");
+      }
+      return;
+    }
+
     const chatbotName = 'geminis';
     let newIndex = 1;
     let potentialTitle = `Conversación ${newIndex}`;
@@ -196,15 +313,18 @@ export class GeminiComponent implements OnInit {
 
     this.chatService.createConversation(chatbotName, title).subscribe({
       next: (newConv) => {
-        this.conversations.push([]);
-        this.conversationTitles.push(title);
-        this.conversationHistoryIds.push(newConv._id);
-        this.selectedConversationIndex = this.conversationTitles.length - 1;
-        if (
-          !isInitialLoad &&
-          this.conversations[this.selectedConversationIndex].length === 0
-        ) {
-          // Opcional: Añadir mensaje de bienvenida
+        if (isInitialLoad && this.conversationTitles.length === 0 && this.conversations.length === 1 && this.conversations[0].length === 0) {
+          // Si es la carga inicial y era la única "conversación vacía" de inicialización, la reemplazamos
+          this.conversations[0] = []; // Asegurar que esté vacío
+          this.conversationTitles[0] = title;
+          this.conversationHistoryIds[0] = newConv._id;
+          this.selectedConversationIndex = 0;
+        } else {
+          // Añadir como nueva
+          this.conversations.push([]);
+          this.conversationTitles.push(title);
+          this.conversationHistoryIds.push(newConv._id);
+          this.selectedConversationIndex = this.conversationTitles.length - 1;
         }
       },
       error: (err) => console.error('Error al crear nueva conversación:', err),
@@ -212,17 +332,22 @@ export class GeminiComponent implements OnInit {
   }
 
   selectConversation(index: number) {
+    // 'index' viene del *ngFor, que itera sobre `conversationTitles | slice...`
+    // Este 'index' es el índice correcto en el array original `conversationTitles`
+    // porque `slice:0:limit` no cambia los índices de los elementos que SÍ muestra.
     if (index >= 0 && index < this.conversationTitles.length) {
       this.selectedConversationIndex = index;
       this.closeMenu();
     } else {
-      console.warn('Índice de conversación inválido:', index);
+      console.warn('Índice de conversación inválido al seleccionar:', index, 'Títulos actuales:', this.conversationTitles.length);
+      // Si el índice no es válido (quizás por un cambio rápido de datos), deseleccionar.
+      // this.selectedConversationIndex = -1;
     }
   }
 
-  // --- Métodos para el menú de tres puntos ---
   toggleMenu(index: number, event: MouseEvent) {
     event.stopPropagation();
+    // 'index' es el índice del array original gracias a cómo funciona el slice en el template.
     this.menuOpenIndex = this.menuOpenIndex === index ? null : index;
   }
 
@@ -230,13 +355,12 @@ export class GeminiComponent implements OnInit {
     this.menuOpenIndex = null;
   }
 
-  // --- Lógica para RENAME MODAL ---
   openRenameConversationModal(index: number, currentTitle: string) {
-    this.renameModalIndex = index;
+    this.renameModalIndex = index; // Este 'index' es el del array original.
     this.currentTitleForRename = currentTitle;
-    this.newTitleForRename = currentTitle; // Pre-rellena el input con el título actual
+    this.newTitleForRename = currentTitle;
     this.showRenameModal = true;
-    this.closeMenu(); // Cierra el menú de tres puntos
+    this.closeMenu();
   }
 
   confirmRenameConversation() {
@@ -251,22 +375,20 @@ export class GeminiComponent implements OnInit {
       this.chatService.renameConversation(historyId, titleToSet).subscribe({
         next: () => {
           if (this.renameModalIndex !== null) {
-            // Chequeo de nulidad por si acaso
             this.conversationTitles[this.renameModalIndex] = titleToSet;
           }
-          this.cancelRenameConversation(); // Cierra y resetea
+          this.cancelRenameConversation();
         },
         error: (err) => {
           console.error('Error al renombrar conversación:', err);
-          // Aquí podrías mostrar un mensaje de error en el modal o como un toast
-          this.cancelRenameConversation(); // Cierra igualmente en caso de error
+          this.cancelRenameConversation();
         },
       });
     } else if (this.newTitleForRename.trim() === this.currentTitleForRename) {
-      this.cancelRenameConversation(); // No hay cambios, solo cierra
+      this.cancelRenameConversation();
     } else {
-      // Título inválido (vacío), podrías mostrar un error en el modal
       console.warn('El nuevo título no puede estar vacío.');
+      // Opcional: mostrar error en el modal
     }
   }
 
@@ -277,12 +399,11 @@ export class GeminiComponent implements OnInit {
     this.currentTitleForRename = '';
   }
 
-  // --- Lógica para DELETE MODAL ---
   openDeleteConversationModal(index: number, title: string) {
-    this.deleteModalIndex = index;
+    this.deleteModalIndex = index; // Este 'index' es el del array original.
     this.titleForDelete = title;
     this.showDeleteModal = true;
-    this.closeMenu(); // Cierra el menú de tres puntos
+    this.closeMenu();
   }
 
   confirmDeleteConversation() {
@@ -297,26 +418,24 @@ export class GeminiComponent implements OnInit {
           this.conversationHistoryIds.splice(indexToDelete, 1);
 
           if (this.conversationTitles.length === 0) {
-            this.startNewConversation();
-          } else if (this.selectedConversationIndex === indexToDelete) {
-            this.selectedConversationIndex = Math.max(0, indexToDelete - 1);
-            if (
-              this.conversationTitles.length > 0 &&
-              this.selectedConversationIndex >= this.conversationTitles.length
-            ) {
-              this.selectedConversationIndex =
-                this.conversationTitles.length - 1;
-            } else if (this.conversationTitles.length === 0) {
-              // El startNewConversation se encargará
+            if (!(this.currentUserRole === 'User' && this.conversationTitles.length >= this.MAX_CONVERSATIONS_FOR_USER_ROLE)) {
+                this.startNewConversation();
+            } else {
+                this.selectedConversationIndex = -1; // No hay nada que seleccionar
             }
+          } else if (this.selectedConversationIndex === indexToDelete) {
+            // Si se eliminó la activa, seleccionar la anterior, o la primera si la eliminada era la 0.
+            this.selectedConversationIndex = Math.max(0, indexToDelete - 1);
           } else if (this.selectedConversationIndex > indexToDelete) {
+            // Si se eliminó una anterior a la activa, ajustar el índice de la activa.
             this.selectedConversationIndex--;
           }
-          this.cancelDeleteConversation(); // Cierra y resetea
+          // Si selectedConversationIndex quedó fuera de rango (ej. < 0), el template lo manejará.
+          this.cancelDeleteConversation();
         },
         error: (err) => {
           console.error('Error al eliminar conversación:', err);
-          this.cancelDeleteConversation(); // Cierra igualmente en caso de error
+          this.cancelDeleteConversation();
         },
       });
     }
@@ -328,8 +447,8 @@ export class GeminiComponent implements OnInit {
     this.titleForDelete = '';
   }
 
-  // Para prevenir que el click dentro del modal lo cierre (si el overlay tiene un (click))
   stopPropagationModal(event: MouseEvent) {
     event.stopPropagation();
   }
 }
+

@@ -157,17 +157,50 @@ header .subtitle {
     box-shadow: 0 2px 4px rgba(27, 94, 32, 0.1);
 }
 
-/* ----- Footer Styling ----- */
-footer {
-    text-align: center;
-    margin-top: 60px;
-    padding: 20px 0;
-    border-top: 1px solid var(--border-color);
+/* ----- Login Prompt Message Styling ----- */
+.login-prompt-message {
+  background-color: rgba(0, 255, 255, 0.171); /* A light, noticeable background */
+  color: var(--color-text-strong, #333);
+  border: 1px solid var(--border-color-accent, #d0d9e0);
+  padding: 15px 20px;
+  border-radius: var(--radius, 8px);
+  margin-bottom: 40px; /* Space before the model grid */
+  text-align: center;
+  font-size: 1.05em;
+  box-shadow: var(--subtle-shadow, 0 2px 4px rgba(0,0,0,0.05));
 }
 
-footer p {
-    font-size: 0.9em;
-    color: var(--color-text-light);
+.login-prompt-message p {
+  margin: 0;
+  line-height: 1.7;
+}
+
+.login-prompt-message a {
+  color: var(--color-primary, #1b5e20); /* Use your primary theme color */
+  font-weight: 600; /* Montserrat SemiBold or similar */
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color var(--transition), border-color var(--transition);
+}
+
+.login-prompt-message a:hover {
+  color: var(--color-secondary, #4caf50); /* A secondary or hover theme color */
+  border-bottom-color: var(--color-secondary, #4caf50);
+}
+
+/* ----- Disabled Button Styling ----- */
+.select-button:disabled {
+  background-color: #d8dde0; /* Lighter, less prominent background */
+  color: #8a959e; /* Muted text color */
+  cursor: not-allowed;
+  box-shadow: none; /* Remove shadow for disabled state */
+  border: 1px solid #caced1; /* Optional: slight border for definition */
+}
+
+.select-button:disabled:hover {
+  background-color: #d8dde0; /* Keep same style on hover */
+  transform: none; /* No hover effect */
+  box-shadow: none;
 }
 
 /* ----- Responsive Adjustments ----- */

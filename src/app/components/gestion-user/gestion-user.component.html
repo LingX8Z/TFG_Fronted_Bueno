@@ -1,4 +1,3 @@
-<!-- Tabla de usuarios -->
 <table class="user-table">
   <thead>
     <tr>
@@ -7,27 +6,69 @@
       <th>Rol</th>
       <th>Acciones</th>
     </tr>
+    <tr class="filter-row">
+      <th>
+        <input
+          id="filterNameInput"
+          type="text"
+          [(ngModel)]="filterName"
+          (ngModelChange)="applyFilters()"
+          placeholder="Filtrar nombre..."
+        />
+      </th>
+      <th>
+        <input
+          id="filterEmailInput"
+          type="text"
+          [(ngModel)]="filterEmail"
+          (ngModelChange)="applyFilters()"
+          placeholder="Filtrar email..."
+        />
+      </th>
+      <th>
+        <select
+          id="filterRoleSelect"
+          [(ngModel)]="filterRole"
+          (ngModelChange)="applyFilters()"
+        >
+          <option value="">Todos los Roles</option>
+          <option *ngFor="let roleOpt of roleOptions" [value]="roleOpt">
+            {{ roleOpt }}
+          </option>
+        </select>
+      </th>
+      <th></th>
+    </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let user of users">
-      <td>{{ user.fullName }}</td>
-      <td>{{ user.email }}</td>
-      <td [ngClass]="'role-' + user.roles">{{ user.roles }}</td>
-
-      <td>
+    <tr *ngFor="let user of filteredUsers">
+      <td [attr.data-label]="'Nombre'">{{ user.fullName }}</td>
+      <td [attr.data-label]="'Email'">{{ user.email }}</td>
+      <td [attr.data-label]="'Rol'">
+        <span
+          class="role-badge"
+          [ngClass]="'role-badge-' + user.roles?.toLowerCase()"
+        >
+          {{ user.roles }}</span
+        >
+      </td>
+      <td [attr.data-label]="'Acciones'">
         <button class="btn btn-danger" (click)="openDeleteModal(user)">
           Eliminar
         </button>
-
         <button class="btn btn-secondary" (click)="openEditModal(user)">
           Editar
         </button>
       </td>
     </tr>
+    <tr *ngIf="filteredUsers.length === 0">
+      <td colspan="4" class="no-results-message">
+        No se encontraron usuarios que coincidan con los filtros.
+      </td>
+    </tr>
   </tbody>
 </table>
 
-<!-- Modal de edición -->
 <div class="modal-overlay" *ngIf="isEditModalOpen">
   <div class="modal-content" (click)="$event.stopPropagation()">
     <h2>Editar Usuario</h2>
@@ -62,7 +103,6 @@
   </div>
 </div>
 
-<!-- Modal de confirmación para eliminar -->
 <div class="modal-overlay" *ngIf="isDeleteModalOpen">
   <div class="modal-content" (click)="$event.stopPropagation()">
     <h2>Confirmar Eliminación</h2>
@@ -71,7 +111,6 @@
       <strong>{{ userToDelete?.fullName }}</strong
       >?
     </p>
-
     <div class="modal-actions">
       <button class="btn btn-danger" (click)="confirmDelete()">Eliminar</button>
       <button class="btn btn-secondary" (click)="cancelDelete()">

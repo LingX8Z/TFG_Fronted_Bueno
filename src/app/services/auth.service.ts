@@ -87,6 +87,37 @@ export class AuthService {
       })
     );
   }
+
+upgradeToPremium(): Observable<any> {
+  return this.http.patch(`${this.apiUrl}/upgrade-to-premium`, {}).pipe(
+    tap((res: any) => {
+      if (res.user) {
+        this.saveUser(res.user); // actualiza el observable y sessionStorage
+      }
+    }),
+    catchError(error => {
+      console.error('Error al actualizar a Premium:', error);
+      return of(null);
+    })
+  );
+}
+
+
+  cancelSubscription(): Observable<any> {
+  return this.http.patch(`${this.apiUrl}/cancel-subscription`, {}).pipe(
+    tap((res: any) => {
+      if (res.user) {
+        this.saveUser(res.user); // actualiza el observable y sessionStorage
+      }
+    }),
+    catchError(error => {
+      console.error('Error al actualizar a User:', error);
+      return of(null);
+    })
+  );
+}
+
+
   isLoggedIn(): boolean {
     return !!this.getToken();
   }

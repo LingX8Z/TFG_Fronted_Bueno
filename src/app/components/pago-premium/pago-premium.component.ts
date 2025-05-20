@@ -19,10 +19,15 @@ export class PagoPremiumComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('modalSpinnerSection') modalSpinnerSection!: ElementRef<HTMLDivElement>;
   @ViewChild('modalSuccessSection') modalSuccessSection!: ElementRef<HTMLDivElement>;
 
+  // Nuevo ViewChild para el modal de confirmación de cancelación (opcional, pero puede ser útil)
+  @ViewChild('cancelConfirmModal') cancelConfirmModal!: ElementRef<HTMLDivElement>;
+
   public currentYear: number = new Date().getFullYear();
   public isModalVisible: boolean = false;
   public showSpinner: boolean = false;
   public showSuccessMessage: boolean = false;
+
+  public isCancelConfirmModalVisible: boolean = false; // Para el nuevo modal
 
   public isAlreadyUpgraded: boolean = false;
   public currentUserRole: string | null = null;
@@ -32,7 +37,7 @@ export class PagoPremiumComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private renderer: Renderer2,
     private authService: AuthService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.userSubscription = this.authService.currentUser$.subscribe(user => {
@@ -46,7 +51,6 @@ export class PagoPremiumComponent implements OnInit, AfterViewInit, OnDestroy {
           this.isAlreadyUpgraded = false;
         }
       } else {
-        // No user or no roles, so not upgraded
         this.isAlreadyUpgraded = false;
         this.currentUserRole = null;
         this.currentUserName = null;
@@ -55,13 +59,11 @@ export class PagoPremiumComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    // Only setup payment inputs if the user is not already upgraded
     if (!this.isAlreadyUpgraded) {
-        // Defer setup slightly to ensure ViewChilds are available if ngIf initially hides them
-        setTimeout(() => {
-            this.setupCardNumberInput();
-            this.setupExpiryDateInput();
-        });
+      setTimeout(() => {
+        this.setupCardNumberInput();
+        this.setupExpiryDateInput();
+      });
     }
   }
 
@@ -106,7 +108,7 @@ export class PagoPremiumComponent implements OnInit, AfterViewInit, OnDestroy {
         e.preventDefault();
       }
     });
-     this.renderer.listen(input, 'paste', (e: ClipboardEvent) => {
+    this.renderer.listen(input, 'paste', (e: ClipboardEvent) => {
       e.preventDefault();
     });
   }
@@ -116,7 +118,7 @@ export class PagoPremiumComponent implements OnInit, AfterViewInit, OnDestroy {
       Object.values(this.paymentForm.controls).forEach(control => {
         control.markAsTouched();
       });
-      console.log('Form is invalid. Please fill all required fields.');
+      console.log('Formulario inválido.');
       return;
     }
 
@@ -124,35 +126,72 @@ export class PagoPremiumComponent implements OnInit, AfterViewInit, OnDestroy {
     this.showSpinner = true;
     this.showSuccessMessage = false;
 
-    if (this.modalSpinnerSection && this.modalSuccessSection) {
-        this.renderer.setStyle(this.modalSpinnerSection.nativeElement, 'display', 'block');
-        this.renderer.setStyle(this.modalSuccessSection.nativeElement, 'display', 'none');
-    }
-
     setTimeout(() => {
-      this.showSpinner = false;
-      this.showSuccessMessage = true;
-      if (this.modalSpinnerSection && this.modalSuccessSection) {
-        this.renderer.setStyle(this.modalSpinnerSection.nativeElement, 'display', 'none');
-        this.renderer.setStyle(this.modalSuccessSection.nativeElement, 'display', 'block');
-      }
-      this.paymentForm.resetForm();
-      // Potentially update user role via AuthService here and refresh isAlreadyUpgraded status
-      // For now, we assume the backend handles role update and a page refresh/re-login would show new status
-      // Or, you can call a method in authService to refresh user data.
-      // Example: this.authService.refreshCurrentUser();
-      // Then the subscription in ngOnInit would pick up the change.
-      // For simplicity, we'll just show the success. A real app would update the user's state.
-      this.isAlreadyUpgraded = true; // Simulate immediate upgrade for UI
-      this.currentUserRole = 'Premium'; // Simulate role change
+      this.authService.upgradeToPremium().subscribe({
+        next: (res) => {
+          this.showSpinner = false;
+          this.showSuccessMessage = true;
 
-    }, 5000);
+          if (this.modalSpinnerSection && this.modalSuccessSection) {
+            this.renderer.setStyle(this.modalSpinnerSection.nativeElement, 'display', 'none');
+            this.renderer.setStyle(this.modalSuccessSection.nativeElement, 'display', 'block');
+          }
+          this.paymentForm.resetForm();
+          const user = this.authService.getUser();
+          this.currentUserRole = user?.roles ?? null;
+          this.isAlreadyUpgraded = this.currentUserRole?.toLowerCase() === 'premium' || this.currentUserRole?.toLowerCase() === 'administrador';
+        },
+        error: (err) => {
+          console.error('Error al actualizar rol a Premium', err);
+          this.closeModal(); // Cierra el modal de procesamiento en caso de error
+        }
+      });
+    }, 3000);
   }
 
   closeModal(): void {
     this.isModalVisible = false;
     this.showSpinner = false;
     this.showSuccessMessage = false;
+    // Resetear estilos del modal de procesamiento si es necesario
+    if (this.modalSpinnerSection && this.modalSuccessSection) {
+        this.renderer.setStyle(this.modalSpinnerSection.nativeElement, 'display', 'block'); // O el display original
+        this.renderer.setStyle(this.modalSuccessSection.nativeElement, 'display', 'none');
+    }
+  }
+
+  // Métodos para el modal de confirmación de cancelación
+  openCancelConfirmModal(): void {
+    this.isCancelConfirmModalVisible = true;
+  }
+
+  closeCancelConfirmModal(): void {
+    this.isCancelConfirmModalVisible = false;
+  }
+
+  confirmCancellation(): void {
+    this.authService.cancelSubscription().subscribe({
+      next: () => {
+        // No es necesario resetear el paymentForm aquí si no se ha usado
+        // this.paymentForm.resetForm(); // Comentado o eliminado si no aplica
+
+        const user = this.authService.getUser();
+        this.currentUserRole = user?.roles ?? null;
+        // isAlreadyUpgraded se actualizará automáticamente por el observable en ngOnInit
+        // o puedes forzar la actualización si es necesario:
+        const roleLowerCase = this.currentUserRole?.toLowerCase();
+        this.isAlreadyUpgraded = roleLowerCase === 'premium' || roleLowerCase === 'administrador';
+
+        this.closeCancelConfirmModal(); // Cierra el modal de confirmación
+        // Opcional: Mostrar un mensaje de éxito/notificación de cancelación
+        // console.log('Suscripción cancelada exitosamente.');
+      },
+      error: (err) => {
+        console.error('Error al cancelar la suscripción', err);
+        this.closeCancelConfirmModal(); // Cierra el modal de confirmación también en caso de error
+        // Opcional: Mostrar un mensaje de error al usuario
+      }
+    });
   }
 
   ngOnDestroy(): void {
