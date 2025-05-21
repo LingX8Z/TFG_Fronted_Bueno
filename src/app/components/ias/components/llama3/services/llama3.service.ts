@@ -12,40 +12,47 @@ export class Llama3Service {
 
   constructor(private http: HttpClient) {}
 
-  private getAuthHeaders(): HttpHeaders {
-    const token = localStorage.getItem('token'); // asegúrate de guardar el JWT ahí
-    return new HttpHeaders({
-      Authorization: `Bearer ${token}`
-    });
+  // 📤 Enviar mensaje al backend y obtener respuesta del modelo LLaMA 3
+  sendPrompt(prompt: string): Observable<{ response: string }> {
+    return this.http.post<{ response: string }>(this.apiUrl, { prompt });
   }
 
-  createConversation(): Observable<any> {
-    const body = { chatbotName: 'llama3', title: 'Conversación Llama3' };
-    return this.http.post(`${this.historyUrl}/new`, body, {
-      headers: this.getAuthHeaders()
-    });
-  }
-
-  sendPrompt(prompt: string): Observable<any> {
-    return this.http.post(this.apiUrl, { prompt });
-  }
-
+  // 💬 Guardar mensaje (user o bot) en la conversación
   saveMessage(historyId: string, sender: 'user' | 'bot', text: string): Observable<any> {
-  return this.http.post('http://localhost:3000/chat-history/add-message', {
-    historyId,
-    sender,
-    text
-  });
-}
-
-
-  getHistory(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.historyUrl}/llama3`, {
-      headers: this.getAuthHeaders()
+    return this.http.post(`${this.historyUrl}/add-message`, {
+      historyId,
+      sender,
+      text
     });
   }
 
-  setHistoryId(id: string) {
+  // 📜 Obtener historial de conversaciones para llama3
+  getConversationHistory(chatbotName: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.historyUrl}/${chatbotName}`);
+  }
+
+  // 🆕 Crear nueva conversación
+  createConversation(chatbotName: string, title: string): Observable<any> {
+    return this.http.post(`${this.historyUrl}/new`, {
+      chatbotName,
+      title
+    });
+  }
+
+  // ✏️ Renombrar conversación
+  renameConversation(historyId: string, newTitle: string): Observable<any> {
+    return this.http.patch(`${this.historyUrl}/${historyId}/rename`, {
+      title: newTitle
+    });
+  }
+
+  // 🗑️ Eliminar conversación
+  deleteConversation(historyId: string): Observable<any> {
+    return this.http.delete(`${this.historyUrl}/${historyId}`);
+  }
+
+  // 👉 Control interno de historyId actual
+  setHistoryId(id: string): void {
     this.currentHistoryId = id;
   }
 

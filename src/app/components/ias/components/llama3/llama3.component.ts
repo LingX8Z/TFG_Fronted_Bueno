@@ -1,10 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, ElementRef, OnInit, OnDestroy } from '@angular/core';
 import { Llama3Service } from './services/llama3.service';
-
-interface Message {
-  sender: 'user' | 'bot';
-  text: string;
-}
+import { AuthService } from '../../../../services/auth.service';
+import { Subscription } from 'rxjs';
+import { marked } from 'marked';
+import { User } from '../../../../interfaces/user.iterface';
 
 @Component({
   selector: 'app-llama3',
@@ -12,105 +11,273 @@ interface Message {
   templateUrl: './llama3.component.html',
   styleUrls: ['./llama3.component.css']
 })
-export class Llama3Component implements OnInit {
+export class Llama3Component implements OnInit, OnDestroy {
   prompt: string = '';
-  loading: boolean = false;
-  historyIds: string[] = ['']; // Se alinea con `conversations` y `conversationTitles`
+  isLoading = false;
 
+  currentUserRole: 'User' | 'Premium' | 'Administrador' | null = null;
+  readonly MAX_CONVERSATIONS_FOR_USER_ROLE = 5;
 
-  conversations: Message[][] = [[]];
-  conversationTitles: string[] = ['Conversación 1'];
-  selectedConversationIndex: number = 0;
-  
+  conversations: { from: 'user' | 'bot'; text: string; timestamp?: string }[][] = [[]];
+  conversationTitles: string[] = [];
+  conversationHistoryIds: string[] = [];
+  selectedConversationIndex = -1;
 
-  constructor(private llama3Service: Llama3Service) {}
+  menuOpenIndex: number | null = null;
+  showRenameModal = false;
+  renameModalIndex: number | null = null;
+  currentTitleForRename = '';
+  newTitleForRename = '';
+
+  showDeleteModal = false;
+  deleteModalIndex: number | null = null;
+  titleForDelete = '';
+
+  private userSubscription: Subscription | undefined;
+
+  constructor(
+    private llamaService: Llama3Service,
+    private authService: AuthService,
+    private elementRef: ElementRef
+  ) {}
 
   ngOnInit(): void {
-    this.loadHistory();
+    this.userSubscription = this.authService.currentUser$.subscribe((user) => {
+      if (user && user.roles) {
+        const role = user.roles as 'User' | 'Premium' | 'Administrador';
+        this.currentUserRole = ['User', 'Premium', 'Administrador'].includes(role) ? role : 'User';
+      } else {
+        this.currentUserRole = 'User';
+      }
+      this.loadConversations();
+    });
   }
 
-  loadHistory(): void {
-    this.llama3Service.getHistory().subscribe({
-      next: (messages) => {
-        const parsed: Message[] = messages.map(msg => ({
-          sender: msg.isUserMessage ? 'user' : 'bot',
-          text: msg.message
-        }));
+  ngOnDestroy(): void {
+    this.userSubscription?.unsubscribe();
+  }
 
-        // Rellenamos la primera conversación
-        this.conversations[0] = parsed;
+  get isPrivilegedUser(): boolean {
+    return this.currentUserRole === 'Premium' || this.currentUserRole === 'Administrador';
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    if (this.menuOpenIndex !== null) {
+      const target = event.target as HTMLElement;
+      const wrapper = this.elementRef.nativeElement.querySelector(
+        `.conversation-item-wrapper[data-original-index="${this.menuOpenIndex}"]`
+      );
+      const button = wrapper?.querySelector('.options-button');
+      const menu = wrapper?.querySelector('.conversation-menu');
+
+      if (!button?.contains(target) && !menu?.contains(target)) {
+        this.closeMenu();
+      }
+    }
+  }
+
+  loadConversations(): void {
+    const chatbotName = 'llama3';
+    this.llamaService.getConversationHistory(chatbotName).subscribe({
+      next: (data) => {
+        console.log('📥 Conversaciones cargadas desde el backend:', data);
+        this.conversationTitles = data.map((c) => c.title);
+        this.conversations = data.map((c) =>
+          c.messages.map((m: any) => ({
+            from: m.sender,
+            text: m.sender === 'bot' ? marked.parse(m.text) : m.text,
+            timestamp: m.timestamp,
+          }))
+        );
+        this.conversationHistoryIds = data.map((c) => c._id);
+        this.selectedConversationIndex = this.conversationTitles.length > 0 ? 0 : -1;
+
+        if (this.conversationTitles.length === 0) {
+          this.startNewConversation(true);
+        }
       },
       error: () => {
-        console.error('❌ Error al cargar el historial de llama3');
+        console.error('❌ Error al cargar conversaciones de Llama3');
       }
     });
   }
-sendPrompt(): void {
-  if (!this.prompt.trim()) return;
 
-  const userText = this.prompt;
-  const userMessage: Message = { sender: 'user', text: userText };
-  this.conversations[this.selectedConversationIndex].push(userMessage);
-  this.prompt = '';
-  this.loading = true;
+  sendMessage(): void {
+    const msg = this.prompt.trim();
+    if (!msg) return;
 
-  const historyId = this.llama3Service.getHistoryId();
-  if (!historyId) {
-    console.error('❌ No hay historyId asignado');
-    return;
+    if (this.selectedConversationIndex < 0 || !this.conversationHistoryIds[this.selectedConversationIndex]) {
+      if (this.currentUserRole === 'User' && this.conversationTitles.length >= this.MAX_CONVERSATIONS_FOR_USER_ROLE) {
+        alert('Has alcanzado el límite de conversaciones.');
+        return;
+      }
+      this.startNewConversationAndSend(msg);
+      return;
+    }
+
+    const historyId = this.conversationHistoryIds[this.selectedConversationIndex];
+    this.conversations[this.selectedConversationIndex].push({
+      from: 'user',
+      text: msg,
+      timestamp: new Date().toISOString()
+    });
+    this.prompt = '';
+    this.isLoading = true;
+
+    this.llamaService.sendPrompt(msg).subscribe({
+      next: (res) => {
+        const botResp = marked.parse(res.response) as string;
+        this.conversations[this.selectedConversationIndex].push({
+          from: 'bot',
+          text: botResp,
+          timestamp: new Date().toISOString()
+        });
+        this.llamaService.saveMessage(historyId, 'user', msg).subscribe();
+        this.llamaService.saveMessage(historyId, 'bot', res.response).subscribe({
+          complete: () => (this.isLoading = false),
+          error: () => (this.isLoading = false)
+        });
+      },
+      error: () => {
+        this.conversations[this.selectedConversationIndex].push({
+          from: 'bot',
+          text: '❌ Error al comunicarse con el servidor.',
+          timestamp: new Date().toISOString()
+        });
+        this.isLoading = false;
+      }
+    });
   }
 
-  this.llama3Service.saveMessage(historyId, 'user', userText).subscribe();
+  startNewConversationAndSend(initialMessage: string): void {
+    this.startNewConversation(false, initialMessage);
+  }
 
-  this.llama3Service.sendPrompt(userText).subscribe({
-    next: (res) => {
-      const botText = res.response;
-      const botMessage: Message = { sender: 'bot', text: botText };
-      this.conversations[this.selectedConversationIndex].push(botMessage);
+  startNewConversation(isInitialLoad: boolean = false, firstMsg?: string): void {
+    if (this.currentUserRole === 'User' && this.conversationTitles.length >= this.MAX_CONVERSATIONS_FOR_USER_ROLE) {
+      if (!isInitialLoad) alert('Límite de conversaciones alcanzado.');
+      return;
+    }
 
-      this.llama3Service.saveMessage(historyId, 'bot', botText).subscribe({
-        complete: () => (this.loading = false),
-        error: () => {
-          console.error('❌ Error al guardar la respuesta del bot');
-          this.loading = false;
+    const index = this.conversationTitles.length + 1;
+    const title = `Conversación ${index}`;
+
+    this.llamaService.createConversation('llama3', title).subscribe({
+      next: (conv) => {
+        this.conversationTitles.push(title);
+        this.conversations.push([]);
+        this.conversationHistoryIds.push(conv._id);
+        this.selectedConversationIndex = this.conversationTitles.length - 1;
+
+        if (firstMsg) {
+          this.prompt = firstMsg;
+          this.sendMessage();
         }
-      });
-    },
-    error: () => {
-      const errorMessage: Message = {
-        sender: 'bot',
-        text: '❌ Error al comunicarse con el servidor.'
-      };
-      this.conversations[this.selectedConversationIndex].push(errorMessage);
-      this.loading = false;
-    }
-  });
-}
-
-  formatMessage(text: string): string {
-    return text
-      .replace(/\n/g, '<br>')
-      .replace(/\* \*\*(.+?)\*\*/g, '<br><strong>• $1</strong>')
-      .replace(/\* (.+)/g, '• $1');
+      },
+      error: () => console.error('❌ Error al crear nueva conversación')
+    });
   }
-
-  startNewConversation(): void {
-  this.llama3Service.createConversation().subscribe({
-    next: (res) => {
-      this.llama3Service.setHistoryId(res._id);
-      const index = this.conversations.length + 1;
-      this.conversationTitles.push(`Conversación ${index}`);
-      this.conversations.push([]);
-      this.selectedConversationIndex = this.conversations.length - 1;
-    },
-    error: () => {
-      console.error('❌ Error al crear la nueva conversación');
-    }
-  });
-}
-
 
   selectConversation(index: number): void {
     this.selectedConversationIndex = index;
+    this.closeMenu();
+  }
+
+  toggleMenu(index: number, event: MouseEvent): void {
+    event.stopPropagation();
+    this.menuOpenIndex = this.menuOpenIndex === index ? null : index;
+  }
+
+  closeMenu(): void {
+    this.menuOpenIndex = null;
+  }
+
+  openRenameConversationModal(index: number, currentTitle: string): void {
+    this.renameModalIndex = index;
+    this.currentTitleForRename = currentTitle;
+    this.newTitleForRename = currentTitle;
+    this.showRenameModal = true;
+    this.closeMenu();
+  }
+
+  confirmRenameConversation(): void {
+    if (
+      this.renameModalIndex !== null &&
+      this.newTitleForRename.trim() &&
+      this.newTitleForRename.trim() !== this.currentTitleForRename
+    ) {
+      const historyId = this.conversationHistoryIds[this.renameModalIndex];
+      this.llamaService.renameConversation(historyId, this.newTitleForRename.trim()).subscribe({
+        next: () => {
+          this.conversationTitles[this.renameModalIndex!] = this.newTitleForRename.trim();
+          this.cancelRenameConversation();
+        },
+        error: () => {
+          console.error('❌ Error al renombrar conversación');
+          this.cancelRenameConversation();
+        }
+      });
+    } else {
+      this.cancelRenameConversation();
+    }
+  }
+
+  cancelRenameConversation(): void {
+    this.showRenameModal = false;
+    this.renameModalIndex = null;
+    this.newTitleForRename = '';
+    this.currentTitleForRename = '';
+  }
+
+  openDeleteConversationModal(index: number, title: string): void {
+    this.deleteModalIndex = index;
+    this.titleForDelete = title;
+    this.showDeleteModal = true;
+    this.closeMenu();
+  }
+
+  confirmDeleteConversation(): void {
+    if (this.deleteModalIndex !== null) {
+      const historyId = this.conversationHistoryIds[this.deleteModalIndex];
+      this.llamaService.deleteConversation(historyId).subscribe({
+        next: () => {
+          this.conversationTitles.splice(this.deleteModalIndex!, 1);
+          this.conversations.splice(this.deleteModalIndex!, 1);
+          this.conversationHistoryIds.splice(this.deleteModalIndex!, 1);
+
+          if (this.conversationTitles.length === 0) {
+            this.selectedConversationIndex = -1;
+            if (this.currentUserRole !== 'User') this.startNewConversation(true);
+          } else {
+            this.selectedConversationIndex = Math.max(0, this.selectedConversationIndex - 1);
+          }
+
+          this.cancelDeleteConversation();
+        },
+        error: () => {
+          console.error('❌ Error al eliminar conversación');
+          this.cancelDeleteConversation();
+        }
+      });
+    }
+  }
+
+  cancelDeleteConversation(): void {
+    this.showDeleteModal = false;
+    this.deleteModalIndex = null;
+    this.titleForDelete = '';
+  }
+
+  formatMessage(text: string): string {
+  return text
+    .replace(/\n/g, '<br>')
+    .replace(/\* \*\*(.+?)\*\*/g, '<br><strong>• $1</strong>')
+    .replace(/\* (.+)/g, '• $1');
+}
+
+
+  stopPropagationModal(event: MouseEvent): void {
+    event.stopPropagation();
   }
 }
