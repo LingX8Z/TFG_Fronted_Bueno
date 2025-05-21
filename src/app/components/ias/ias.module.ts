@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { Llama3Component } from './components/llama3/llama3.component';
 import { GeminiComponent } from './components/gemini/gemini.component';
+import { RAGComponent } from './components/rag/rag.component';
 
 
 
@@ -13,7 +14,8 @@ import { GeminiComponent } from './components/gemini/gemini.component';
   declarations: [
     IAsComponent,
     Llama3Component,
-    GeminiComponent
+    GeminiComponent,
+    RAGComponent
   ],
   imports: [
     CommonModule,
