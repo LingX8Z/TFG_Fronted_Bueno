@@ -20,9 +20,9 @@ export class AuthService {
     this.currentUserSubject.asObservable();
 
   constructor(private http: HttpClient) {
-    const storedUser = sessionStorage.getItem('user');
-    if (storedUser) {
-      this.currentUserSubject.next(JSON.parse(storedUser));
+    const token = this.getToken();
+    if (token) {
+      this.fetchUser(); // 🔐 siempre usa el backend como fuente de verdad
     }
   }
 
@@ -39,14 +39,24 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}/login`, { email, password }).pipe(
       tap((res: any) => {
         this.saveToken(res.token);
-        this.saveUser(res.user);
+        this.fetchUser(); // 🔁 ahora lo cargas con el token
       })
     );
   }
 
+  fetchUser(): void {
+    this.http.get<User>(`${this.apiUrl}/me`).subscribe({
+      next: (user) =>
+        this.currentUserSubject.next(user),
+      error: (err) => {
+        console.error('Error al obtener datos del usuario:', err);
+        this.logout();
+      }
+    });
+  }
+
   saveUser(user: User): void {
     this.currentUserSubject.next(user);
-    sessionStorage.setItem('user', JSON.stringify(user));
   }
 
   getUser(): User | null {
@@ -88,34 +98,34 @@ export class AuthService {
     );
   }
 
-upgradeToPremium(): Observable<any> {
-  return this.http.patch(`${this.apiUrl}/upgrade-to-premium`, {}).pipe(
-    tap((res: any) => {
-      if (res.user) {
-        this.saveUser(res.user); // actualiza el observable y sessionStorage
-      }
-    }),
-    catchError(error => {
-      console.error('Error al actualizar a Premium:', error);
-      return of(null);
-    })
-  );
-}
+  upgradeToPremium(): Observable<any> {
+    return this.http.patch(`${this.apiUrl}/upgrade-to-premium`, {}).pipe(
+      tap((res: any) => {
+        if (res.user) {
+          this.saveUser(res.user); // actualiza el observable y sessionStorage
+        }
+      }),
+      catchError(error => {
+        console.error('Error al actualizar a Premium:', error);
+        return of(null);
+      })
+    );
+  }
 
 
   cancelSubscription(): Observable<any> {
-  return this.http.patch(`${this.apiUrl}/cancel-subscription`, {}).pipe(
-    tap((res: any) => {
-      if (res.user) {
-        this.saveUser(res.user); // actualiza el observable y sessionStorage
-      }
-    }),
-    catchError(error => {
-      console.error('Error al actualizar a User:', error);
-      return of(null);
-    })
-  );
-}
+    return this.http.patch(`${this.apiUrl}/cancel-subscription`, {}).pipe(
+      tap((res: any) => {
+        if (res.user) {
+          this.saveUser(res.user); // actualiza el observable y sessionStorage
+        }
+      }),
+      catchError(error => {
+        console.error('Error al actualizar a User:', error);
+        return of(null);
+      })
+    );
+  }
 
 
   isLoggedIn(): boolean {

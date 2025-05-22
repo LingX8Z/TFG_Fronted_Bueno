@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Event, NavigationEnd, Router } from '@angular/router';
 import { filter, Subscription } from 'rxjs'; // Adjust this path if your AuthService is elsewhere
 import { AuthService } from '../../services/auth.service';
+import { BackgroundService } from '../../services/background.service';
 
 @Component({
   selector: 'app-ias',
@@ -19,7 +20,8 @@ export class IAsComponent implements OnInit, OnDestroy {
 
   constructor(
     private router: Router,
-    private authService: AuthService // Inject AuthService
+    private authService: AuthService, // Inject AuthService
+    private BackgroundService: BackgroundService
   ) {}
 
   ngOnInit(): void {
