@@ -1,1 +1,275 @@
-<p>rag works!</p>
+<div
+  class="chatbot-container"
+  [ngClass]="{
+    'premium-theme': currentUserRole === 'Premium',
+    'admin-theme': currentUserRole === 'Administrador'
+  }"
+>
+  <div class="conversation-list-container">
+    <div class="conversation-list-title">
+      Conversaciones <span class="role-indicator">{{ currentUserRole }}</span>
+    </div>
+    <hr />
+    <button
+      class="new-conversation-button"
+      (click)="startNewConversation()"
+      [disabled]="
+        currentUserRole === 'User' &&
+        conversationTitles.length >= MAX_CONVERSATIONS_FOR_USER_ROLE
+      "
+    >
+      Nueva Conversación
+      <span
+        *ngIf="
+          currentUserRole === 'User' &&
+          conversationTitles.length >= MAX_CONVERSATIONS_FOR_USER_ROLE
+        "
+      >
+        (Límite alcanzado)</span
+      >
+    </button>
+
+    <div id="conversation-list">
+      <div
+        *ngFor="
+          let conv of conversationTitles
+            | slice
+              : 0
+              : (currentUserRole === 'User'
+                  ? MAX_CONVERSATIONS_FOR_USER_ROLE
+                  : conversationTitles.length);
+          let i = index
+        "
+        class="conversation-item-wrapper"
+        [attr.data-original-index]="i"
+      >
+        <div
+          class="conversation-item"
+          [class.active]="i === selectedConversationIndex"
+          (click)="selectConversation(i)"
+        >
+          <span class="conversation-title">{{ conv }}</span>
+          <button class="options-button" (click)="toggleMenu(i, $event)">
+            &#8942;
+          </button>
+        </div>
+        <div class="conversation-menu" *ngIf="menuOpenIndex === i">
+          <button (click)="openRenameConversationModal(i, conv)">
+            Renombrar
+          </button>
+          <button (click)="openDeleteConversationModal(i, conv)">
+            Eliminar
+          </button>
+        </div>
+      </div>
+      <div
+        *ngIf="
+          currentUserRole === 'User' &&
+          conversationTitles.length > MAX_CONVERSATIONS_FOR_USER_ROLE
+        "
+        class="user-limit-info"
+      >
+        Mostrando {{ MAX_CONVERSATIONS_FOR_USER_ROLE }} de
+        {{ conversationTitles.length }} conversaciones. Actualiza tu plan para
+        ver más.
+      </div>
+    </div>
+
+    <div class="under-conversation-text">
+      <span>BETA</span>
+      <p>Próximamente...</p>
+    </div>
+  </div>
+
+  <div class="chat-area">
+    <div class="chat-header">
+      <h1>Gemini <span *ngIf="isPrivilegedUser" class="star-icon"></span></h1>
+      <div class="header-info">
+        <h2 id="current-conversation-title">
+          {{
+            selectedConversationIndex >= 0 &&
+            selectedConversationIndex < conversationTitles.length
+              ? conversationTitles[selectedConversationIndex]
+              : conversationTitles.length > 0 &&
+                !(
+                  currentUserRole === "User" &&
+                  selectedConversationIndex >= MAX_CONVERSATIONS_FOR_USER_ROLE
+                )
+              ? "Selecciona una conversación"
+              : "Sin conversación activa"
+          }}
+        </h2>
+      </div>
+    </div>
+
+    <div class="chat-messages" id="chat-messages">
+      <div
+        class="no-conversation-message"
+        *ngIf="
+          conversationTitles.length === 0 ||
+          selectedConversationIndex < 0 ||
+          (selectedConversationIndex >= 0 &&
+            !conversations[selectedConversationIndex]) ||
+          conversations[selectedConversationIndex]?.length === 0
+        "
+      >
+        <p
+          *ngIf="
+            conversationTitles.length === 0 &&
+            !(
+              currentUserRole === 'User' &&
+              conversationTitles.length >= MAX_CONVERSATIONS_FOR_USER_ROLE
+            )
+          "
+        >
+          🔍 No hay conversaciones. Crea una nueva para comenzar.
+        </p>
+        <p
+          *ngIf="
+            conversationTitles.length === 0 &&
+            currentUserRole === 'User' &&
+            conversationTitles.length >= MAX_CONVERSATIONS_FOR_USER_ROLE
+          "
+        >
+          Has alcanzado el límite de conversaciones.
+        </p>
+        <p
+          *ngIf="
+            selectedConversationIndex >= 0 &&
+            conversations[selectedConversationIndex]?.length === 0 &&
+            conversationTitles.length > 0
+          "
+        >
+          Esta conversación está vacía. ¡Envía un mensaje!
+        </p>
+        <p
+          *ngIf="selectedConversationIndex < 0 && conversationTitles.length > 0"
+        >
+          Por favor, selecciona una conversación de la lista.
+        </p>
+      </div>
+
+      <div
+        *ngFor="
+          let msg of selectedConversationIndex >= 0 &&
+          conversations[selectedConversationIndex]
+            ? conversations[selectedConversationIndex]
+            : []
+        "
+        class="message"
+        [ngClass]="{
+          'user-message': msg.from === 'user',
+          'bot-message': msg.from === 'bot'
+        }"
+      >
+        <div class="message-text" [innerHTML]="msg.text"></div>
+        <div class="timestamp">
+          {{ msg.timestamp | date : "HH:mm" }}
+        </div>
+      </div>
+
+      <div class="message bot-message" *ngIf="isLoading">
+        <em>Escribiendo...</em>
+      </div>
+    </div>
+
+    <div class="chat-input">
+      <input
+        type="text"
+        [(ngModel)]="prompt"
+        (keyup.enter)="sendMessage()"
+        [placeholder]="
+          isLoading
+            ? 'Esperando respuesta...'
+            : selectedConversationIndex < 0 &&
+              currentUserRole === 'User' &&
+              conversationTitles.length >= MAX_CONVERSATIONS_FOR_USER_ROLE
+            ? 'Límite de conversaciones alcanzado'
+            : 'Escribe tu consulta...'
+        "
+        [disabled]="
+          isLoading ||
+          (selectedConversationIndex < 0 &&
+            currentUserRole === 'User' &&
+            conversationTitles.length >= MAX_CONVERSATIONS_FOR_USER_ROLE &&
+            conversationTitles.length > 0) ||
+          (selectedConversationIndex < 0 &&
+            conversationTitles.length > 0 &&
+            !isPrivilegedUser)
+        "
+      />
+      <button
+        (click)="sendMessage()"
+        [disabled]="
+          isLoading ||
+          (selectedConversationIndex < 0 &&
+            currentUserRole === 'User' &&
+            conversationTitles.length >= MAX_CONVERSATIONS_FOR_USER_ROLE &&
+            conversationTitles.length > 0) ||
+          (selectedConversationIndex < 0 &&
+            conversationTitles.length > 0 &&
+            !isPrivilegedUser)
+        "
+      >
+        Enviar
+      </button>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal-overlay"
+  *ngIf="showRenameModal"
+  (click)="cancelRenameConversation()"
+>
+  <div class="modal-content" (click)="stopPropagationModal($event)">
+    <h2>Renombrar Conversación</h2>
+    <p>Nombre actual: "{{ currentTitleForRename }}"</p>
+    <input
+      type="text"
+      [(ngModel)]="newTitleForRename"
+      placeholder="Nuevo nombre"
+      (keyup.enter)="confirmRenameConversation()"
+    />
+    <div class="modal-actions">
+      <button (click)="cancelRenameConversation()" class="button-cancel">
+        Cancelar
+      </button>
+      <button
+        (click)="confirmRenameConversation()"
+        class="button-save"
+        [disabled]="
+          !newTitleForRename.trim() ||
+          newTitleForRename.trim() === currentTitleForRename
+        "
+      >
+        Guardar
+      </button>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal-overlay"
+  *ngIf="showDeleteModal"
+  (click)="cancelDeleteConversation()"
+>
+  <div class="modal-content" (click)="stopPropagationModal($event)">
+    <h2>Confirmar Eliminación</h2>
+    <p>
+      ¿Estás seguro de que deseas eliminar la conversación "<strong>{{
+        titleForDelete
+      }}</strong
+      >"?
+    </p>
+    <p class="error">Esta acción no se puede deshacer.</p>
+    <div class="modal-actions">
+      <button (click)="cancelDeleteConversation()" class="button-cancel">
+        Cancelar
+      </button>
+      <button (click)="confirmDeleteConversation()" class="button-delete">
+        Eliminar
+      </button>
+    </div>
+  </div>
+</div>

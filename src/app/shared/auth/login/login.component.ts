@@ -6,12 +6,12 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
-  standalone:false,
+  standalone: false,
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit, OnDestroy {
-  
+
   loginForm!: FormGroup;
   registerForm!: FormGroup;
 
@@ -19,12 +19,16 @@ export class LoginComponent implements OnInit, OnDestroy {
   registerError: boolean = false;
   passwordMismatch: boolean = false;
 
+  loginErrorMessage: string = '';
+  registerErrorMessage: string = '';
+
+
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
     private backgroundService: BackgroundService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.backgroundService.setBackgroundColor('var(--color-background)');
@@ -47,7 +51,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.backgroundService.resetBackgroundColor();
   }
 
-  // 🔐 LOGIN
+  //  LOGIN
   onLoginSubmit(): void {
     if (this.loginForm.invalid) return;
 
@@ -55,36 +59,45 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.authService.login(email, password).subscribe({
       next: () => {
         this.loginError = false;
+        this.loginErrorMessage = '';
         this.router.navigate(['/']);
       },
-      error: () => {
+      error: (err) => {
         this.loginError = true;
+        this.loginErrorMessage =
+          err?.error?.message || 'Error al iniciar sesión. Inténtalo de nuevo.';
       }
     });
   }
 
-  // 🆕 REGISTER
+
+  //  REGISTER
   onRegisterSubmit(): void {
-    if (this.registerForm.invalid) return;
+  if (this.registerForm.invalid) return;
 
-    const { fullName, email, password, confirmPassword } = this.registerForm.value;
+  const { fullName, email, password, confirmPassword } = this.registerForm.value;
 
-    if (password !== confirmPassword) {
-      this.passwordMismatch = true;
-      return;
-    }
-
-    this.passwordMismatch = false;
-
-    this.authService.register({ fullName, email, password }).subscribe({
-      next: () => {
-        this.registerError = false;
-        // Opcional: redirigir o cambiar vista a login
-        this.router.navigate(['/']);
-      },
-      error: () => {
-        this.registerError = true;
-      }
-    });
+  if (password !== confirmPassword) {
+    this.passwordMismatch = true;
+    this.registerError = true;
+    this.registerErrorMessage = 'Las contraseñas no coinciden';
+    return;
   }
+
+  this.passwordMismatch = false;
+
+  this.authService.register({ fullName, email, password }).subscribe({
+    next: () => {
+      this.registerError = false;
+      this.registerErrorMessage = '';
+      this.router.navigate(['/']);
+    },
+    error: (err) => {
+      this.registerError = true;
+      this.registerErrorMessage =
+        err?.error?.message || 'Error al registrar. Inténtalo más tarde.';
+    }
+  });
+}
+
 }

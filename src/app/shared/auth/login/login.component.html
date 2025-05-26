@@ -85,6 +85,10 @@
               <a href="#" class="forgot-password">¿Olvidaste tu contraseña?</a>
             </div>
             <button type="submit" class="btn-submit">Iniciar Sesión</button>
+            <div *ngIf="loginError" class="error-message">
+              {{ loginErrorMessage }}
+            </div>
+
             <p class="form-alternate-link">
               ¿No tienes una cuenta?
               <label for="view_register" class="toggle-form-link"
@@ -189,6 +193,10 @@
               </label>
             </div>
             <button type="submit" class="btn-submit">Crear Cuenta</button>
+            <div *ngIf="registerError" class="error-message">
+              {{ registerErrorMessage }}
+            </div>
+
             <p class="form-alternate-link">
               ¿Ya tienes una cuenta?
               <label for="view_login" class="toggle-form-link"

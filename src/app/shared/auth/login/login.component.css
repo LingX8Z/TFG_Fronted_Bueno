@@ -204,6 +204,17 @@ body {
     /* border-radius y transform gestionados dinámicamente */
 }
 
+.error-message {
+  color: white;
+  font-size: 0.9rem;
+  background-color: #e74c3c;
+  margin-left: 25%;
+  margin-right: 25%;
+  border: 15px;
+  text-align: center;
+}
+
+
 .art-content-segment { display: none; animation: fadeInArtContent 0.5s ease-in-out 0.4s; /* Retraso para que aparezca después del slide */ }
 @keyframes fadeInArtContent { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
