@@ -39,7 +39,7 @@ export class RAGComponent implements OnInit, OnDestroy {
     private chatService: RagService,
     private elementRef: ElementRef,
     private authService: AuthService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.userSubscription = this.authService.currentUser$.subscribe((user: User | null) => {
@@ -80,7 +80,7 @@ export class RAGComponent implements OnInit, OnDestroy {
   }
 
   loadConversations() {
-    this.chatService.getConversationHistory('rag').subscribe({
+    this.chatService.getConversationHistory().subscribe({
       next: (apiConvs) => {
         if (apiConvs.length > 0) {
           this.conversationTitles = apiConvs.map((c) => c.title);
@@ -152,14 +152,25 @@ export class RAGComponent implements OnInit, OnDestroy {
         });
       },
       error: () => {
+        const errorMsg = '❌ Error al comunicarse con el asistente.';
+
+        // Agrega el mensaje de error visualmente
         this.conversations[this.selectedConversationIndex].push({
           from: 'bot',
-          text: '❌ Error al comunicarse con el asistente.',
+          text: errorMsg,
           timestamp: new Date().toISOString(),
         });
+
+        // Guarda el mensaje del usuario y también el error en el historial
+        this.chatService.addMessage(historyId, 'user', userMsg).subscribe();
+        this.chatService.addMessage(historyId, 'bot', errorMsg).subscribe({
+          complete: () => (this.isLoading = false),
+          error: () => (this.isLoading = false),
+        });
+
         this.prompt = currentPrompt;
-        this.isLoading = false;
-      },
+      }
+
     });
   }
 
