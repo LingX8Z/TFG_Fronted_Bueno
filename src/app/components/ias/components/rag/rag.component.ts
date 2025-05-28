@@ -135,7 +135,8 @@ export class RAGComponent implements OnInit, OnDestroy {
     this.prompt = '';
     this.isLoading = true;
 
-    this.chatService.sendPromptWithHistory(userMsg).subscribe({
+    this.chatService.sendPromptToAllPdfs(userMsg).subscribe({
+
       next: (res) => {
         const botResponseHtml = marked.parse(res.response) as string;
         this.conversations[this.selectedConversationIndex].push({

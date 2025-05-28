@@ -44,4 +44,12 @@ export class RagService {
       text,
     });
   }
+
+  sendPromptToAllPdfs(prompt: string): Observable<{ response: string }> {
+  return this.http.post<{ response: string }>(
+    `${this.apiUrl}/rag/ask`,
+    { prompt }
+  );
+}
+
 }

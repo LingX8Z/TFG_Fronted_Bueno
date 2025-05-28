@@ -177,6 +177,7 @@ export class PagoPremiumComponent implements OnInit, AfterViewInit, OnDestroy {
 
         const user = this.authService.getUser();
         this.currentUserRole = user?.roles ?? null;
+        this.authService.saveUser(user!)
         // isAlreadyUpgraded se actualizará automáticamente por el observable en ngOnInit
         // o puedes forzar la actualización si es necesario:
         const roleLowerCase = this.currentUserRole?.toLowerCase();

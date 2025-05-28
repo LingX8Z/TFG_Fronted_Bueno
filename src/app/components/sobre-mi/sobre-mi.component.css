@@ -4,13 +4,13 @@
     padding: 0;
     box-sizing: border-box;
   }
-  
+
   body {
     font-family: 'Arial', sans-serif;
     color: #333;
     height: 100vh;
   }
-  
+
   .container {
     display: flex;
     flex-wrap: wrap;
@@ -19,7 +19,7 @@
     max-width: 1200px;
     margin: 0 auto;
   }
-  
+
   .text-section {
     flex: 1;
     padding: 5% 10%;
@@ -28,7 +28,7 @@
     flex-direction: column;
     justify-content: center;
   }
-  
+
   .text-section h1 {
     font-size: 3rem;
     font-size: calc(1.5rem + 1vw);
@@ -36,23 +36,23 @@
     line-height: 1.2;
     margin-bottom: 15px;
   }
-  
+
   .text-section h1 span {
     color: var(--color-surface);
   }
-  
+
   .text-section p {
     font-size: 1.2rem;
     font-size: calc(1rem + 0.5vw);
     color: #555;
     margin-bottom: 20px;
   }
-  
+
   .buttons {
     display: flex;
     gap: 15px;
   }
-  
+
   .buttons a {
     text-decoration: none;
     padding: 10px 20px;
@@ -61,25 +61,25 @@
     font-weight: bold;
     transition: background-color 0.3s;
   }
-  
+
   .buttons .primary {
     background-color: var(--color-surface);
-    color: white;
+    color: var(--color-light);
   }
-  
+
   .buttons .primary:hover {
     background-color: var(--color-text-light);
   }
-  
+
   .buttons .secondary {
     background-color: var(--color-tertiary);
     color: #333;
   }
-  
+
   .buttons .secondary:hover {
     background-color: var(--color-light);
   }
-  
+
   .image-section {
     flex: 1;
     display: flex;
@@ -89,7 +89,7 @@
     padding: calc(2% + 1vw) calc(5% + 2vw);
     position: relative;
   }
-  
+
   .image-section .image-frame {
     width: 90%;
     max-width: 500px;
@@ -99,13 +99,13 @@
     overflow: hidden;
     position: relative;
   }
-  
+
   .image-section img {
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
-  
+
   /*---------- SECTION SOBREMI -------------- */
   .sobreMi{
     display: flex;
@@ -116,7 +116,7 @@
     background-size: 100% 100%;
     height: 100%;
   }
-  
+
   .backgroundAboutMe{
     margin-left: 20%;
     margin-top: 7%;
@@ -126,38 +126,38 @@
     max-width: 630px;
     height: 80%;
   }
-  
+
   .green{
     border-top: 5px solid var(--color-surface);
     width: 50px;
     margin-bottom: 3%;
-  
+
   }
-  
+
   .firstParragraf{
     display: block;
     margin-bottom: 5%;
     font-weight: 500;
   }
-  
+
   /*---------- SECTION DE MIS REDES SOCIALES -------------- */
   .redesSociales {
     background-color: #f7f7f7;
     padding: 20px;
     text-align: center;
   }
-  
+
   .container-redes {
     max-width: 800px;
     margin: 0 auto;
   }
-  
+
   .redes {
     display: flex;
     justify-content: space-around;
     margin-top: 20px;
   }
-  
+
   .red-social {
     display: flex;
     flex-direction: column;
@@ -167,80 +167,79 @@
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   }
-  
+
   .red-social:hover{
     transform: translateY(-5px);
     box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
   }
-  
+
   .red-social img {
     width: 40px;
     height: 40px;
     margin-bottom: 10px;
   }
-  
+
   .red-social span {
     font-size: 16px;
     font-weight: bold;
     color: #333;
   }
-  
+
   .hrRedes{
     border-top: 5px solid var(--color-surface);
     width: 100px;
     margin-bottom: 3%;
-  
+
   }
-  
+
   @media (max-width: 1200px) {
     .container {
       flex-direction: column;
     }
-  
+
     .text-section {
       padding: 5% 10%;
     }
-  
+
     .image-section {
       padding: 5% 10%;
     }
   }
-  
+
   @media (max-width: 992px) {
     .container {
       flex-direction: column;
     }
-  
+
     .text-section {
       padding: 5% 10%;
     }
-  
+
     .image-section {
       padding: 5% 10%;
     }
   }
-  
+
   @media (max-width: 768px) {
     .container {
       flex-direction: column;
     }
-  
+
     .text-section {
       padding: 5% 10%;
     }
-  
+
     .image-section {
       padding: 5% 10%;
     }
   }
-  
+
   @media (max-width: 576px) {
     .menu {
       display: none;
     }
-  
+
     .menu-button {
       display: block;
     }
   }
-  
