@@ -7,6 +7,7 @@ import { RouterModule } from '@angular/router';
 import { Llama3Component } from './components/llama3/llama3.component';
 import { GeminiComponent } from './components/gemini/gemini.component';
 import { RAGComponent } from './components/rag/rag.component';
+import { UploadPDFComponent } from './components/rag/components/upload-pdf/upload-pdf.component';
 
 
 
@@ -15,14 +16,14 @@ import { RAGComponent } from './components/rag/rag.component';
     IAsComponent,
     Llama3Component,
     GeminiComponent,
-    RAGComponent
+    RAGComponent,
+    UploadPDFComponent
   ],
   imports: [
     CommonModule,
     IasRoutingModule,
     FormsModule ,
     RouterModule,
-
   ]
 })
 export class IasModule { }

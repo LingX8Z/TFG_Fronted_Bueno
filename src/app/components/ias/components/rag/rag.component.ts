@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { User } from '../../../../interfaces/user.iterface';
 import { AuthService } from '../../../../services/auth.service';
 import { RagService } from './service/rag.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-rag',
@@ -38,7 +39,8 @@ export class RAGComponent implements OnInit, OnDestroy {
   constructor(
     private chatService: RagService,
     private elementRef: ElementRef,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -272,6 +274,9 @@ export class RAGComponent implements OnInit, OnDestroy {
     }
   }
 
+  uploadPDF(){
+    this.router.navigate(['upload'])
+  }
   cancelRenameConversation() {
     this.showRenameModal = false;
     this.renameModalIndex = null;

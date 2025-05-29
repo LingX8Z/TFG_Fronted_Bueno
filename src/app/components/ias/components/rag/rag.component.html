@@ -174,6 +174,24 @@
     </div>
 
     <div class="chat-input">
+       <button
+       *ngIf="currentUserRole === 'Administrador'"
+      class="upload-pdf-button"
+      title="Subir PDF"
+      (click)="uploadPDF()"
+      [disabled]="
+        isLoading ||
+        (selectedConversationIndex < 0 &&
+          conversationTitles.length >= MAX_CONVERSATIONS_FOR_USER_ROLE &&
+          conversationTitles.length > 0) ||
+        (selectedConversationIndex < 0 &&
+          conversationTitles.length > 0 &&
+          !isPrivilegedUser)
+      "
+      style="background: none; border: none; font-size: 1.5em; cursor: pointer; margin-right: 8px; padding: 5px;"
+    >
+      📎
+    </button>
       <input
         type="text"
         [(ngModel)]="prompt"

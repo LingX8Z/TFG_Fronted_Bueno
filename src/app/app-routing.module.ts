@@ -8,6 +8,7 @@ import { GestionarMicuentaComponent } from './components/gestionar-micuenta/gest
 import { AdminRoleGuard } from './guards/admin-role.guard';
 import { ErrorComponent } from './components/error/error.component';
 import { PagoPremiumComponent } from './components/pago-premium/pago-premium.component';
+import { AuthGuard } from './guards/auth.guard';
 
 
 const routes: Routes = [
@@ -42,7 +43,8 @@ const routes: Routes = [
   },
   {
     path: 'premiumPage',
-    component: PagoPremiumComponent
+    component: PagoPremiumComponent,
+    canActivate:[AuthGuard]
   },
   {
     path: 'ias',

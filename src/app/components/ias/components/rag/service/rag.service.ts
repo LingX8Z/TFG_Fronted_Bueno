@@ -52,4 +52,12 @@ export class RagService {
   );
 }
 
+uploadPdf(file: File): Observable<any> {
+  const formData = new FormData();
+  formData.append('pdfs', file); // El nombre debe coincidir con el del interceptor (FilesInterceptor('pdfs', ...))
+
+  return this.http.post(`${this.apiUrl}/rag/upload-and-ask`, formData);
+}
+
+
 }

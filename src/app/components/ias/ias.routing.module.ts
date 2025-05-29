@@ -5,6 +5,8 @@ import { Llama3Component } from './components/llama3/llama3.component';
 import { GeminiComponent } from './components/gemini/gemini.component';
 import { AuthGuard } from '../../guards/auth.guard';
 import { RAGComponent } from './components/rag/rag.component';
+import { AdminRoleGuard } from '../../guards/admin-role.guard';
+import { UploadPDFComponent } from './components/rag/components/upload-pdf/upload-pdf.component';
 
 const routes: Routes = [
   {
@@ -15,6 +17,11 @@ const routes: Routes = [
     path: 'RAG',
     component: RAGComponent,
     canActivate: [AuthGuard]
+  },
+  {
+    path: 'upload',
+    component: UploadPDFComponent,
+    canActivate: [AdminRoleGuard]
   },
   {
     path: 'llama3',
