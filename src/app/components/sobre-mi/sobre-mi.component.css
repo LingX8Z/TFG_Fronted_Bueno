@@ -73,7 +73,7 @@
 
   .buttons .secondary {
     background-color: var(--color-tertiary);
-    color: #333;
+    color: white;
   }
 
   .buttons .secondary:hover {
