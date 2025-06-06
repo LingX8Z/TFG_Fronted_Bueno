@@ -4,7 +4,7 @@ RehabAI es el frontend de un Trabajo de Fin de Grado (TFG) desarrollado con Angu
 
 El proyecto cuenta con un sistema completo de autenticación de usuarios, gestión de roles (Usuario, Premium, Administrador), un panel de administración para la gestión de usuarios y funcionalidades específicas para cada rol, como un límite de conversaciones para usuarios estándar o la capacidad de subir documentos para el modelo RAG por parte de los administradores.
 
-## ✨ Características Principales
+##  Características Principales
 
 * **Autenticación de Usuarios**: Sistema completo de registro e inicio de sesión con validación de formularios reactivos.
 * **Gestión de Sesiones**: Uso de tokens JWT para la gestión de sesiones, con un interceptor para añadir automáticamente el token a las peticiones HTTP.
@@ -26,7 +26,7 @@ El proyecto cuenta con un sistema completo de autenticación de usuarios, gesti�
 * **Sistema de Suscripción**: Página de pago para que los usuarios puedan actualizar su cuenta a Premium y cancelar su suscripción.
 * **Diseño Responsivo**: La interfaz se adapta correctamente a dispositivos de escritorio y móviles.
 
-## 🛠️ Tecnologías Utilizadas
+##  Tecnologías Utilizadas
 
 * **Framework**: Angular v19.1
 * **Lenguaje**: TypeScript v5.7
@@ -36,7 +36,7 @@ El proyecto cuenta con un sistema completo de autenticación de usuarios, gesti�
 * **Renderizado de Markdown**: La librería `marked` para mostrar las respuestas de las IAs formateadas.
 * **Testing**: Karma y Jasmine para pruebas unitarias.
 
-## 📂 Estructura del Proyecto
+##  Estructura del Proyecto
 
 El proyecto sigue la estructura estándar de Angular CLI, con algunas carpetas clave:
 Markdown
@@ -47,7 +47,7 @@ RehabAI es el frontend de un Trabajo de Fin de Grado (TFG) desarrollado con Angu
 
 El proyecto cuenta con un sistema completo de autenticación de usuarios, gestión de roles (Usuario, Premium, Administrador), un panel de administración para la gestión de usuarios y funcionalidades específicas para cada rol, como un límite de conversaciones para usuarios estándar o la capacidad de subir documentos para el modelo RAG por parte de los administradores.
 
-## ✨ Características Principales
+##  Características Principales
 
 * **Autenticación de Usuarios**: Sistema completo de registro e inicio de sesión con validación de formularios reactivos.
 * **Gestión de Sesiones**: Uso de tokens JWT para la gestión de sesiones, con un interceptor para añadir automáticamente el token a las peticiones HTTP.
@@ -69,7 +69,7 @@ El proyecto cuenta con un sistema completo de autenticación de usuarios, gesti�
 * **Sistema de Suscripción**: Página de pago para que los usuarios puedan actualizar su cuenta a Premium y cancelar su suscripción.
 * **Diseño Responsivo**: La interfaz se adapta correctamente a dispositivos de escritorio y móviles.
 
-## 🛠️ Tecnologías Utilizadas
+##  Tecnologías Utilizadas
 
 * **Framework**: Angular v19.1
 * **Lenguaje**: TypeScript v5.7
@@ -79,28 +79,54 @@ El proyecto cuenta con un sistema completo de autenticación de usuarios, gesti�
 * **Renderizado de Markdown**: La librería `marked` para mostrar las respuestas de las IAs formateadas.
 * **Testing**: Karma y Jasmine para pruebas unitarias.
 
-## 📂 Estructura del Proyecto
+##  Estructura del Proyecto
 
 El proyecto sigue la estructura estándar de Angular CLI, con algunas carpetas clave:
 
+```
 /src
 ├── /app
 │   ├── /components
-│   │   ├── /gestion-user     # Panel de administración
-│   │   ├── /gestionar-micuenta # Perfil de usuario
-│   │   ├── /home             # Página de inicio
-│   │   ├── /ias              # Módulo perezoso (lazy-loaded) para los chats
-│   │   │   ├── /components   # Contiene los componentes de cada IA (Gemini, Llama3, RAG)
-│   │   │   └── ias.module.ts # Declaración y enrutamiento del módulo
-│   │   ├── /pago-premium     # Página para gestionar la suscripción
-│   │   └── /sobre-mi         # Página de información
-│   ├── /guards               # Contiene AdminRoleGuard y AuthGuard
-│   ├── /interfaces           # Define la interfaz de Usuario
-│   ├── /services             # Lógica de negocio y llamadas a la API (Auth, Gemini, etc.)
-│   └── /shared               # Módulos y componentes compartidos (Header, Footer, Login)
-├── /assets
-└── /environments
-## 🚀 Instalación y Puesta en Marcha
+│   │   ├── /error/
+│   │   ├── /gestion-user/
+│   │   ├── /gestionar-micuenta/
+│   │   ├── /home/
+│   │   ├── /ias/  (Módulo perezoso)
+│   │   │   ├── /components
+│   │   │   │   ├── /gemini/
+│   │   │   │   ├── /llama3/
+│   │   │   │   └── /rag/
+│   │   │   └── ias.module.ts
+│   │   ├── /pago-premium/
+│   │   └── /sobre-mi/
+│   ├── /guards/
+│   │   ├── admin-role.guard.ts
+│   │   └── auth.guard.ts
+│   ├── /interceptor/
+│   │   └── interceptor.ts
+│   ├── /interfaces/
+│   │   └── user.interface.ts
+│   ├── /services/
+│   │   ├── auth.service.ts
+│   │   └── background.service.ts
+│   ├── /shared/
+│   │   ├── /auth
+│   │   │   └── /login/
+│   │   ├── /components
+│   │   │   ├── /footer/
+│   │   │   └── /header/
+│   │   └── shared.module.ts
+│   ├── app-routing.module.ts
+│   ├── app.component.ts
+│   └── app.module.ts
+├── /public/ (Directorio de assets según angular.json)
+├── index.html
+├── main.ts
+└── styles.css
+```
+
+
+##  Instalación y Puesta en Marcha
 
 Para ejecutar este proyecto en tu entorno local, sigue estos pasos:
 
@@ -136,21 +162,8 @@ Para ejecutar este proyecto en tu entorno local, sigue estos pasos:
     ```
     Navega a `http://localhost:4200/`. La aplicación se recargará automáticamente si cambias alguno de los archivos de origen.
 
-### Otros Scripts Disponibles
 
-* **Construir para producción**:
-    ```bash
-    npm run build
-    ```
-    Los artefactos de la compilación se almacenarán en el directorio `dist/`.
-
-* **Ejecutar pruebas unitarias**:
-    ```bash
-    npm test
-    ```
-    Esto ejecutará las pruebas con Karma y Jasmine.
-
-## 🗺️ Rutas y Navegación
+##  Rutas y Navegación
 
 La aplicación cuenta con las siguientes rutas principales, algunas de ellas protegidas por guards:
 
@@ -169,11 +182,11 @@ La aplicación cuenta con las siguientes rutas principales, algunas de ellas pro
 | `/ias/upload` | `UploadPDFComponent` | Solo Administradores (`AdminRoleGuard`) | Formulario para subir archivos PDF para el modelo RAG. |
 | `/error` | `ErrorComponent` | Público | Página de error mostrada cuando se intenta acceder a una ruta sin permisos. |
 
-## 🤝 Contribuciones
+##  Contribuciones
 
 Este es un proyecto académico y, por el momento, no se buscan contribuciones externas. Sin embargo, si tienes alguna sugerencia o encuentras un error, no dudes en abrir un *issue*.
 
-## 👨‍💻 Autor
+##  Autor
 
 * **Lingxiao Zheng** - Desarrollador principal.
     * GitHub: [@LingX8Z](https://github.com/LingX8Z)
