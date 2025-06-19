@@ -191,7 +191,7 @@ Este es un proyecto académico y, por el momento, no se buscan contribuciones ex
 * ## Autor
 
 **Lingxiao Zheng**  
-Estudiante de Grado en Ingeniería Informática en Ingenieria del Software
-Universidad [Politecdnica de Extremadura]  
+Estudiante de Grado en Ingeniería Informática en Ingeniería del Software
+Universidad [Politécnica de Extremadura]  
 GitHub: [https://github.com/LingX8Z](https://github.com/LingX8Z)  
 Correo: [lingxiaoz2002@gmail.com](mailto:tuemail@ejemplo.com)  
