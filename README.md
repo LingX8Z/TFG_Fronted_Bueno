@@ -188,6 +188,10 @@ Este es un proyecto académico y, por el momento, no se buscan contribuciones ex
 
 ##  Autor
 
-* **Lingxiao Zheng** - Desarrollador principal.
-    * GitHub: [@LingX8Z](https://github.com/LingX8Z)
-    * LinkedIn: [Lingxiao Zheng](https://es.linkedin.com/in/lingxiao-zheng-28aa1831b?trk=people-guest_people_search-card)
+* ## Autor
+
+**Lingxiao Zheng**  
+Estudiante de Grado en Ingeniería Informática en Ingenieria del Software
+Universidad [Politecdnica de Extremadura]  
+GitHub: [https://github.com/LingX8Z](https://github.com/LingX8Z)  
+Correo: [lingxiaoz2002@gmail.com](mailto:tuemail@ejemplo.com)  
