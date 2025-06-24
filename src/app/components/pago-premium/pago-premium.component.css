@@ -1,4 +1,3 @@
-/* pago-premium.component.css */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Roboto:wght@400;500&display=swap');
 
 :host {
@@ -11,9 +10,7 @@
     --color-text: #102A43;
     --color-text-light: #627D98;
     --color-text-placeholder: #90A4AE;
-    --color-error: #D32F2F; /* Rojo para errores y acciones destructivas */
-    --color-warning: #FFA000; /* Naranja/Amarillo para advertencias */
-
+    --color-error: #D32F2F;     --color-warning: #FFA000; 
 
     --button-premium-bg: #FFC107;
     --button-premium-text: #212529;
@@ -27,8 +24,7 @@
     --button-danger-text: #FFFFFF;
     --button-danger-hover-bg: #C62828;
 
-    --button-secondary-bg: #CFD8DC; /* Un gris claro para acciones secundarias */
-    --button-secondary-text: var(--color-text);
+    --button-secondary-bg: #CFD8DC;     --button-secondary-text: var(--color-text);
     --button-secondary-hover-bg: #B0BEC5;
 
 
@@ -68,8 +64,7 @@
     margin: 0 auto;
     padding-left: 20px;
     padding-right: 20px;
-    padding-bottom: 40px; /* Added padding at the bottom */
-}
+    padding-bottom: 40px; }
 
 .upgrade-header {
     text-align: center;
@@ -77,8 +72,7 @@
 }
 
 .upgrade-header h1 {
-    font-size: clamp(1.8rem, 5vw, 2.6rem); /* Slightly adjusted for potentially longer text */
-    font-weight: 700;
+    font-size: clamp(1.8rem, 5vw, 2.6rem);     font-weight: 700;
     margin-bottom: 10px;
     color: var(--color-text);
 }
@@ -376,8 +370,7 @@
     text-decoration: none;
     cursor: pointer;
     transition: background-color var(--transition), transform var(--transition), box-shadow var(--transition);
-    width: 100%; /* Default for buttons inside forms maybe */
-}
+    width: 100%; }
 .btn:disabled {
     background-color: #B0BEC5;
     color: #78909C;
@@ -465,8 +458,7 @@
     background: var(--color-surface);
     border-radius: var(--radius);
     width: 100%;
-    max-width: 420px; /* Ancho estándar para modales de info/pago */
-    box-shadow: 0 10px 30px rgba(16, 42, 67, 0.2);
+    max-width: 420px;     box-shadow: 0 10px 30px rgba(16, 42, 67, 0.2);
     animation: modal-appear 0.3s ease-out forwards;
     transform: scale(0.95);
     opacity: 0;
@@ -476,10 +468,8 @@
     opacity: 1;
 }
 
-/* Ancho específico para el modal de confirmación si es necesario */
 .modal-content-wrapper.modal-confirm-cancel {
-    max-width: 480px; /* Un poco más ancho para el texto y botones */
-}
+    max-width: 480px; }
 
 
 @keyframes modal-appear {
@@ -497,13 +487,10 @@
 .modal-header-section h3 {
     font-size: 1.2rem;
     font-weight: 600;
-    color: var(--color-primary); /* Azul para cabecera estándar */
-    margin: 0;
+    color: var(--color-primary);     margin: 0;
 }
-/* Para el modal de confirmación, el título podría ser más sobrio o de advertencia */
 .modal-confirm-cancel .modal-header-section h3 {
-    color: var(--color-text); /* Un color más neutro para la cabecera de confirmación */
-}
+    color: var(--color-text); }
 
 
 .btn-close-modal {
@@ -517,8 +504,7 @@
     transition: color var(--transition);
 }
 .btn-close-modal:hover {
-    color: var(--color-error); /* Rojo al pasar el cursor, indica cerrar/cancelar */
-}
+    color: var(--color-error); }
 
 
 .modal-body {
@@ -547,11 +533,8 @@
     display: block;
 }
 
-.warning-icon { /* Estilo para el icono de advertencia */
-    width: 50px; /* Ajusta según sea necesario */
-    height: 50px;
-    fill: var(--color-warning); /* Color de advertencia */
-    margin: 0 auto 20px auto;
+.warning-icon {     width: 50px;     height: 50px;
+    fill: var(--color-warning);     margin: 0 auto 20px auto;
     display: block;
 }
 
@@ -569,7 +552,6 @@
     margin-bottom: 25px;
 }
 
-/* Estilos para el texto del modal de advertencia/confirmación */
 .modal-warning-title {
     font-size: 1.3rem;
     font-weight: 600;
@@ -594,24 +576,18 @@
     font-weight: 500;
     cursor: pointer;
     transition: background-color var(--transition);
-    min-width: 120px; /* Para que el botón "Entendido" tenga un tamaño decente */
-}
+    min-width: 120px; }
 .btn-modal-close:hover {
     background-color: var(--button-payment-hover-bg);
 }
 
-/* Estilos para los botones en el modal de confirmación de cancelación */
 .modal-confirm-buttons {
     display: flex;
-    gap: 15px; /* Espacio entre botones */
-    justify-content: center; /* Centrar los botones si no ocupan todo el ancho */
-    margin-top: 20px;
+    gap: 15px;     justify-content: center;     margin-top: 20px;
 }
 
-.modal-confirm-buttons .btn { /* Los botones dentro de este contenedor no serán full-width por defecto */
-    width: auto;
-    padding: 10px 20px; /* Ajusta el padding para estos botones */
-    font-size: 0.9rem;
+.modal-confirm-buttons .btn {     width: auto;
+    padding: 10px 20px;     font-size: 0.9rem;
 }
 
 .btn-modal-danger {
@@ -626,8 +602,7 @@
 .btn-modal-secondary {
     background-color: var(--button-secondary-bg);
     color: var(--button-secondary-text);
-    border: 1px solid var(--button-secondary-hover-bg); /* Un borde sutil */
-}
+    border: 1px solid var(--button-secondary-hover-bg); }
 .btn-modal-secondary:hover {
     background-color: var(--button-secondary-hover-bg);
     transform: translateY(-1px);
@@ -645,17 +620,12 @@
 }
 
 .btn-cancel-subscription {
-  background-color: var(--button-danger-bg); /* Usar la variable de color de error/peligro */
-  color: var(--button-danger-text);
-  border: none; /* Puede que no necesite borde si el fondo es distintivo */
-  font-weight: 600;
+  background-color: var(--button-danger-bg);   color: var(--button-danger-text);
+  border: none;   font-weight: 600;
   margin-top: 16px;
-  padding: 10px 20px; /* Ajuste de padding */
-  border-radius: var(--radius);
+  padding: 10px 20px;   border-radius: var(--radius);
   transition: all 0.2s ease-in-out;
-  width: auto; /* Para que no ocupe todo el ancho si no es necesario */
-  display: inline-block; /* Para que el width:auto funcione correctamente */
-}
+  width: auto;   display: inline-block; }
 
 .btn-cancel-subscription:hover {
     background-color: var(--button-danger-hover-bg);
@@ -696,10 +666,8 @@
     .form-row .form-group {
         margin-bottom: 20px;
     }
-    .btn { /* Afecta a todos los .btn, ajustar si es necesario */
-        font-size: 0.9rem;
-        padding: 12px 15px; /* Ajuste de padding general para botones en móvil */
-    }
+    .btn {         font-size: 0.9rem;
+        padding: 12px 15px;     }
     .payment-form-card h3 {
         font-size: 1.3rem;
     }
@@ -710,16 +678,13 @@
         font-size: 1rem;
     }
     .modal-content-wrapper {
-        max-width: calc(100% - 30px); /* Asegura que el modal no sea demasiado ancho en móviles */
-    }
+        max-width: calc(100% - 30px);     }
     .modal-body {
         padding: 20px;
     }
     .modal-confirm-buttons {
-        flex-direction: column; /* Apila los botones en móviles */
-        gap: 10px;
+        flex-direction: column;         gap: 10px;
     }
     .modal-confirm-buttons .btn {
-        width: 100%; /* Hace que los botones apilados ocupen todo el ancho */
-    }
+        width: 100%;     }
 }

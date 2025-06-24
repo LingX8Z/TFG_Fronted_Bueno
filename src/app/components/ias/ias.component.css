@@ -1,5 +1,4 @@
 
-/* ----- Global Resets & Base Styles ----- */
 *,
 *::before,
 *::after {
@@ -29,31 +28,25 @@ body {
 
 }
 
-/* ----- Header Styling ----- */
 header {
     text-align: center;
     margin-bottom: 60px;
     padding: 20px;
-    background-color: var(--color-surface); /* Fondo blanco para el header */
-    border-radius: var(--radius);
+    background-color: var(--color-surface);     border-radius: var(--radius);
     box-shadow: var(--card-shadow);
 }
 
 header h1 {
     font-family: var(--font-primary);
-    font-size: 2.8em; /* Ligeramente más pequeño para Montserrat */
-    font-weight: 700;
-    color: var(--color-primary); /* Título principal con el verde esmeralda */
-    margin-bottom: 10px;
+    font-size: 2.8em;     font-weight: 700;
+    color: var(--color-primary);     margin-bottom: 10px;
 }
 
 header .subtitle {
     font-size: 1.2em;
     color: var(--color-text-light);
-    font-weight: 400; /* Montserrat regular */
-}
+    font-weight: 400; }
 
-/* ----- Models Grid Styling ----- */
 .models-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -62,8 +55,7 @@ header .subtitle {
 }
 
 .model-card {
-    background-color: var(--color-light); /* Blanco verdoso para las tarjetas */
-    border-radius: var(--radius);
+    background-color: var(--color-light);     border-radius: var(--radius);
     padding: 30px;
     text-align: center;
     box-shadow: var(--card-shadow);
@@ -75,11 +67,9 @@ header .subtitle {
 }
 
 .model-card:hover {
-    transform: translateY(-8px) scale(1.01); /* Sutil hover */
-    box-shadow: var(--card-hover-shadow);
+    transform: translateY(-8px) scale(1.01);     box-shadow: var(--card-hover-shadow);
 }
 
-/* Contenedor del icono para controlar mejor el fondo y la forma */
 .model-icon-wrapper {
     width: 80px;
     height: 80px;
@@ -88,10 +78,7 @@ header .subtitle {
     justify-content: center;
     align-items: center;
     border-radius: 50%;
-    background-color: var(--color-background); /* Fondo del icono igual al del body para "recortar" */
-    padding:15px; /* Espacio para el icono dentro del círculo */
-    border: 2px solid var(--color-secondary); /* Borde con el verde hoja */
-}
+    background-color: var(--color-background);     padding:15px;     border: 2px solid var(--color-secondary); }
 
 .model-icon {
     width: 100%;
@@ -102,33 +89,16 @@ header .subtitle {
 }
 
 .model-icon svg {
-    width: 40px; /* Ajustado para el padding */
-    height: 40px; /* Ajustado para el padding */
-    fill: currentColor; /* Heredará el color del padre */
+    width: 40px;     height: 40px;     fill: currentColor; }
+
+.gemini-icon { color: #4285F4;     margin-bottom: 15px;
 }
 
-/* Colores específicos para iconos (usando fill directamente o color en el padre) */
-.gemini-icon { color: #4285F4; /* Azul Google, se mantiene para distinción */ }
-.rag-icon { color: var(--color-primary); /* Verde Esmeralda para RAG */ }
-.llama-icon { color: #FF6F00; /* Naranja Meta, se mantiene para distinción */ }
-
-
-.model-card h2 {
-    font-family: var(--font-primary);
-    font-size: 1.8em;
-    font-weight: 700; /* Montserrat Bold */
-    margin-bottom: 15px;
-}
-
-/* Colores específicos para títulos de tarjetas (se mantienen para distinción) */
 #gemini h2 { color: #4285F4; }
-#rag h2 { color: var(--color-primary); } /* Usando el verde primario de la paleta */
-#llama3 h2 { color: #FF6F00; } /* Mantenemos el naranja para Llama */
-
+#rag h2 { color: var(--color-primary); } #llama3 h2 { color: #FF6F00; } 
 .model-card .description {
     font-size: 0.95em;
-    color: var(--color-text); /* Texto principal para buena legibilidad */
-    margin-bottom: 25px;
+    color: var(--color-text);     margin-bottom: 25px;
     flex-grow: 1;
     min-height: 70px;
 }
@@ -140,16 +110,12 @@ header .subtitle {
     padding: 12px 25px;
     border-radius: var(--radius);
     font-size: 1em;
-    font-family: var(--font-primary); /* Usar Montserrat para botones */
-    font-weight: 500; /* Montserrat Medium */
-    cursor: pointer;
+    font-family: var(--font-primary);     font-weight: 500;     cursor: pointer;
     transition: background-color var(--transition), transform var(--transition), box-shadow var(--transition);
-    box-shadow: 0 4px 8px rgba(27, 94, 32, 0.15); /* Sombra sutil verde */
-}
+    box-shadow: 0 4px 8px rgba(27, 94, 32, 0.15); }
 
 .select-button:hover {
-    background-color: var(--color-primary); /* Verde esmeralda al pasar el ratón */
-    transform: translateY(-2px);
+    background-color: var(--color-primary);     transform: translateY(-2px);
     box-shadow: 0 6px 12px rgba(27, 94, 32, 0.2);
 }
 
@@ -158,15 +124,12 @@ header .subtitle {
     box-shadow: 0 2px 4px rgba(27, 94, 32, 0.1);
 }
 
-/* ----- Login Prompt Message Styling ----- */
 .login-prompt-message {
-  background-color: rgba(0, 255, 255, 0.171); /* A light, noticeable background */
-  color: var(--color-text-strong, #333);
+  background-color: rgba(0, 255, 255, 0.171);   color: var(--color-text-strong, #333);
   border: 1px solid var(--border-color-accent, #d0d9e0);
   padding: 15px 20px;
   border-radius: var(--radius, 8px);
-  margin-bottom: 40px; /* Space before the model grid */
-  text-align: center;
+  margin-bottom: 40px;   text-align: center;
   font-size: 1.05em;
   box-shadow: var(--subtle-shadow, 0 2px 4px rgba(0,0,0,0.05));
 }
@@ -177,34 +140,23 @@ header .subtitle {
 }
 
 .login-prompt-message a {
-  color: var(--color-primary, #1b5e20); /* Use your primary theme color */
-  font-weight: 600; /* Montserrat SemiBold or similar */
-  text-decoration: none;
+  color: var(--color-primary, #1b5e20);   font-weight: 600;   text-decoration: none;
   border-bottom: 1px solid transparent;
   transition: color var(--transition), border-color var(--transition);
 }
 
 .login-prompt-message a:hover {
-  color: var(--color-secondary, #4caf50); /* A secondary or hover theme color */
-  border-bottom-color: var(--color-secondary, #4caf50);
+  color: var(--color-secondary, #4caf50);   border-bottom-color: var(--color-secondary, #4caf50);
 }
 
-/* ----- Disabled Button Styling ----- */
 .select-button:disabled {
-  background-color: #d8dde0; /* Lighter, less prominent background */
-  color: #8a959e; /* Muted text color */
-  cursor: not-allowed;
-  box-shadow: none; /* Remove shadow for disabled state */
-  border: 1px solid #caced1; /* Optional: slight border for definition */
-}
+  background-color: #d8dde0;   color: #8a959e;   cursor: not-allowed;
+  box-shadow: none;   border: 1px solid #caced1; }
 
 .select-button:disabled:hover {
-  background-color: #d8dde0; /* Keep same style on hover */
-  transform: none; /* No hover effect */
-  box-shadow: none;
+  background-color: #d8dde0;   transform: none;   box-shadow: none;
 }
 
-/* ----- Responsive Adjustments ----- */
 @media (max-width: 992px) {
     header h1 {
         font-size: 2.3em;

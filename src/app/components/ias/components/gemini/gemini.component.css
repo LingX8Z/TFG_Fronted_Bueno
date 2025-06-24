@@ -1,4 +1,3 @@
-/* Estilos básicos para visualización (puedes moverlos a un archivo CSS) */
 body {
   font-family: sans-serif;
   margin: 0;
@@ -40,50 +39,32 @@ body {
   color: #333;
 }
 
-/* --- Role Indicator in Conversation List Title --- */
 
-/* Default style for User (Gris) */
 .conversation-list-title .role-indicator {
   padding: 2px 6px;
   border-radius: 4px;
-  font-size: 0.75em; /* Slightly smaller than the title */
-  font-weight: bold;
-  margin-left: 8px; /* Space from "Conversaciones" */
-  background-color: #e0e0e0; /* Light grey background */
-  color: #555555; /* Dark grey text */
-  border: 1px solid #cccccc;
+  font-size: 0.75em;   font-weight: bold;
+  margin-left: 8px;   background-color: #e0e0e0;   color: #555555;   border: 1px solid #cccccc;
 }
 
-/* Premium Role Style (Dorado) */
 .premium-theme .conversation-list-title .role-indicator {
-  background-color: orange; /* Gold */
-  color: #4A3B00; /* Darker gold/brown text for contrast */
-  border: 1px solid orange; /* Goldenrod border */
-  text-shadow: 0 0 3px rgba(255, 255, 255, 0.3);
+  background-color: orange;   color: #4A3B00;   border: 1px solid orange;   text-shadow: 0 0 3px rgba(255, 255, 255, 0.3);
 }
 
-/* Admin Role Style (Plateado) */
 .admin-theme .conversation-list-title .role-indicator {
-  background-color: #FFD700; /* Silver */
-  color: #2F2F2F; /* Dark grey text for contrast */
-  border: 1px solid #FFD700; /* Darker silver border */
-  text-shadow: 0 0 3px rgba(255, 255, 255, 0.4);
+  background-color: #FFD700;   color: #2F2F2F;   border: 1px solid #FFD700;   text-shadow: 0 0 3px rgba(255, 255, 255, 0.4);
 }
 
-/* Optional: Adjustments to the main title text color if needed when a theme is active */
 .premium-theme .conversation-list-title,
 .admin-theme .conversation-list-title {
-  display: flex; /* Helps align the main title and span nicely */
-  align-items: center;
+  display: flex;   align-items: center;
 }
 
 .premium-theme .conversation-list-title {
- color: #ecf0f1; /* From your existing premium theme */
-}
+ color: #ecf0f1; }
 
 .admin-theme .conversation-list-title {
- color: #f5f6fa; /* From your existing admin theme */
-}
+ color: #f5f6fa; }
 
 .conversation-list-container hr {
   border: none;
@@ -171,7 +152,6 @@ body {
   color: #333;
 }
 
-/* Estilo para el H1 añadido */
 .header-info h2 {
   font-size: 1.1em;
   margin: 0;
@@ -278,35 +258,25 @@ body {
   color: #000;
 }
 
-/* Estilos existentes ... */
 
 .conversation-item-wrapper {
-  position: relative; /* Para posicionar el menú_ */
-}
+  position: relative; }
 
 .conversation-item {
-  display: flex; /* Para alinear el título y el botón */
-  justify-content: space-between; /* Espacio entre título y botón */
-  align-items: center; /* Centrar verticalmente */
-  padding: 10px;
+  display: flex;   justify-content: space-between;   align-items: center;   padding: 10px;
   cursor: pointer;
   border-bottom: 1px solid #eee;
   transition: background-color 0.3s;
 }
 
 .conversation-title {
-  flex-grow: 1; /* Para que ocupe el espacio disponible */
-  overflow: hidden; /* Evita que el texto largo rompa el diseño */
-  text-overflow: ellipsis; /* Añade ... si el texto es muy largo */
-  white-space: nowrap; /* Evita saltos de línea en el título */
-}
+  flex-grow: 1;   overflow: hidden;   text-overflow: ellipsis;   white-space: nowrap; }
 
 .options-button {
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 1.2em; /* Ajusta el tamaño del icono */
-  padding: 0 5px;
+  font-size: 1.2em;   padding: 0 5px;
   color: #555;
 }
 
@@ -316,15 +286,11 @@ body {
 
 .conversation-menu {
   position: absolute;
-  right: 5px; /* Posición del menú */
-  top: 35px; /* Ajusta según el alto del item + padding */
-  background-color: white;
+  right: 5px;   top: 35px;   background-color: white;
   border: 1px solid #ccc;
   border-radius: 4px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  z-index: 100; /* Asegura que esté por encima de otros elementos */
-  width: 120px; /* Ancho del menú */
-}
+  z-index: 100;   width: 120px; }
 
 .conversation-menu button {
   display: block;
@@ -341,7 +307,6 @@ body {
   background-color: #f0f0f0;
 }
 
-/* ... otros estilos ... */
 
 .chat-input input[disabled],
 .chat-input button[disabled] {
@@ -354,16 +319,13 @@ body {
   padding: 10px;
   font-size: 0.8em;
   color: #777;
-  border-top: 1px solid #eee; /* Línea divisoria opcional */
-  margin-top: auto; /* Empuja este div hacia abajo */
-}
+  border-top: 1px solid #eee;   margin-top: auto; }
 
 .under-conversation-text span {
   font-weight: bold;
   color: #555;
 }
 
-/* ... (tus estilos existentes para .chatbot-container, .conversation-list-container, etc.) ... */
 
 .conversation-item-wrapper {
   position: relative;
@@ -385,8 +347,7 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  padding-right: 5px; /* Espacio para el botón de opciones */
-}
+  padding-right: 5px; }
 
 .options-button {
   background: none;
@@ -395,8 +356,7 @@ body {
   font-size: 1.2em;
   padding: 0 5px;
   color: #555;
-  line-height: 1; /* Para mejor alineación vertical */
-}
+  line-height: 1; }
 
 .options-button:hover {
   color: #000;
@@ -405,8 +365,7 @@ body {
 .conversation-menu {
   position: absolute;
   right: 5px;
-  top: 100%; /* Se posiciona justo debajo del item */
-  background-color: white;
+  top: 100%;   background-color: white;
   border: 1px solid #ccc;
   border-radius: 4px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -429,20 +388,16 @@ body {
   background-color: #f0f0f0;
 }
 
-/* --- Estilos para Modales Integrados --- */
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.6); /* Un poco más oscuro */
-  display: flex;
+  background-color: rgba(0, 0, 0, 0.6);   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1050; /* Por encima del menú de conversación si estuviera abierto */
-  padding: 15px; /* Para evitar que el modal toque los bordes en pantallas pequeñas */
-  box-sizing: border-box;
+  z-index: 1050;   padding: 15px;   box-sizing: border-box;
 }
 
 .modal-content {
@@ -451,15 +406,12 @@ body {
   border-radius: 8px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   width: 100%;
-  max-width: 450px; /* Un poco más ancho */
-  text-align: left; /* Default para el modal de renombrar */
-  box-sizing: border-box;
+  max-width: 450px;   text-align: left;   box-sizing: border-box;
 }
 
 .modal-content h2 {
   margin-top: 0;
-  margin-bottom: 20px; /* Más espacio */
-  font-size: 1.4em;
+  margin-bottom: 20px;   font-size: 1.4em;
   color: #333;
 }
 
@@ -470,10 +422,8 @@ body {
 }
 
 .modal-content input[type="text"] {
-  width: 100%; /* Ocupa todo el ancho menos padding del contenedor */
-  padding: 12px;
-  margin-bottom: 25px; /* Más espacio */
-  border: 1px solid #ccc;
+  width: 100%;   padding: 12px;
+  margin-bottom: 25px;   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 1em;
   box-sizing: border-box;
@@ -482,12 +432,10 @@ body {
 .modal-actions {
   display: flex;
   justify-content: flex-end;
-  gap: 12px; /* Un poco más de espacio entre botones */
-}
+  gap: 12px; }
 
 .modal-actions button {
-  padding: 10px 20px; /* Botones un poco más grandes */
-  border: none;
+  padding: 10px 20px;   border: none;
   border-radius: 5px;
   cursor: pointer;
   font-size: 0.95em;
@@ -495,10 +443,8 @@ body {
   transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* Estilos específicos para botones de acción del modal */
 .modal-actions .button-save {
-  background-color: #28a745; /* Verde bootstrap success */
-  color: white;
+  background-color: #28a745;   color: white;
 }
 .modal-actions .button-save:hover {
   background-color: #218838;
@@ -512,8 +458,7 @@ body {
 }
 
 .modal-actions .button-cancel {
-  background-color: #6c757d; /* Gris bootstrap secondary */
-  color: white;
+  background-color: #6c757d;   color: white;
 }
 .modal-actions .button-cancel:hover {
   background-color: #5a6268;
@@ -521,22 +466,13 @@ body {
 }
 
 .modal-actions .button-delete {
-  background-color: #dc3545; /* Rojo bootstrap danger */
-  color: white;
+  background-color: #dc3545;   color: white;
 }
 .modal-actions .button-delete:hover {
   background-color: #c82333;
    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-/* Para el modal de confirmación, podemos centrar el texto si queremos */
-/* Si el modal de delete necesita texto centrado específicamente */
-/* .modal-overlay[attr-type="delete"] .modal-content {
-  text-align: center;
-}
-.modal-overlay[attr-type="delete"] .modal-actions {
-  justify-content: center;
-} */
 
 .chat-input input[disabled],
 .chat-input button[disabled] {
@@ -564,41 +500,31 @@ body {
   font-weight: bold;
 }
 
-/* ... tus estilos existentes ... */
 
-/* --- Estilos para Roles --- */
 
-/* Tema Base (ya lo tienes) */
 
-/* Tema Premium */
 .premium-theme .conversation-list-container {
-  background: linear-gradient(135deg, #2c3e50, #3498db); /* Azul oscuro a azul más claro */
-  border-right: 1px solid #4a6fa5;
+  background: linear-gradient(135deg, #2c3e50, #3498db);   border-right: 1px solid #4a6fa5;
 }
 .premium-theme .conversation-list-title {
-  color: #ecf0f1; /* Texto claro */
-}
+  color: #ecf0f1; }
 .premium-theme .conversation-list-container hr {
   border-top: 1px solid #4a6fa5;
 }
 .premium-theme .new-conversation-button {
-  background-color: #e67e22; /* Naranja */
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  background-color: #e67e22;   box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 .premium-theme .new-conversation-button:hover {
   background-color: #d35400;
 }
 .premium-theme .conversation-item {
-  color: white; /* Texto de item gris claro */
-  border-bottom: 1px solid #3e5770;
+  color: white;   border-bottom: 1px solid #3e5770;
 }
 .premium-theme .conversation-item:hover {
-  background-color: rgba(236, 240, 241, 0.1); /* Hover sutil */
-  color: #fff;
+  background-color: rgba(236, 240, 241, 0.1);   color: #fff;
 }
 .premium-theme .conversation-item.active {
-  background-color: #e67e22; /* Naranja para activo */
-  color: white;
+  background-color: #e67e22;   color: white;
   font-weight: bold;
 }
 .premium-theme .options-button {
@@ -608,18 +534,14 @@ body {
   color: #fff;
 }
 .premium-theme .chat-header {
-  background: #34495e; /* Azul grisáceo oscuro */
-  border-bottom: 1px solid #2c3e50;
+  background: #34495e;   border-bottom: 1px solid #2c3e50;
 }
 .premium-theme .chat-header h1 {
-  color: #e67e22; /* Naranja para el título principal */
-}
+  color: #e67e22; }
 .premium-theme .header-info h2 {
-  color: #ecf0f1; /* Texto de subtítulo claro */
-}
+  color: #ecf0f1; }
 .premium-theme .star-icon {
-  color: #f1c40f; /* Amarillo estrella */
-  margin-left: 8px;
+  color: #f1c40f;   margin-left: 8px;
 }
 .premium-theme .under-conversation-text {
   color: #bdc3c7;
@@ -636,10 +558,8 @@ body {
 }
 
 
-/* Tema Administrador (puede heredar de premium o ser completamente diferente) */
 .admin-theme .conversation-list-container {
-  background: linear-gradient(135deg, #1d2b3a, #4a0e6c); /* Oscuro a púrpura */
-  border-right: 1px solid #5d3d77;
+  background: linear-gradient(135deg, #1d2b3a, #4a0e6c);   border-right: 1px solid #5d3d77;
 }
 .admin-theme .conversation-list-title {
   color: #f5f6fa;
@@ -649,8 +569,7 @@ body {
   border-top: 1px solid #5d3d77;
 }
 .admin-theme .new-conversation-button {
-  background-color: #8e44ad; /* Púrpura */
-  font-weight: bold;
+  background-color: #8e44ad;   font-weight: bold;
   text-transform: uppercase;
   letter-spacing: 1px;
 }
@@ -666,19 +585,15 @@ body {
   color: #fff;
 }
 .admin-theme .conversation-item.active {
-  background-color: #8e44ad; /* Púrpura para activo */
-  color: white;
-  border-left: 3px solid #f1c40f; /* Borde dorado */
-}
+  background-color: #8e44ad;   color: white;
+  border-left: 3px solid #f1c40f; }
 .admin-theme .options-button {
   color: white;
 }
 .admin-theme .options-button:hover {
-  color: #f1c40f; /* Dorado al hacer hover */
-}
+  color: #f1c40f; }
 .admin-theme .chat-header {
-  background: #2c1e38; /* Púrpura muy oscuro */
-  border-bottom: 1px solid #1d2b3a;
+  background: #2c1e38;   border-bottom: 1px solid #1d2b3a;
 }
 .admin-theme .chat-header h1 {
   color: #8e44ad;
@@ -688,9 +603,7 @@ body {
   color: #f5f6fa;
 }
 .admin-theme .star-icon {
-  color: #ffd700; /* Dorado */
-  animation: pulse 1.5s infinite; /* Animación sutil */
-}
+  color: #ffd700;   animation: pulse 1.5s infinite; }
 .admin-theme .under-conversation-text {
   color: #dfe6e9;
   border-top: 1px solid #4a315e;
