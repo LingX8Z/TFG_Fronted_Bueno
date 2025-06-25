@@ -24,42 +24,43 @@ export class IAsComponent implements OnInit, OnDestroy {
     private BackgroundService: BackgroundService
   ) {}
 
-  ngOnInit(): void {
-    // Subscribe to router events to control visibility of the model grid
-    this.routerSubscription = this.router.events
-      .pipe(filter(event => event instanceof NavigationEnd))
-      .subscribe((event: Event) => { // Explicitly type event as Event or NavigationEnd
-        const navEndEvent = event as NavigationEnd;
-        const currentUrl = navEndEvent.urlAfterRedirects;
-        // Show model grid only on the base '/ias' path, hide for sub-paths like '/ias/gemini'
-        this.areButtonsVisible = currentUrl === '/ias';
-      });
-
-    // Subscribe to currentUser$ to get real-time login status
-    this.authSubscription = this.authService.currentUser$.subscribe(user => {
-      this.isUserLoggedIn = !!user; // True if user object exists, false if null
+// Se ejecuta al inicializar el componente
+ngOnInit(): void {
+  // Se suscribe a los eventos del router para mostrar u ocultar los botones
+  this.routerSubscription = this.router.events
+    .pipe(filter(event => event instanceof NavigationEnd))
+    .subscribe((event: Event) => {
+      const navEndEvent = event as NavigationEnd;
+      const currentUrl = navEndEvent.urlAfterRedirects;
+      // Los botones se muestran solo si la ruta es exactamente '/ias'
+      this.areButtonsVisible = currentUrl === '/ias';
     });
-  }
 
-  ngOnDestroy(): void {
-    // Unsubscribe to prevent memory leaks
-    if (this.routerSubscription) {
-      this.routerSubscription.unsubscribe();
-    }
-    if (this.authSubscription) {
-      this.authSubscription.unsubscribe();
-    }
-  }
+  // Se suscribe al observable del usuario actual para saber si hay sesión iniciada
+  this.authSubscription = this.authService.currentUser$.subscribe(user => {
+    this.isUserLoggedIn = !!user; // true si hay usuario logueado, false si es null
+  });
+}
 
-  // Updated to handle navigation only if logged in, or prompt for login
-  navigateToModel(modelPath: string): void {
-    if (this.isUserLoggedIn) {
-      this.router.navigate(['/ias', modelPath]);
-    } else {
-      // You could use a more sophisticated modal/toast here
-      alert('Por favor, inicia sesión para acceder a los modelos de IA.');
-      // Optionally, redirect to login:
-      // this.router.navigate(['/auth/login']); // Assuming '/auth/login' is your login route
-    }
+// Se ejecuta al destruir el componente
+ngOnDestroy(): void {
+  // Cancela la suscripción al router para evitar fugas de memoria
+  if (this.routerSubscription) {
+    this.routerSubscription.unsubscribe();
   }
+  // Cancela la suscripción al observable del usuario
+  if (this.authSubscription) {
+    this.authSubscription.unsubscribe();
+  }
+}
+
+// Navega al modelo de IA seleccionado si el usuario está logueado, si no, muestra un aviso
+navigateToModel(modelPath: string): void {
+  if (this.isUserLoggedIn) {
+    this.router.navigate(['/ias', modelPath]); // Navega a la ruta del modelo
+  } else {
+    alert('Por favor, inicia sesión para acceder a los modelos de IA.');
+  }
+}
+
 }

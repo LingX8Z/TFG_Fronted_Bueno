@@ -36,6 +36,7 @@ export class GestionarMicuentaComponent implements OnInit {
     this.user = this.authService.currentUser$;
   }
 
+  // Se ejecuta al iniciar el componente: configura el formulario con los datos del usuario actual
   ngOnInit() {
     this.authService.currentUser$.subscribe((user) => {
       this.userForm = this.fb.group({
@@ -48,12 +49,14 @@ export class GestionarMicuentaComponent implements OnInit {
     });
   }
 
+  // Alterna la visibilidad de los campos de contraseña según el tipo (actual, nueva o confirmación)
   toggleVisibility(field: 'current' | 'new' | 'confirm') {
     if (field === 'current') this.showCurrent = !this.showCurrent;
     if (field === 'new') this.showNew = !this.showNew;
     if (field === 'confirm') this.showConfirm = !this.showConfirm;
   }
 
+  // Maneja el envío del formulario: valida datos y muestra el modal de confirmación si todo está correcto
   onSubmit() {
     if (this.userForm.invalid) return;
 
@@ -65,7 +68,7 @@ export class GestionarMicuentaComponent implements OnInit {
       return;
     }
 
-    // Guarda los datos temporalmente y muestra el modal
+    // Guarda temporalmente los datos para confirmar antes de enviarlos al backend
     this.pendingUpdateData = {
       fullName,
       currentPassword: currentPassword || undefined,
@@ -74,6 +77,7 @@ export class GestionarMicuentaComponent implements OnInit {
     this.showModal = true;
   }
 
+  // Confirma la actualización del perfil: envía los datos al backend y gestiona la respuesta
   confirmUpdate() {
     if (!this.pendingUpdateData) return;
 
@@ -84,7 +88,7 @@ export class GestionarMicuentaComponent implements OnInit {
         this.showModal = false;
         this.pendingUpdateData = null;
         this.showToast(' Perfil actualizado correctamente', 'success');
-        this.onCancel(); // recarga formulario
+        this.onCancel(); // Recarga el formulario tras la actualización
       },
       error: (err) => {
         this.isLoading = false;
@@ -95,6 +99,7 @@ export class GestionarMicuentaComponent implements OnInit {
     });
   }
 
+  // Muestra una notificación (toast) con mensaje y tipo (éxito o error)
   showToast(message: string, type: 'success' | 'error' = 'success') {
     this.toastMessage = message;
     this.toastType = type;
@@ -103,11 +108,13 @@ export class GestionarMicuentaComponent implements OnInit {
     }, 3000);
   }
 
+  // Cancela la acción del modal sin realizar cambios y limpia los datos pendientes
   cancelModal() {
     this.showModal = false;
     this.pendingUpdateData = null;
   }
 
+  // Reinicia el formulario recargando los datos del usuario actual
   onCancel() {
     this.ngOnInit();
   }

@@ -39,8 +39,9 @@ export class Llama3Component implements OnInit, OnDestroy {
     private llamaService: Llama3Service,
     private authService: AuthService,
     private elementRef: ElementRef
-  ) {}
+  ) { }
 
+  // Método del ciclo de vida que se ejecuta al iniciar el componente. Determina el rol del usuario y carga las conversaciones.
   ngOnInit(): void {
     this.userSubscription = this.authService.currentUser$.subscribe((user) => {
       if (user && user.roles) {
@@ -53,14 +54,17 @@ export class Llama3Component implements OnInit, OnDestroy {
     });
   }
 
+  // Método del ciclo de vida que se ejecuta al destruir el componente. Cancela la suscripción al observable del usuario.
   ngOnDestroy(): void {
     this.userSubscription?.unsubscribe();
   }
 
+  // Getter que indica si el usuario tiene un rol con privilegios (Premium o Administrador).
   get isPrivilegedUser(): boolean {
     return this.currentUserRole === 'Premium' || this.currentUserRole === 'Administrador';
   }
 
+  // Listener que detecta clics globales en el documento para cerrar el menú contextual si el clic fue fuera de él.
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
     if (this.menuOpenIndex !== null) {
@@ -77,6 +81,7 @@ export class Llama3Component implements OnInit, OnDestroy {
     }
   }
 
+  // Carga el historial de conversaciones del modelo Llama3 desde el backend.
   loadConversations(): void {
     const chatbotName = 'llama3';
     this.llamaService.getConversationHistory(chatbotName).subscribe({
@@ -103,6 +108,7 @@ export class Llama3Component implements OnInit, OnDestroy {
     });
   }
 
+  // Envía el mensaje del usuario y procesa la respuesta del bot. También guarda ambos mensajes en el historial.
   sendMessage(): void {
     const msg = this.prompt.trim();
     if (!msg) return;
@@ -150,10 +156,12 @@ export class Llama3Component implements OnInit, OnDestroy {
     });
   }
 
+  // Inicia una nueva conversación y envía el mensaje inicial proporcionado.
   startNewConversationAndSend(initialMessage: string): void {
     this.startNewConversation(false, initialMessage);
   }
 
+  // Crea una nueva conversación vacía. Puede recibir un mensaje inicial para enviar automáticamente.
   startNewConversation(isInitialLoad: boolean = false, firstMsg?: string): void {
     if (this.currentUserRole === 'User' && this.conversationTitles.length >= this.MAX_CONVERSATIONS_FOR_USER_ROLE) {
       if (!isInitialLoad) alert('Límite de conversaciones alcanzado.');
@@ -179,20 +187,24 @@ export class Llama3Component implements OnInit, OnDestroy {
     });
   }
 
+  // Selecciona una conversación del historial según el índice recibido.
   selectConversation(index: number): void {
     this.selectedConversationIndex = index;
     this.closeMenu();
   }
 
+  // Alterna la visibilidad del menú contextual de una conversación específica.
   toggleMenu(index: number, event: MouseEvent): void {
     event.stopPropagation();
     this.menuOpenIndex = this.menuOpenIndex === index ? null : index;
   }
 
+  // Cierra cualquier menú contextual abierto.
   closeMenu(): void {
     this.menuOpenIndex = null;
   }
 
+  // Abre el modal para cambiar el nombre de una conversación.
   openRenameConversationModal(index: number, currentTitle: string): void {
     this.renameModalIndex = index;
     this.currentTitleForRename = currentTitle;
@@ -201,6 +213,7 @@ export class Llama3Component implements OnInit, OnDestroy {
     this.closeMenu();
   }
 
+  // Confirma y aplica el nuevo nombre de la conversación seleccionada.
   confirmRenameConversation(): void {
     if (
       this.renameModalIndex !== null &&
@@ -223,6 +236,7 @@ export class Llama3Component implements OnInit, OnDestroy {
     }
   }
 
+  // Cancela el proceso de renombrar la conversación y cierra el modal.
   cancelRenameConversation(): void {
     this.showRenameModal = false;
     this.renameModalIndex = null;
@@ -230,6 +244,7 @@ export class Llama3Component implements OnInit, OnDestroy {
     this.currentTitleForRename = '';
   }
 
+  // Abre el modal de confirmación para eliminar una conversación específica.
   openDeleteConversationModal(index: number, title: string): void {
     this.deleteModalIndex = index;
     this.titleForDelete = title;
@@ -237,6 +252,7 @@ export class Llama3Component implements OnInit, OnDestroy {
     this.closeMenu();
   }
 
+  // Elimina la conversación seleccionada del historial y actualiza la selección activa.
   confirmDeleteConversation(): void {
     if (this.deleteModalIndex !== null) {
       const historyId = this.conversationHistoryIds[this.deleteModalIndex];
@@ -263,20 +279,22 @@ export class Llama3Component implements OnInit, OnDestroy {
     }
   }
 
+  // Cancela la operación de eliminación de la conversación y cierra el modal.
   cancelDeleteConversation(): void {
     this.showDeleteModal = false;
     this.deleteModalIndex = null;
     this.titleForDelete = '';
   }
 
+  // Da formato al texto del mensaje usando HTML básico para listas y saltos de línea.
   formatMessage(text: string): string {
-  return text
-    .replace(/\n/g, '<br>')
-    .replace(/\* \*\*(.+?)\*\*/g, '<br><strong>• $1</strong>')
-    .replace(/\* (.+)/g, '• $1');
-}
+    return text
+      .replace(/\n/g, '<br>')
+      .replace(/\* \*\*(.+?)\*\*/g, '<br><strong>• $1</strong>')
+      .replace(/\* (.+)/g, '• $1');
+  }
 
-
+  // Previene que el clic dentro del modal propague eventos al documento (evita que se cierre por error).
   stopPropagationModal(event: MouseEvent): void {
     event.stopPropagation();
   }

@@ -12,12 +12,12 @@ export class Llama3Service {
 
   constructor(private http: HttpClient) {}
 
-  // 📤 Enviar mensaje al backend y obtener respuesta del modelo LLaMA 3
+  //  Enviar mensaje al backend y obtener respuesta del modelo LLaMA 3
   sendPrompt(prompt: string): Observable<{ response: string }> {
     return this.http.post<{ response: string }>(this.apiUrl, { prompt });
   }
 
-  // 💬 Guardar mensaje (user o bot) en la conversación
+  //  Guardar mensaje (user o bot) en la conversación
   saveMessage(historyId: string, sender: 'user' | 'bot', text: string): Observable<any> {
     return this.http.post(`${this.historyUrl}/add-message`, {
       historyId,
@@ -26,12 +26,12 @@ export class Llama3Service {
     });
   }
 
-  // 📜 Obtener historial de conversaciones para llama3
+  //  Obtener historial de conversaciones para llama3
   getConversationHistory(chatbotName: string): Observable<any[]> {
     return this.http.get<any[]>(`${this.historyUrl}/${chatbotName}`);
   }
 
-  // 🆕 Crear nueva conversación
+  //  Crear nueva conversación
   createConversation(chatbotName: string, title: string): Observable<any> {
     return this.http.post(`${this.historyUrl}/new`, {
       chatbotName,
@@ -39,19 +39,19 @@ export class Llama3Service {
     });
   }
 
-  // ✏️ Renombrar conversación
+  //  Renombrar conversación
   renameConversation(historyId: string, newTitle: string): Observable<any> {
     return this.http.patch(`${this.historyUrl}/${historyId}/rename`, {
       title: newTitle
     });
   }
 
-  // 🗑️ Eliminar conversación
+  //  Eliminar conversación
   deleteConversation(historyId: string): Observable<any> {
     return this.http.delete(`${this.historyUrl}/${historyId}`);
   }
 
-  // 👉 Control interno de historyId actual
+  //  Control interno de historyId actual
   setHistoryId(id: string): void {
     this.currentHistoryId = id;
   }

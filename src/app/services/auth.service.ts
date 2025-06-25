@@ -26,122 +26,134 @@ export class AuthService {
     }
   }
 
-  register(data: RegisterPayload): Observable<any> {
-    return this.http.post(`${this.apiUrl}/register`, data).pipe(
-      tap((res: any) => {
-        this.saveToken(res.token);
+  // Registra un nuevo usuario y guarda su token y datos
+register(data: RegisterPayload): Observable<any> {
+  return this.http.post(`${this.apiUrl}/register`, data).pipe(
+    tap((res: any) => {
+      this.saveToken(res.token);
+      this.saveUser(res.user);
+    })
+  );
+}
+
+// Inicia sesión con email y contraseña, guarda token y luego obtiene los datos del usuario
+login(email: string, password: string): Observable<any> {
+  return this.http.post(`${this.apiUrl}/login`, { email, password }).pipe(
+    tap((res: any) => {
+      this.saveToken(res.token);
+      this.fetchUser();
+    })
+  );
+}
+
+// Solicita al backend los datos del usuario actual usando el token almacenado
+fetchUser(): void {
+  this.http.get<User>(`${this.apiUrl}/me`).subscribe({
+    next: (user) => this.currentUserSubject.next(user),
+    error: (err) => {
+      console.error('Error al obtener datos del usuario:', err);
+      this.logout();
+    }
+  });
+}
+
+// Guarda el objeto usuario en el observable
+saveUser(user: User): void {
+  this.currentUserSubject.next(user);
+}
+
+// Devuelve el usuario actual almacenado localmente
+getUser(): User | null {
+  return this.currentUserSubject.value;
+}
+
+// Guarda el token JWT en sessionStorage
+saveToken(token: string): void {
+  sessionStorage.setItem('token', token);
+}
+
+// Recupera el token JWT desde sessionStorage
+getToken(): string | null {
+  return sessionStorage.getItem('token');
+}
+
+// Elimina el token y los datos del usuario, y limpia el observable
+logout(): void {
+  sessionStorage.removeItem('token');
+  sessionStorage.removeItem('user');
+  this.currentUserSubject.next(null);
+}
+
+// Verifica con el backend si el token almacenado es válido
+isTokenValid() {
+  return this.http.get(`${this.apiUrl}/check`).pipe(
+    catchError(() => of(false))
+  );
+}
+
+// Actualiza los datos del usuario (nombre y/o contraseña)
+updateUser(data: {
+  fullName: string;
+  currentPassword?: string;
+  newPassword?: string;
+}): Observable<any> {
+  return this.http.patch(`${this.apiUrl}/update`, data).pipe(
+    tap((res: any) => {
+      if (res.user) {
         this.saveUser(res.user);
-      })
-    );
-  }
-
-  login(email: string, password: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/login`, { email, password }).pipe(
-      tap((res: any) => {
-        this.saveToken(res.token);
-        this.fetchUser(); // 🔁 ahora lo cargas con el token
-      })
-    );
-  }
-
-  fetchUser(): void {
-    this.http.get<User>(`${this.apiUrl}/me`).subscribe({
-      next: (user) =>
-        this.currentUserSubject.next(user),
-      error: (err) => {
-        console.error('Error al obtener datos del usuario:', err);
-        this.logout();
       }
-    });
-  }
+    })
+  );
+}
 
-  saveUser(user: User): void {
-    this.currentUserSubject.next(user);
-  }
+// Cambia el rol del usuario a Premium
+upgradeToPremium(): Observable<any> {
+  return this.http.patch(`${this.apiUrl}/upgrade-to-premium`, {}).pipe(
+    tap((res: any) => {
+      if (res.user) {
+        this.saveUser(res.user);
+      }
+    }),
+    catchError(error => {
+      console.error('Error al actualizar a Premium:', error);
+      return of(null);
+    })
+  );
+}
 
-  getUser(): User | null {
-    return this.currentUserSubject.value;
-  }
+// Cancela la suscripción Premium, devolviendo al rol User
+cancelSubscription(): Observable<any> {
+  return this.http.patch(`${this.apiUrl}/cancel-subscription`, {}).pipe(
+    tap((res: any) => {
+      if (res.user) {
+        this.saveUser(res.user);
+      }
+    }),
+    catchError(error => {
+      console.error('Error al actualizar a User:', error);
+      return of(null);
+    })
+  );
+}
 
-  saveToken(token: string): void {
-    sessionStorage.setItem('token', token);
-  }
+// Retorna true si hay un token JWT almacenado
+isLoggedIn(): boolean {
+  return !!this.getToken();
+}
 
-  getToken(): string | null {
-    return sessionStorage.getItem('token');
-  }
+// Obtiene todos los usuarios registrados (uso administrativo)
+getAllUsers(): Observable<User[]> {
+  return this.http.get<User[]>(`${this.apiUrl}/users`);
+}
 
-  logout(): void {
-    sessionStorage.removeItem('token');
-    sessionStorage.removeItem('user');
-    this.currentUserSubject.next(null);
-  }
+// Elimina un usuario por ID (uso administrativo)
+deleteUser(id: string): Observable<any> {
+  return this.http.delete(`${this.apiUrl}/users/${id}`);
+}
 
-  isTokenValid() {
-    return this.http.get(`${this.apiUrl}/check`).pipe(
-      catchError(() => of(false)) // si hay error, asumimos que es inválido
-    );
-  }
-
-  // auth.service.ts (extensión de tu servicio existente)
-  updateUser(data: {
-    fullName: string;
-    currentPassword?: string;
-    newPassword?: string;
-  }): Observable<any> {
-    return this.http.patch(`${this.apiUrl}/update`, data).pipe(
-      tap((res: any) => {
-        if (res.user) {
-          this.saveUser(res.user);
-        }
-      })
-    );
-  }
-
-  upgradeToPremium(): Observable<any> {
-    return this.http.patch(`${this.apiUrl}/upgrade-to-premium`, {}).pipe(
-      tap((res: any) => {
-        if (res.user) {
-          this.saveUser(res.user); // actualiza el observable y sessionStorage
-        }
-      }),
-      catchError(error => {
-        console.error('Error al actualizar a Premium:', error);
-        return of(null);
-      })
-    );
-  }
-
-
-  cancelSubscription(): Observable<any> {
-    return this.http.patch(`${this.apiUrl}/cancel-subscription`, {}).pipe(
-      tap((res: any) => {
-        if (res.user) {
-          this.saveUser(res.user); // actualiza el observable y sessionStorage
-        }
-      }),
-      catchError(error => {
-        console.error('Error al actualizar a User:', error);
-        return of(null);
-      })
-    );
-  }
-
-
-  isLoggedIn(): boolean {
-    return !!this.getToken();
-  }
-
-  getAllUsers(): Observable<User[]> {
-    return this.http.get<User[]>(`${this.apiUrl}/users`);
-  }
-
-  deleteUser(id: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/users/${id}`);
-  }
-
-  updateUserDetails(id: string, data: { fullName: string; roles: string }): Observable<any> {
-    return this.http.patch(`${this.apiUrl}/users/${id}`, data);
-  }
+// Actualiza nombre y rol de un usuario por ID (uso administrativo)
+updateUserDetails(id: string, data: { fullName: string; roles: string }): Observable<any> {
+  return this.http.patch(`${this.apiUrl}/users/${id}`, data);
+}
 
 }
