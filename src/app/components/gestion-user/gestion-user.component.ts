@@ -9,6 +9,8 @@ import { AuthService } from '../../services/auth.service'; // Asegúrate que la 
   styleUrls: ['./gestion-user.component.css'],
 })
 export class GestionUserComponent implements OnInit {
+
+
   users: User[] = []; // Lista original de usuarios
   filteredUsers: User[] = []; // Lista de usuarios a mostrar en la tabla
   currentUser: User | null = null;
@@ -31,6 +33,7 @@ export class GestionUserComponent implements OnInit {
 
   constructor(private userService: AuthService) {}
 
+  // Método del ciclo de vida de Angular, se ejecuta al inicializar el componente
   ngOnInit(): void {
     this.loadUsers();
     this.userService.currentUser$.subscribe((user) => {
@@ -40,6 +43,7 @@ export class GestionUserComponent implements OnInit {
     this.loadUsers();
   }
 
+  // Carga todos los usuarios desde el backend y aplica los filtros
   loadUsers(): void {
     this.userService.getAllUsers().subscribe({
       next: (data) => {
@@ -50,6 +54,7 @@ export class GestionUserComponent implements OnInit {
     });
   }
 
+  // Aplica los filtros definidos en los inputs sobre la lista de usuarios
   applyFilters(): void {
     let tempUsers = [...this.users]; // Empezar con todos los usuarios
 
@@ -92,11 +97,13 @@ export class GestionUserComponent implements OnInit {
     this.isEditModalOpen = true;
   }
 
+  // Cierra el modal de edición y limpia los datos del usuario editable
   closeEditModal(): void {
     this.isEditModalOpen = false;
     this.editableUser = {};
   }
 
+  // Envía los cambios del usuario editado al backend y recarga la lista
   submitEdit(): void {
     if (this.editableUser._id) {
       this.userService
@@ -114,11 +121,13 @@ export class GestionUserComponent implements OnInit {
     }
   }
 
+  // Abre el modal de confirmación para eliminar un usuario
   openDeleteModal(user: User): void {
     this.userToDelete = user;
     this.isDeleteModalOpen = true;
   }
 
+  // Confirma la eliminación del usuario y actualiza la lista
   confirmDelete(): void {
     if (this.userToDelete?._id) {
       this.userService.deleteUser(this.userToDelete._id).subscribe({
@@ -134,6 +143,7 @@ export class GestionUserComponent implements OnInit {
     }
   }
 
+  // Cierra el modal de eliminación sin borrar al usuario
   cancelDelete(): void {
     this.isDeleteModalOpen = false;
     this.userToDelete = null;

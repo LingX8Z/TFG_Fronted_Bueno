@@ -28,8 +28,9 @@ export class LoginComponent implements OnInit, OnDestroy {
     private backgroundService: BackgroundService
   ) {}
 
-  ngOnInit(): void {
-    this.backgroundService.setBackgroundColor('var(--color-background)');
+  // Método del ciclo de vida: se ejecuta al inicializar el componente, configura los formularios y el fondo
+ngOnInit(): void {
+  this.backgroundService.setBackgroundColor('var(--color-background)');
 
     // Inicializar formularios reactivos
     this.loginForm = this.fb.group({
@@ -46,13 +47,14 @@ export class LoginComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy(): void {
-    this.backgroundService.resetBackgroundColor();
-  }
+// Método del ciclo de vida: se ejecuta al destruir el componente, restaura el fondo original
+ngOnDestroy(): void {
+  this.backgroundService.resetBackgroundColor();
+}
 
-  //  LOGIN
-  onLoginSubmit(): void {
-    if (this.loginForm.invalid) return;
+// Método que maneja el envío del formulario de login
+onLoginSubmit(): void {
+  if (this.loginForm.invalid) return;
 
     const { email, password } = this.loginForm.value;
     this.authService.login(email, password).subscribe({
@@ -65,20 +67,14 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.loginError = true;
         this.loginErrorMessage =
           err?.error?.message || 'Error al iniciar sesión. Inténtalo de nuevo.';
-      },
+      }
     });
   }
 
+
   //  REGISTER
   onRegisterSubmit(): void {
-  if (this.registerForm.invalid) {
-    // Mostrar mensaje específico si no aceptó los términos
-    if (!this.registerForm.get('terms')?.value) {
-      this.registerError = true;
-      this.registerErrorMessage = 'Debes aceptar los Términos y Condiciones';
-    }
-    return;
-  }
+  if (this.registerForm.invalid) return;
 
   const { fullName, email, password, confirmPassword } = this.registerForm.value;
 
