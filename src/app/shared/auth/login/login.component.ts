@@ -29,8 +29,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   ) {}
 
   // Método del ciclo de vida: se ejecuta al inicializar el componente, configura los formularios y el fondo
-ngOnInit(): void {
-  this.backgroundService.setBackgroundColor('var(--color-background)');
+  ngOnInit(): void {
+    this.backgroundService.setBackgroundColor('var(--color-background)');
 
     // Inicializar formularios reactivos
     this.loginForm = this.fb.group({
@@ -40,40 +40,50 @@ ngOnInit(): void {
 
     this.registerForm = this.fb.group({
       fullName: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.email]], 
+      email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]],
       confirmPassword: ['', [Validators.required]],
-      terms: [false, [Validators.requiredTrue]], // ✅ Nuevo campo obligatorio
+      terms: [false, [Validators.requiredTrue]],
     });
   }
 
-// Método del ciclo de vida: se ejecuta al destruir el componente, restaura el fondo original
-ngOnDestroy(): void {
-  this.backgroundService.resetBackgroundColor();
-}
+  // Método del ciclo de vida: se ejecuta al destruir el componente, restaura el fondo original
+  ngOnDestroy(): void {
+    this.backgroundService.resetBackgroundColor();
+  }
 
-// Método que maneja el envío del formulario de login
+  // Método que maneja el envío del formulario de login
 onLoginSubmit(): void {
   if (this.loginForm.invalid) return;
 
-    const { email, password } = this.loginForm.value;
-    this.authService.login(email, password).subscribe({
-      next: () => {
+  const { email, password } = this.loginForm.value;
+  this.authService.login(email, password).subscribe({
+    next: () => {
+      this.loginError = false;
+      this.loginErrorMessage = '';
+      this.router.navigate(['/']);
+    },
+    error: (err) => {
+      console.error('ERROR DE LOGIN', err);
+      this.loginError = true;
+      this.loginErrorMessage =
+        err?.error?.message ||
+        err?.message ||
+        'Error al iniciar sesión. Inténtalo de nuevo.';
+
+      // Quitar el error en 10 segundos
+      setTimeout(() => {
         this.loginError = false;
         this.loginErrorMessage = '';
-        this.router.navigate(['/']);
-      },
-      error: (err) => {
-        this.loginError = true;
-        this.loginErrorMessage =
-          err?.error?.message || 'Error al iniciar sesión. Inténtalo de nuevo.';
-      }
-    });
-  }
+      }, 10000);
+    },
+  });
+}
+
 
 
   //  REGISTER
-  onRegisterSubmit(): void {
+onRegisterSubmit(): void {
   if (this.registerForm.invalid) return;
 
   const { fullName, email, password, confirmPassword } = this.registerForm.value;
@@ -82,6 +92,12 @@ onLoginSubmit(): void {
     this.passwordMismatch = true;
     this.registerError = true;
     this.registerErrorMessage = 'Las contraseñas no coinciden';
+    // Quitar el error en 10 segundos
+    setTimeout(() => {
+      this.passwordMismatch = false;
+      this.registerError = false;
+      this.registerErrorMessage = '';
+    }, 10000);
     return;
   }
 
@@ -94,11 +110,21 @@ onLoginSubmit(): void {
       this.router.navigate(['/']);
     },
     error: (err) => {
+      console.error('ERROR DE REGISTER', err);
       this.registerError = true;
       this.registerErrorMessage =
-        err?.error?.message || 'Error al registrar. Inténtalo más tarde.';
-    }
+        err?.error?.message ||
+        err?.message ||
+        'Error al registrar. Inténtalo más tarde.';
+
+      // Quitar el error en 10 segundos
+      setTimeout(() => {
+        this.registerError = false;
+        this.registerErrorMessage = '';
+      }, 10000);
+    },
   });
 }
+
 
 }

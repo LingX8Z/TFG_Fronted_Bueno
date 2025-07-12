@@ -206,12 +206,23 @@ body {
 
 .error-message {
   color: white;
-  font-size: 0.9rem;
   background-color: #e74c3c;
-  margin-left: 25%;
-  margin-right: 25%;
-  border: 15px;
+  padding: 10px 20px;
+  margin: 20px auto;
+  max-width: 400px;
   text-align: center;
+  border-radius: 6px;
+  font-size: 1rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+.field-error {
+  color: #e74c3c;
+  font-size: 1rem;
+  margin-top: 5px;
+}
+.field-error small {
+  display: block;
 }
 
 .input-with-icon {

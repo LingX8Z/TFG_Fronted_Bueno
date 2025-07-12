@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, catchError, Observable, of, tap } from 'rxjs';
+import { BehaviorSubject, catchError, map, Observable, of, tap, throwError } from 'rxjs';
 import { User } from '../interfaces/user.iterface';
 
 interface RegisterPayload {
@@ -29,9 +29,13 @@ export class AuthService {
   // Registra un nuevo usuario y guarda su token y datos
 register(data: RegisterPayload): Observable<any> {
   return this.http.post(`${this.apiUrl}/register`, data).pipe(
-    tap((res: any) => {
+    map((res: any) => {
+      if (!res.token) {
+        throw new Error(res.message || 'Error en el registro');
+      }
       this.saveToken(res.token);
       this.saveUser(res.user);
+      return res;
     })
   );
 }
@@ -39,9 +43,17 @@ register(data: RegisterPayload): Observable<any> {
 // Inicia sesión con email y contraseña, guarda token y luego obtiene los datos del usuario
 login(email: string, password: string): Observable<any> {
   return this.http.post(`${this.apiUrl}/login`, { email, password }).pipe(
-    tap((res: any) => {
+    map((res: any) => {
+      if (!res.token) {
+        throw new Error(res.message || 'Credenciales inválidas');
+      }
       this.saveToken(res.token);
       this.fetchUser();
+      return res;
+    }),
+    catchError(err => {
+      const errorMsg = err?.error?.message || err?.message || 'Error al iniciar sesión';
+      return throwError(() => new Error(errorMsg));
     })
   );
 }

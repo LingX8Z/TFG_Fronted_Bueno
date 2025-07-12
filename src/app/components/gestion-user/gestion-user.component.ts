@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from '../../interfaces/user.iterface'; // Asegúrate que la ruta es correcta
 import { AuthService } from '../../services/auth.service'; // Asegúrate que la ruta es correcta
+import { BackgroundService } from '../../services/background.service';
 
 @Component({
   selector: 'app-gestion-user',
@@ -31,10 +32,11 @@ export class GestionUserComponent implements OnInit {
   isDeleteModalOpen = false;
   userToDelete: User | null = null;
 
-  constructor(private userService: AuthService) {}
+  constructor(private userService: AuthService, private backgroundService: BackgroundService) {}
 
   // Método del ciclo de vida de Angular, se ejecuta al inicializar el componente
   ngOnInit(): void {
+        this.backgroundService.setBackgroundColor('var(--color-background)');
     this.loadUsers();
     this.userService.currentUser$.subscribe((user) => {
       this.currentUser = user;
