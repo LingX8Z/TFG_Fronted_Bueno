@@ -214,6 +214,25 @@ body {
   text-align: center;
 }
 
+.input-with-icon {
+  position: relative;
+}
+
+.input-with-icon input {
+  padding-left: 45px !important;
+}
+
+.input-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  color: #7f8c8d;
+  pointer-events: none;
+}
+
 
 .art-content-segment { display: none; animation: fadeInArtContent 0.5s ease-in-out 0.4s; /* Retraso para que aparezca después del slide */ }
 @keyframes fadeInArtContent { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }

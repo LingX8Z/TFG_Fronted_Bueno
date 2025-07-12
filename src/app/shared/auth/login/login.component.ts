@@ -8,10 +8,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   selector: 'app-login',
   standalone: false,
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit, OnDestroy {
-
   loginForm!: FormGroup;
   registerForm!: FormGroup;
 
@@ -22,13 +21,12 @@ export class LoginComponent implements OnInit, OnDestroy {
   loginErrorMessage: string = '';
   registerErrorMessage: string = '';
 
-
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
     private backgroundService: BackgroundService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.backgroundService.setBackgroundColor('var(--color-background)');
@@ -36,14 +34,15 @@ export class LoginComponent implements OnInit, OnDestroy {
     // Inicializar formularios reactivos
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required]]
+      password: ['', [Validators.required]],
     });
 
     this.registerForm = this.fb.group({
       fullName: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.email]],
+      email: ['', [Validators.required, Validators.email]], 
       password: ['', [Validators.required]],
-      confirmPassword: ['', [Validators.required]]
+      confirmPassword: ['', [Validators.required]],
+      terms: [false, [Validators.requiredTrue]], // ✅ Nuevo campo obligatorio
     });
   }
 
@@ -66,14 +65,20 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.loginError = true;
         this.loginErrorMessage =
           err?.error?.message || 'Error al iniciar sesión. Inténtalo de nuevo.';
-      }
+      },
     });
   }
 
-
   //  REGISTER
   onRegisterSubmit(): void {
-  if (this.registerForm.invalid) return;
+  if (this.registerForm.invalid) {
+    // Mostrar mensaje específico si no aceptó los términos
+    if (!this.registerForm.get('terms')?.value) {
+      this.registerError = true;
+      this.registerErrorMessage = 'Debes aceptar los Términos y Condiciones';
+    }
+    return;
+  }
 
   const { fullName, email, password, confirmPassword } = this.registerForm.value;
 

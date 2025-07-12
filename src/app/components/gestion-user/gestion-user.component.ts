@@ -6,11 +6,12 @@ import { AuthService } from '../../services/auth.service'; // Asegúrate que la 
   selector: 'app-gestion-user',
   standalone: false,
   templateUrl: './gestion-user.component.html',
-  styleUrls: ['./gestion-user.component.css']
+  styleUrls: ['./gestion-user.component.css'],
 })
 export class GestionUserComponent implements OnInit {
   users: User[] = []; // Lista original de usuarios
   filteredUsers: User[] = []; // Lista de usuarios a mostrar en la tabla
+  currentUser: User | null = null;
 
   // Propiedades para los filtros
   filterName: string = '';
@@ -28,9 +29,14 @@ export class GestionUserComponent implements OnInit {
   isDeleteModalOpen = false;
   userToDelete: User | null = null;
 
-  constructor(private userService: AuthService) { }
+  constructor(private userService: AuthService) {}
 
   ngOnInit(): void {
+    this.loadUsers();
+    this.userService.currentUser$.subscribe((user) => {
+      this.currentUser = user;
+    });
+
     this.loadUsers();
   }
 
@@ -40,7 +46,7 @@ export class GestionUserComponent implements OnInit {
         this.users = data;
         this.applyFilters(); // Aplicar filtros una vez cargados los usuarios
       },
-      error: (err) => console.error('Error al cargar usuarios', err)
+      error: (err) => console.error('Error al cargar usuarios', err),
     });
   }
 
@@ -49,30 +55,36 @@ export class GestionUserComponent implements OnInit {
 
     // Filtrar por nombre (insensible a mayúsculas/minúsculas)
     if (this.filterName.trim() !== '') {
-      tempUsers = tempUsers.filter(user =>
-        user.fullName.toLowerCase().includes(this.filterName.trim().toLowerCase())
+      tempUsers = tempUsers.filter((user) =>
+        user.fullName
+          .toLowerCase()
+          .includes(this.filterName.trim().toLowerCase())
       );
     }
 
     // Filtrar por email (insensible a mayúsculas/minúsculas)
     if (this.filterEmail.trim() !== '') {
-      tempUsers = tempUsers.filter(user =>
+      tempUsers = tempUsers.filter((user) =>
         user.email.toLowerCase().includes(this.filterEmail.trim().toLowerCase())
       );
     }
 
     // Filtrar por rol
-    if (this.filterRole) { // Si se ha seleccionado un rol (no es cadena vacía)
-      tempUsers = tempUsers.filter(user => user.roles === this.filterRole);
+    if (this.filterRole) {
+      // Si se ha seleccionado un rol (no es cadena vacía)
+      tempUsers = tempUsers.filter((user) => user.roles === this.filterRole);
     }
 
     this.filteredUsers = tempUsers;
   }
 
   // --- Métodos de Modales (sin cambios relevantes para el filtrado) ---
-  deleteUser(id: string): void { // Este método ya no se usa directamente desde el template
+  deleteUser(id: string): void {
+    // Este método ya no se usa directamente desde el template
     // La lógica ahora está en confirmDelete
-    console.warn('deleteUser(id) llamado, pero la lógica principal está en confirmDelete()');
+    console.warn(
+      'deleteUser(id) llamado, pero la lógica principal está en confirmDelete()'
+    );
   }
 
   openEditModal(user: User): void {
@@ -87,16 +99,18 @@ export class GestionUserComponent implements OnInit {
 
   submitEdit(): void {
     if (this.editableUser._id) {
-      this.userService.updateUserDetails(this.editableUser._id, {
-        fullName: this.editableUser.fullName!,
-        roles: this.editableUser.roles!
-      }).subscribe({
-        next: () => {
-          this.loadUsers(); // Recargar y aplicar filtros
-          this.closeEditModal();
-        },
-        error: (err) => console.error('Error al actualizar usuario', err)
-      });
+      this.userService
+        .updateUserDetails(this.editableUser._id, {
+          fullName: this.editableUser.fullName!,
+          roles: this.editableUser.roles!,
+        })
+        .subscribe({
+          next: () => {
+            this.loadUsers(); // Recargar y aplicar filtros
+            this.closeEditModal();
+          },
+          error: (err) => console.error('Error al actualizar usuario', err),
+        });
     }
   }
 
@@ -115,7 +129,7 @@ export class GestionUserComponent implements OnInit {
         error: (err) => {
           console.error('Error al eliminar usuario', err);
           this.cancelDelete();
-        }
+        },
       });
     }
   }

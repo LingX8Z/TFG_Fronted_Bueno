@@ -31,11 +31,12 @@ const routes: Routes = [
   {
     path: 'gestionUser',
     component: GestionUserComponent,
-    canActivate: [AdminRoleGuard]
+    canActivate: [AdminRoleGuard, AuthGuard]
   },
   {
     path: 'gestionarMiCuenta',
-    component: GestionarMicuentaComponent
+    component: GestionarMicuentaComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'error',
