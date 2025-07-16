@@ -21,7 +21,7 @@ const routes: Routes = [
   {
     path: 'upload',
     component: UploadPDFComponent,
-    canActivate: [AdminRoleGuard]
+    canActivate: [AdminRoleGuard, AuthGuard]
   },
   {
     path: 'llama3',

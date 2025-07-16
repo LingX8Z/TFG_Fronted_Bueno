@@ -39,6 +39,7 @@ export class PagoPremiumComponent implements OnInit, AfterViewInit, OnDestroy {
     private authService: AuthService
   ) { }
 
+  // Método del ciclo de vida que se ejecuta al iniciar el componente. Obtiene el rol e información del usuario actual.
   ngOnInit(): void {
     this.userSubscription = this.authService.currentUser$.subscribe(user => {
       if (user && user.roles) {
@@ -58,6 +59,7 @@ export class PagoPremiumComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
+  // Método que se ejecuta después de que la vista ha sido inicializada. Configura inputs si el usuario no es premium.
   ngAfterViewInit(): void {
     if (!this.isAlreadyUpgraded) {
       setTimeout(() => {
@@ -67,6 +69,7 @@ export class PagoPremiumComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  // Inicializa el input de número de tarjeta con formato y restricciones.
   private setupCardNumberInput(): void {
     if (!this.cardNumberInput || !this.cardNumberInput.nativeElement) return;
     const input = this.cardNumberInput.nativeElement;
@@ -88,6 +91,7 @@ export class PagoPremiumComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
+  // Inicializa el input de fecha de expiración con formato y restricciones.
   private setupExpiryDateInput(): void {
     if (!this.expiryDateInput || !this.expiryDateInput.nativeElement) return;
     const input = this.expiryDateInput.nativeElement;
@@ -113,6 +117,7 @@ export class PagoPremiumComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
+  // Procesa el pago: valida el formulario, muestra spinner y cambia rol a Premium tras 3 segundos.
   processPayment(): void {
     if (this.paymentForm.invalid) {
       Object.values(this.paymentForm.controls).forEach(control => {
@@ -149,52 +154,48 @@ export class PagoPremiumComponent implements OnInit, AfterViewInit, OnDestroy {
     }, 3000);
   }
 
+  // Cierra el modal de procesamiento de pago y resetea su contenido visual.
   closeModal(): void {
     this.isModalVisible = false;
     this.showSpinner = false;
     this.showSuccessMessage = false;
     // Resetear estilos del modal de procesamiento si es necesario
     if (this.modalSpinnerSection && this.modalSuccessSection) {
-        this.renderer.setStyle(this.modalSpinnerSection.nativeElement, 'display', 'block'); // O el display original
-        this.renderer.setStyle(this.modalSuccessSection.nativeElement, 'display', 'none');
+      this.renderer.setStyle(this.modalSpinnerSection.nativeElement, 'display', 'block'); // O el display original
+      this.renderer.setStyle(this.modalSuccessSection.nativeElement, 'display', 'none');
     }
   }
 
-  // Métodos para el modal de confirmación de cancelación
+  // Abre el modal de confirmación para cancelar la suscripción.
   openCancelConfirmModal(): void {
     this.isCancelConfirmModalVisible = true;
   }
 
+  // Cierra el modal de confirmación de cancelación.
   closeCancelConfirmModal(): void {
     this.isCancelConfirmModalVisible = false;
   }
 
+  // Confirma la cancelación de la suscripción, actualiza el rol del usuario y cierra el modal.
   confirmCancellation(): void {
     this.authService.cancelSubscription().subscribe({
       next: () => {
-        // No es necesario resetear el paymentForm aquí si no se ha usado
-        // this.paymentForm.resetForm(); // Comentado o eliminado si no aplica
 
         const user = this.authService.getUser();
         this.currentUserRole = user?.roles ?? null;
         this.authService.saveUser(user!)
-        // isAlreadyUpgraded se actualizará automáticamente por el observable en ngOnInit
-        // o puedes forzar la actualización si es necesario:
         const roleLowerCase = this.currentUserRole?.toLowerCase();
         this.isAlreadyUpgraded = roleLowerCase === 'premium' || roleLowerCase === 'administrador';
 
-        this.closeCancelConfirmModal(); // Cierra el modal de confirmación
-        // Opcional: Mostrar un mensaje de éxito/notificación de cancelación
-        // console.log('Suscripción cancelada exitosamente.');
+        this.closeCancelConfirmModal();
       },
       error: (err) => {
         console.error('Error al cancelar la suscripción', err);
-        this.closeCancelConfirmModal(); // Cierra el modal de confirmación también en caso de error
-        // Opcional: Mostrar un mensaje de error al usuario
+        this.closeCancelConfirmModal();
       }
     });
   }
-
+  // Método del ciclo de vida que se ejecuta al destruir el componente. Cancela la suscripción al observable del usuario.
   ngOnDestroy(): void {
     if (this.userSubscription) {
       this.userSubscription.unsubscribe();

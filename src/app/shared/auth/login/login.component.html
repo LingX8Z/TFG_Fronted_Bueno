@@ -1,225 +1,362 @@
-<!DOCTYPE html>
-<html lang="es">
-  <body>
-    <input
-      type="radio"
-      name="auth_view_toggle"
-      id="view_login"
-      class="auth-view-toggle"
-      checked
-    />
-    <input
-      type="radio"
-      name="auth_view_toggle"
-      id="view_register"
-      class="auth-view-toggle"
-    />
+<input
+  type="radio"
+  name="auth_view_toggle"
+  id="view_login"
+  class="auth-view-toggle"
+  checked
+/>
+<input
+  type="radio"
+  name="auth_view_toggle"
+  id="view_register"
+  class="auth-view-toggle"
+/>
 
-    <div class="auth-page-container">
-      <div class="auth-interactive-flipper">
-        <div class="auth-form-panel login-face">
-          <div class="logo-container">
-            <svg
-              class="logo-svg"
-              viewBox="0 0 100 100"
-              xmlns="http://www.w3.org/2000/svg"
+<div class="auth-page-container">
+  <div class="auth-interactive-flipper">
+    <div class="auth-form-panel login-face">
+      <div class="logo-container">
+        <svg
+          class="logo-svg"
+          viewBox="0 0 100 100"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <defs>
+            <linearGradient
+              id="logoGradientLogin"
+              x1="0%"
+              y1="0%"
+              x2="100%"
+              y2="100%"
             >
-              <defs>
-                <linearGradient
-                  id="logoGradientLogin"
-                  x1="0%"
-                  y1="0%"
-                  x2="100%"
-                  y2="100%"
-                >
-                  <stop
-                    offset="0%"
-                    style="stop-color: #8e44ad; stop-opacity: 1"
-                  />
-                  <stop
-                    offset="100%"
-                    style="stop-color: #3498db; stop-opacity: 1"
-                  />
-                </linearGradient>
-              </defs>
-              <circle cx="50" cy="50" r="45" fill="url(#logoGradientLogin)" />
+              <stop offset="0%" style="stop-color: #8e44ad; stop-opacity: 1" />
+              <stop
+                offset="100%"
+                style="stop-color: #3498db; stop-opacity: 1"
+              />
+            </linearGradient>
+          </defs>
+          <circle cx="50" cy="50" r="45" fill="url(#logoGradientLogin)" />
+          <path
+            d="M30 50 L45 65 L70 35"
+            stroke="white"
+            stroke-width="8"
+            fill="none"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+        <h2>Bienvenido de Nuevo</h2>
+        <p>Inicia sesión para acceder a tu cuenta</p>
+      </div>
+      <form [formGroup]="loginForm" (ngSubmit)="onLoginSubmit()">
+        <div class="input-group">
+          <label for="login-email">Correo Electrónico</label>
+          <div class="input-with-icon">
+            <svg class="input-icon" viewBox="0 0 24 24">
               <path
-                d="M30 50 L45 65 L70 35"
-                stroke="white"
-                stroke-width="8"
+                d="M2 4h20v16H2z"
                 fill="none"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
-            <h2>Bienvenido de Nuevo</h2>
-            <p>Inicia sesión para acceder a tu cuenta</p>
-          </div>
-          <form [formGroup]="loginForm" (ngSubmit)="onLoginSubmit()">
-            <div class="input-group">
-              <label for="login-email">Correo Electrónico</label>
-              <input
-                type="email"
-                id="login-email"
-                formControlName="email"
-                placeholder="tuemail@ejemplo.com"
-                required
-              />
-              <span class="input-icon">[...]</span>
-            </div>
-            <div class="input-group">
-              <label for="login-password">Contraseña</label>
-              <input
-                type="password"
-                id="login-password"
-                formControlName="password"
-                placeholder="Tu contraseña secreta"
-                required
-              />
-              <span class="input-icon">[...]</span>
-            </div>
-            <div class="options">
-              <label class="remember-me"
-                ><input type="checkbox" /> Recuérdame</label
-              >
-              <a href="#" class="forgot-password">¿Olvidaste tu contraseña?</a>
-            </div>
-            <button type="submit" class="btn-submit">Iniciar Sesión</button>
-            <div *ngIf="loginError" class="error-message">
-              {{ loginErrorMessage }}
-            </div>
-
-            <p class="form-alternate-link">
-              ¿No tienes una cuenta?
-              <label for="view_register" class="toggle-form-link"
-                >Regístrate aquí</label
-              >
-            </p>
-          </form>
-        </div>
-
-        <div class="auth-form-panel register-face">
-          <div class="logo-container">
-            <svg
-              class="logo-svg"
-              viewBox="0 0 100 100"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <defs>
-                <linearGradient
-                  id="logoGradientRegister"
-                  x1="0%"
-                  y1="0%"
-                  x2="100%"
-                  y2="100%"
-                >
-                  <stop
-                    offset="0%"
-                    style="stop-color: #58b19f; stop-opacity: 1"
-                  />
-                  <stop
-                    offset="100%"
-                    style="stop-color: #1b9cfc; stop-opacity: 1"
-                  />
-                </linearGradient>
-              </defs>
-              <circle
-                cx="50"
-                cy="50"
-                r="45"
-                fill="url(#logoGradientRegister)"
+                stroke="currentColor"
+                stroke-width="2"
               />
               <path
-                d="M40 40 L60 40 M50 30 L50 50 M40 60 L60 60 M45 70 L55 70"
-                stroke="white"
-                stroke-width="6"
+                d="M22 4L12 13 2 4"
                 fill="none"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                stroke="currentColor"
+                stroke-width="2"
               />
             </svg>
-            <h2>Crea Tu Cuenta</h2>
-            <p>Completa el formulario para unirte.</p>
+            <input
+              type="email"
+              id="login-email"
+              formControlName="email"
+              placeholder="tuemail@ejemplo.com"
+              required
+            />
           </div>
-          <form [formGroup]="registerForm" (ngSubmit)="onRegisterSubmit()">
-            <div class="input-group">
-              <label for="reg-fullname">Nombre Completo</label>
-              <input
-                type="text"
-                id="reg-fullname"
-                formControlName="fullName"
-                placeholder="Tu nombre completo"
-                required
-              />
-              <span class="input-icon">[...]</span>
-            </div>
-            <div class="input-group">
-              <label for="reg-email">Correo Electrónico</label>
-              <input
-                type="email"
-                id="reg-email"
-                formControlName="email"
-                placeholder="tuemail@ejemplo.com"
-                required
-              />
-              <span class="input-icon">[...]</span>
-            </div>
-            <div class="input-group">
-              <label for="reg-password">Contraseña</label>
-              <input
-                type="password"
-                id="reg-password"
-                formControlName="password"
-                placeholder="Crea una contraseña segura"
-                required
-              />
-              <span class="input-icon">[...]</span>
-            </div>
-            <div class="input-group">
-              <label for="reg-confirm-password">Confirmar Contraseña</label>
-              <input
-                type="password"
-                id="reg-confirm-password"
-                formControlName="confirmPassword"
-                placeholder="Confirma tu contraseña"
-                required
-              />
-              <span class="input-icon">[...]</span>
-            </div>
-            <div class="options-register">
-              <label class="terms-agreement">
-                <input type="checkbox" required /> Acepto los
-                <a href="#">Términos y Condiciones</a>
-              </label>
-            </div>
-            <button type="submit" class="btn-submit">Crear Cuenta</button>
-            <div *ngIf="registerError" class="error-message">
-              {{ registerErrorMessage }}
-            </div>
+          <div
+            class="field-error"
+            *ngIf="
+              loginForm.get('email')?.touched && loginForm.get('email')?.invalid
+            "
+          >
+            <small *ngIf="loginForm.get('email')?.errors?.['required']"
+              >El correo es obligatorio.</small
+            >
+            <small *ngIf="loginForm.get('email')?.errors?.['email']"
+              >Formato de correo inválido.</small
+            >
+          </div>
+        </div>
 
-            <p class="form-alternate-link">
-              ¿Ya tienes una cuenta?
-              <label for="view_login" class="toggle-form-link"
-                >Inicia Sesión aquí</label
-              >
-            </p>
-          </form>
-        </div>
-      </div>
+        <div class="input-group">
+          <label for="login-password">Contraseña</label>
+          <div class="input-with-icon">
+            <svg class="input-icon" viewBox="0 0 24 24">
+              <path d="M12 17a2 2 0 100-4 2 2 0 000 4z" />
+              <path
+                d="M5 11V9a7 7 0 0114 0v2"
+                stroke="currentColor"
+                stroke-width="2"
+                fill="none"
+              />
+              <rect
+                x="5"
+                y="11"
+                width="14"
+                height="10"
+                rx="2"
+                ry="2"
+                stroke="currentColor"
+                stroke-width="2"
+                fill="none"
+              />
+            </svg>
+            <input
+              type="password"
+              id="login-password"
+              formControlName="password"
+              placeholder="Tu contraseña secreta"
+              required
+            />
+          </div>
+          <div class="field-error" *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">
+  <small *ngIf="loginForm.get('password')?.errors?.['required']">La contraseña es obligatoria.</small>
+</div>
 
-      <div class="auth-art-wrapper">
-        <div class="art-content-segment login-art-content">
-          <h3>Descubre un Mundo de Posibilidades</h3>
-          <p>Únete a nuestra comunidad y explora características increíbles.</p>
         </div>
-        <div class="art-content-segment register-art-content">
-          <h3>Únete a la Aventura</h3>
-          <p>Regístrate y comienza a explorar todas las funcionalidades.</p>
+
+        <div class="options">
+          <label class="remember-me"
+            ><input type="checkbox" /> Recuérdame</label
+          >
+          <a href="#" class="forgot-password">¿Olvidaste tu contraseña?</a>
         </div>
-        <div class="art-shape art-shape-1"></div>
-        <div class="art-shape art-shape-2"></div>
-        <div class="art-shape art-shape-3"></div>
-      </div>
+        <button type="submit" class="btn-submit">Iniciar Sesión</button>
+        <div *ngIf="loginError" class="error-message">
+          {{ loginErrorMessage }}
+        </div>
+
+        <p class="form-alternate-link">
+          ¿No tienes una cuenta?
+          <label for="view_register" class="toggle-form-link"
+            >Regístrate aquí</label
+          >
+        </p>
+      </form>
     </div>
-  </body>
-</html>
+
+    <div class="auth-form-panel register-face">
+      <div class="logo-container">
+        <svg
+          class="logo-svg"
+          viewBox="0 0 100 100"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <defs>
+            <linearGradient
+              id="logoGradientRegister"
+              x1="0%"
+              y1="0%"
+              x2="100%"
+              y2="100%"
+            >
+              <stop offset="0%" style="stop-color: #58b19f; stop-opacity: 1" />
+              <stop
+                offset="100%"
+                style="stop-color: #1b9cfc; stop-opacity: 1"
+              />
+            </linearGradient>
+          </defs>
+          <circle cx="50" cy="50" r="45" fill="url(#logoGradientRegister)" />
+          <path
+            d="M40 40 L60 40 M50 30 L50 50 M40 60 L60 60 M45 70 L55 70"
+            stroke="white"
+            stroke-width="6"
+            fill="none"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+        <h2>Crea Tu Cuenta</h2>
+        <p>Completa el formulario para unirte.</p>
+      </div>
+      <form [formGroup]="registerForm" (ngSubmit)="onRegisterSubmit()">
+        <div class="input-group">
+          <label for="reg-fullname">Nombre Completo</label>
+          <div class="input-with-icon">
+            <svg class="input-icon" viewBox="0 0 24 24">
+              <path
+                d="M12 12c2.67 0 8 1.34 8 4v4H4v-4c0-2.66 5.33-4 8-4z"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              />
+              <circle
+                cx="12"
+                cy="7"
+                r="4"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              />
+            </svg>
+            <input
+              type="text"
+              id="reg-fullname"
+              formControlName="fullName"
+              placeholder="Tu nombre completo"
+              required
+            />
+          </div>
+          <div class="field-error" *ngIf="registerForm.get('fullName')?.touched && registerForm.get('fullName')?.invalid">
+  <small *ngIf="registerForm.get('fullName')?.errors?.['required']">El nombre es obligatorio.</small>
+</div>
+
+        </div>
+
+        <div class="input-group">
+          <label for="reg-email">Correo Electrónico</label>
+          <div class="input-with-icon">
+            <svg class="input-icon" viewBox="0 0 24 24">
+              <path
+                d="M2 4h20v16H2z"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              />
+              <path
+                d="M22 4L12 13 2 4"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              />
+            </svg>
+            <input
+              type="email"
+              id="reg-email"
+              formControlName="email"
+              placeholder="tuemail@ejemplo.com"
+              required
+            />
+          </div>
+          <div class="field-error" *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.invalid">
+  <small *ngIf="registerForm.get('email')?.errors?.['required']">El correo es obligatorio.</small>
+  <small *ngIf="registerForm.get('email')?.errors?.['email']">Formato de correo inválido.</small>
+</div>
+
+        </div>
+
+        <div class="input-group">
+          <label for="reg-password">Contraseña</label>
+          <div class="input-with-icon">
+            <svg class="input-icon" viewBox="0 0 24 24">
+              <path d="M12 17a2 2 0 100-4 2 2 0 000 4z" />
+              <path
+                d="M5 11V9a7 7 0 0114 0v2"
+                stroke="currentColor"
+                stroke-width="2"
+                fill="none"
+              />
+              <rect
+                x="5"
+                y="11"
+                width="14"
+                height="10"
+                rx="2"
+                ry="2"
+                stroke="currentColor"
+                stroke-width="2"
+                fill="none"
+              />
+            </svg>
+            <input
+              type="password"
+              id="reg-password"
+              formControlName="password"
+              placeholder="Crea una contraseña segura"
+              required
+            />
+          </div>
+          <div class="field-error" *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.invalid">
+  <small *ngIf="registerForm.get('password')?.errors?.['required']">La contraseña es obligatoria.</small>
+</div>
+
+        </div>
+
+        <div class="input-group">
+          <label for="reg-confirm-password">Confirmar Contraseña</label>
+          <div class="input-with-icon">
+            <svg class="input-icon" viewBox="0 0 24 24">
+              <path d="M12 17a2 2 0 100-4 2 2 0 000 4z" />
+              <path
+                d="M5 11V9a7 7 0 0114 0v2"
+                stroke="currentColor"
+                stroke-width="2"
+                fill="none"
+              />
+              <rect
+                x="5"
+                y="11"
+                width="14"
+                height="10"
+                rx="2"
+                ry="2"
+                stroke="currentColor"
+                stroke-width="2"
+                fill="none"
+              />
+            </svg>
+            <input
+              type="password"
+              id="reg-confirm-password"
+              formControlName="confirmPassword"
+              placeholder="Confirma tu contraseña"
+              required
+            />
+          </div>
+          <div class="field-error" *ngIf="registerForm.get('confirmPassword')?.touched && registerForm.get('confirmPassword')?.invalid">
+  <small *ngIf="registerForm.get('confirmPassword')?.errors?.['required']">Debes confirmar la contraseña.</small>
+</div>
+
+        </div>
+        <div class="options-register">
+          <label class="terms-agreement">
+            <input type="checkbox" formControlName="terms" required />
+            Acepto los <a href="#">Términos y Condiciones</a>
+          </label>
+        </div>
+<div class="field-error" *ngIf="registerForm.get('terms')?.touched && registerForm.get('terms')?.invalid">
+  <small *ngIf="registerForm.get('terms')?.errors?.['requiredTrue']">Debes aceptar los términos y condiciones.</small>
+</div>
+
+        <button type="submit" class="btn-submit">Crear Cuenta</button>
+        <div *ngIf="registerError" class="error-message">
+          {{ registerErrorMessage }}
+        </div>
+
+        <p class="form-alternate-link">
+          ¿Ya tienes una cuenta?
+          <label for="view_login" class="toggle-form-link"
+            >Inicia Sesión aquí</label
+          >
+        </p>
+      </form>
+    </div>
+  </div>
+
+  <div class="auth-art-wrapper">
+    <div class="art-content-segment login-art-content">
+      <h3>Descubre un Mundo de Posibilidades</h3>
+      <p>Únete a nuestra comunidad y explora características increíbles.</p>
+    </div>
+    <div class="art-content-segment register-art-content">
+      <h3>Únete a la Aventura</h3>
+      <p>Regístrate y comienza a explorar todas las funcionalidades.</p>
+    </div>
+    <div class="art-shape art-shape-1"></div>
+    <div class="art-shape art-shape-2"></div>
+    <div class="art-shape art-shape-3"></div>
+  </div>
+</div>

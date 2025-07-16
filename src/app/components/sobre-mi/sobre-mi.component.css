@@ -106,8 +106,7 @@
     object-fit: cover;
   }
 
-  /*---------- SECTION SOBREMI -------------- */
-  .sobreMi{
+    .sobreMi{
     display: flex;
     margin: 0 auto;
     margin-top: 7%;
@@ -140,8 +139,7 @@
     font-weight: 500;
   }
 
-  /*---------- SECTION DE MIS REDES SOCIALES -------------- */
-  .redesSociales {
+    .redesSociales {
     background-color: #f7f7f7;
     padding: 20px;
     text-align: center;

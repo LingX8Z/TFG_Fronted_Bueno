@@ -54,9 +54,10 @@
         >
       </td>
       <td [attr.data-label]="'Acciones'">
-        <button class="btn btn-danger" (click)="openDeleteModal(user)">
+        <button class="btn btn-danger" (click)="openDeleteModal(user)" *ngIf="currentUser !== user">
           Eliminar
         </button>
+        
         <button class="btn btn-secondary" (click)="openEditModal(user)">
           Editar
         </button>

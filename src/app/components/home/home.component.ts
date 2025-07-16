@@ -21,35 +21,36 @@ export class HomeComponent implements OnInit, OnDestroy {
     private backgroundService: BackgroundService,
     private authService: AuthService,
     private router: Router
-  ) {}
+  ) { }
 
+  // Método del ciclo de vida que se ejecuta al iniciar el componente
   ngOnInit(): void {
+    // Cambia el color de fondo al definido por el CSS personalizado
     this.backgroundService.setBackgroundColor('var(--color-background)');
-    this.authService.isTokenValid().subscribe((isValid: any) => { // Asumimos que isValid es un booleano o tiene una estructura predecible
-      // La lógica original es:
-      // this.logeado = true; // Se pone a true temporalmente
-      // if (!isValid) {
-      //   this.logeado = false; // Se corrige a false si no es válido
-      //   this.authService.logout();
-      // }
-      // Una forma más directa sería:
-      if (isValid) { // Asumiendo que isValid es un booleano true para válido
-        this.logeado = true;
+
+    // Verifica si el token JWT es válido
+    this.authService.isTokenValid().subscribe((isValid: any) => {
+      if (isValid) {
+        this.logeado = true; // Usuario autenticado
       } else {
-        this.logeado = false;
-        this.authService.logout(); // Importante: esto cierra la sesión si el token no es válido
+        this.logeado = false; // Usuario no autenticado
+        this.authService.logout(); // Cierra sesión si el token no es válido
       }
     });
+
+    // Obtiene los datos del usuario desde el servicio de autenticación
     this.user = this.authService.getUser();
   }
 
+  // Método del ciclo de vida que se ejecuta al destruir el componente
   ngOnDestroy(): void {
+    // Restaura el color de fondo original
     this.backgroundService.resetBackgroundColor();
   }
 
-  // El método goTo no es invocado por los routerLink directamente,
-  // pero se mantiene por si se usa en otra parte.
+  // Navega al componente de chat correspondiente al nombre indicado
   goTo(chat: string): void {
     this.router.navigate([`/chat/${chat}`]);
   }
+
 }
