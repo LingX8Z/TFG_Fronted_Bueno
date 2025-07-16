@@ -6,8 +6,8 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class GeminiService {
-  private apiUrl = 'http://localhost:3000/chat/generate'; // Ajusta si tu backend tiene otra URL o puerto
-  private saveHistoryUrl = 'http://localhost:3000/chat-history/save'; // URL para guardar el historial
+  private apiUrl = 'https://tfgbackend-production-35c6.up.railway.app/generate'; // Ajusta si tu backend tiene otra URL o puerto
+  private saveHistoryUrl = 'https://tfgbackend-production-35c6.up.railway.app/chat-history/save'; // URL para guardar el historial
 
   constructor(private http: HttpClient) {}
 

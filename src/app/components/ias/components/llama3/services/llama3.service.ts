@@ -6,8 +6,8 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class Llama3Service {
-  private apiUrl = 'http://localhost:3000/ollama/generate';
-  private historyUrl = 'http://localhost:3000/chat-history';
+  private apiUrl = 'https://tfgbackend-production-35c6.up.railway.app/generate';
+  private historyUrl = 'https://tfgbackend-production-35c6.up.railway.app/chat-history';
   private currentHistoryId: string | null = null;
 
   constructor(private http: HttpClient) {}

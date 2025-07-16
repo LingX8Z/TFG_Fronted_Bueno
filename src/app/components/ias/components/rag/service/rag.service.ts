@@ -7,7 +7,7 @@ import { Observable } from "rxjs";
 })
 export class RagService {
   private readonly chatbot = 'rag';
-  private readonly apiUrl = 'http://localhost:3000';
+  private readonly apiUrl = 'https://tfgbackend-production-35c6.up.railway.app/';
 
   constructor(private http: HttpClient) { }
 
