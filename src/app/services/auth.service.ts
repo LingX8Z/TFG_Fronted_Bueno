@@ -13,7 +13,7 @@ interface RegisterPayload {
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'https://tfgbackend-production-35c6.up.railway.app';
+  private apiUrl = 'https://tfgbackend-production-35c6.up.railway.app/auth';
 
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$: Observable<User | null> =
