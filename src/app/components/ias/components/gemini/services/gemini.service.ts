@@ -22,7 +22,7 @@ addMessage(
   sender: 'user' | 'bot',
   text: string
 ): Observable<any> {
-  return this.http.post('http://localhost:3000/chat-history/add-message', {
+  return this.http.post('https://tfgbackend-production-35c6.up.railway.app/chat-history/add-message', {
     historyId,
     sender,
     text,
@@ -45,13 +45,13 @@ saveMessage(
 // Obtiene el historial de conversaciones para un chatbot específico
 getConversationHistory(chatbotName: string): Observable<any[]> {
   return this.http.get<any[]>(
-    `http://localhost:3000/chat-history/${chatbotName}`
+    `https://tfgbackend-production-35c6.up.railway.app/chat-history/${chatbotName}`
   );
 }
 
 // Crea una nueva conversación con un título y nombre de chatbot
 createConversation(chatbotName: string, title: string): Observable<any> {
-  return this.http.post('http://localhost:3000/chat-history/new', {
+  return this.http.post('https://tfgbackend-production-35c6.up.railway.app/chat-history/new', {
     chatbotName,
     title,
   });
@@ -59,14 +59,14 @@ createConversation(chatbotName: string, title: string): Observable<any> {
 
 // Cambia el título de una conversación existente
 renameConversation(historyId: string, newTitle: string): Observable<any> {
-  return this.http.patch(`http://localhost:3000/chat-history/${historyId}/rename`, {
+  return this.http.patch(`https://tfgbackend-production-35c6.up.railway.app/chat-history/${historyId}/rename`, {
     title: newTitle,
   });
 }
 
 // Elimina una conversación del historial por su ID
 deleteConversation(historyId: string): Observable<any> {
-  return this.http.delete(`http://localhost:3000/chat-history/${historyId}`);
+  return this.http.delete(`https://tfgbackend-production-35c6.up.railway.app/chat-history/${historyId}`);
 }
 
 

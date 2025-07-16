@@ -7,7 +7,7 @@ import { Observable } from "rxjs";
 })
 export class RagService {
   private readonly chatbot = 'rag';
-  private readonly apiUrl = 'https://tfgbackend-production-35c6.up.railway.app/';
+  private readonly apiUrl = 'https://tfgbackend-production-35c6.up.railway.app';
 
   constructor(private http: HttpClient) { }
 
@@ -18,7 +18,7 @@ export class RagService {
 
   // Crea una nueva conversación con el nombre del chatbot y un título
   createConversation(chatbotName: string, title: string): Observable<any> {
-    return this.http.post('http://localhost:3000/chat-history/new', {
+    return this.http.post('https://tfgbackend-production-35c6.up.railway.app/chat-history/new', {
       chatbotName,
       title,
     });
